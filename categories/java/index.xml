@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Java on HoCode</title>
+        <link>https://hollisho.github.io/categories/java/</link>
+        <description>Recent content in Java on HoCode</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Hollis Ho</copyright><atom:link href="https://hollisho.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
+</rss>
