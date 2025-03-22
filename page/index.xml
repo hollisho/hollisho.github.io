@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Fri, 09 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hollisho.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://hollisho.github.io/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>归档</title>
         <link>https://hollisho.github.io/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
@@ -18,29 +18,48 @@
         <item>
         <title>关于</title>
         <link>https://hollisho.github.io/about/</link>
-        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://hollisho.github.io/about/</guid>
-        <description>&lt;p&gt;Written in Go, Hugo is an open source static site generator available under the &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio/hugo/blob/master/LICENSE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Apache License 2.0.&lt;/a&gt; Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.&lt;/p&gt;
-&lt;p&gt;Hugo makes use of a variety of open source projects including:&lt;/p&gt;
+        <description>&lt;p&gt;资深全栈工程师，拥有10年以上PHP开发经验，专注构建高性能Web应用。技术栈涵盖：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/yuin/goldmark&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/yuin/goldmark&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/alecthomas/chroma&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/alecthomas/chroma&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/muesli/smartcrop&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/muesli/smartcrop&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/cobra&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/cobra&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/viper&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/viper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;🚀 主流框架：Laravel/Yii/ThinkPHP/Hyperf 深度实践&lt;/li&gt;
+&lt;li&gt;🛠️ 跨语言开发：PHP/Java（SpringBoot）双栈能力&lt;/li&gt;
+&lt;li&gt;🐋 云原生技术：Docker容器化部署及Linux运维&lt;/li&gt;
+&lt;li&gt;🔧 全流程掌控：从需求分析到系统运维的全链路交付&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.&lt;/p&gt;
-&lt;p&gt;Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.&lt;/p&gt;
-&lt;p&gt;Websites built with Hugo are extremely fast, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify and any other hosting provider.&lt;/p&gt;
-&lt;p&gt;Learn more and contribute on &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;技术优势&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;带领团队完成20+中大型项目落地，擅长项目规划与风险管理&lt;/li&gt;
+&lt;li&gt;开源社区贡献者，擅长复杂问题排查与性能优化&lt;/li&gt;
+&lt;li&gt;数据库专家：MySQL查询优化/Redis高并发场景实践&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;技术履历&lt;/strong&gt;
+全栈技术专家，深耕PHP生态10余年，主导构建日均百万级请求的高可用Web系统。核心能力矩阵：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;🚀 框架架构：精通Laravel/Yii/ThinkPHP，主导Hyperf微服务架构落地&lt;/li&gt;
+&lt;li&gt;🌐 全栈开发：百万级PHP系统架构经验，兼具SpringBoot企业级开发能力&lt;/li&gt;
+&lt;li&gt;🛠️ 工程效能：基于Docker/Jenkins构建CI/CD流水线，落地自动化运维体系&lt;/li&gt;
+&lt;li&gt;🔥 性能攻坚：多次完成数据库千万级数据量下的查询优化实施&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;技术沉淀&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主导交付23个中大型项目，涵盖电商、物联网等领域，最长维护周期达5年+&lt;/li&gt;
+&lt;li&gt;开源社区贡献者，累计提交PR 50+，Github开源项目Star总数300+&lt;/li&gt;
+&lt;li&gt;数据库调优专家，曾实现千万级订单表查询响应从3.2s优化至0.15s&lt;/li&gt;
+&lt;li&gt;技术布道者，团队内部举办技术分享60+场，培养高级工程师8名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;开源项目&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hollisho/lumen-sls&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hollisho/lumen-sls&lt;/a&gt;：阿里云日志服务深度整合方案，降低接入成本70%&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hollisho/object-builder&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hollisho/object-builder&lt;/a&gt;：通用对象构造器，支持多种数据格式转换&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hollisho/http-client&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hollisho/http-client&lt;/a&gt;：基于PHP的高效HTTP客户端框架，OpenFeign替代者，简化HTTP请求编写。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;技术雷达&lt;/strong&gt;
+Laravel | Yii2 | ThinkPHP | Vue生态 | 前端工程化 | Linux内核优化 | Docker | 自动化运维&lt;/p&gt;
 </description>
         </item>
         <item>

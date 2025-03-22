@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="内容类型和分类方式 Debug Bar插件 Queries WP Query Object Cache Post Types Post Type 内容类型 Taxonomy 分类方式 category 分类目录 post_tag 标签 Debug Bar Taxonomy插件可以查看所有分类方式 最小主题 style.css 必填字段: Theme Name、Author、Description、Version、License、License URI、Text Domain\n">
+<title>Wordpress主题核心知识点梳理</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Wordpress主题核心知识点梳理">
+<meta property='og:description' content="内容类型和分类方式 Debug Bar插件 Queries WP Query Object Cache Post Types Post Type 内容类型 Taxonomy 分类方式 category 分类目录 post_tag 标签 Debug Bar Taxonomy插件可以查看所有分类方式 最小主题 style.css 必填字段: Theme Name、Author、Description、Version、License、License URI、Text Domain\n">
+<meta property='og:url' content='https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='wordpress' /><meta property='article:published_time' content='2024-03-23T02:17:45&#43;08:00'/><meta property='article:modified_time' content='2024-03-23T02:17:45&#43;08:00'/>
+<meta name="twitter:title" content="Wordpress主题核心知识点梳理">
+<meta name="twitter:description" content="内容类型和分类方式 Debug Bar插件 Queries WP Query Object Cache Post Types Post Type 内容类型 Taxonomy 分类方式 category 分类目录 post_tag 标签 Debug Bar Taxonomy插件可以查看所有分类方式 最小主题 style.css 必填字段: Theme Name、Author、Description、Version、License、License URI、Text Domain\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">Hollis Ho Blog</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#内容类型和分类方式">内容类型和分类方式</a></li>
+    <li><a href="#最小主题">最小主题</a></li>
+    <li><a href="#详情页模板层级">详情页模板层级</a>
+      <ol>
+        <li><a href="#文章详情页">文章详情页</a></li>
+        <li><a href="#附件详情页">附件详情页</a></li>
+        <li><a href="#自定义内容类型详情页">自定义内容类型详情页</a></li>
+        <li><a href="#页面详情页">页面详情页</a></li>
+      </ol>
+    </li>
+    <li><a href="#自定义模板文件">自定义模板文件</a></li>
+    <li><a href="#分类目录归档页">分类目录归档页</a>
+      <ol>
+        <li><a href="#category-archice">Category Archice</a></li>
+        <li><a href="#tag-archive">Tag Archive</a></li>
+        <li><a href="#author-archive">Author Archive</a></li>
+        <li><a href="#date-archive-year-archivemonth-archiveday-archive">Date Archive (Year Archive、Month Archive、Day Archive)</a></li>
+        <li><a href="#自定义内容归档页custom-post-type">自定义内容归档页(custom post type)</a></li>
+        <li><a href="#自定义分类方式归档页custom-taxonomy">自定义分类方式归档页(custom taxonomy)</a></li>
+      </ol>
+    </li>
+    <li><a href="#站点首页模板层级">站点首页模板层级</a></li>
+    <li><a href="#404错误页搜索结果页被嵌入内容页">404错误页、搜索结果页、被嵌入内容页</a></li>
+    <li><a href="#归档页默认查询结果">归档页默认查询结果</a>
+      <ol>
+        <li><a href="#分类目录归档页-1">分类目录归档页</a></li>
+      </ol>
+    </li>
+    <li><a href="#详情页默认查询结果">详情页默认查询结果</a>
+      <ol>
+        <li><a href="#文章详情页-1">文章详情页</a></li>
+      </ol>
+    </li>
+    <li><a href="#首页和其他页面默认查询结果">首页和其他页面默认查询结果</a>
+      <ol>
+        <li><a href="#首页默认">首页（默认）</a></li>
+        <li><a href="#首页设置了自定义页面">首页（设置了自定义页面）</a></li>
+        <li><a href="#blog文章索引页就是在阅读设置中文章页指定了自定义页面">Blog文章索引页（就是在阅读设置中，文章页指定了自定义页面）</a></li>
+        <li><a href="#搜索结果页">搜索结果页</a></li>
+        <li><a href="#404错误页">404错误页</a></li>
+      </ol>
+    </li>
+    <li><a href="#获取文章各种数据的模板标签">获取文章各种数据的模板标签</a></li>
+    <li><a href="#获取文章所属的分类目录信息">获取文章所属的分类目录信息</a></li>
+    <li><a href="#获取文章所属标签信息">获取文章所属标签信息</a></li>
+    <li><a href="#分类归档页中调用和显示数据">分类归档页中调用和显示数据</a>
+      <ol>
+        <li><a href="#category-archive-分类目录归档页">Category Archive 分类目录归档页</a></li>
+        <li><a href="#tag-archive-标签归档页">Tag Archive 标签归档页</a></li>
+        <li><a href="#author-archive-作者归档页">Author Archive 作者归档页</a></li>
+        <li><a href="#date-archive-日期归档页">Date Archive 日期归档页</a></li>
+        <li><a href="#通用获取分类title">通用获取分类title</a></li>
+        <li><a href="#搜索结果归档页">搜索结果归档页</a></li>
+      </ol>
+    </li>
+    <li><a href="#模板标签所在的文件">模板标签所在的文件</a></li>
+    <li><a href="#条件标签使用举例">条件标签使用举例</a></li>
+    <li><a href="#首页相关条件标签">首页相关条件标签</a></li>
+    <li><a href="#获取其他信息">获取其他信息</a>
+      <ol>
+        <li><a href="#获取站点信息">获取站点信息</a></li>
+        <li><a href="#评论信息">评论信息</a></li>
+        <li><a href="#主题路径及url信息">主题路径及url信息</a></li>
+      </ol>
+    </li>
+    <li><a href="#钩子机制">钩子机制</a></li>
+    <li><a href="#传统引入css和js文件的方式">传统引入css和js文件的方式</a></li>
+    <li><a href="#推荐的引入css和js文件的方式">推荐的引入css和js文件的方式</a>
+      <ol>
+        <li><a href="#引入css文件">引入css文件</a></li>
+        <li><a href="#引入js文件">引入js文件</a></li>
+        <li><a href="#使用案例">使用案例</a></li>
+      </ol>
+    </li>
+    <li><a href="#模板文件拆分和引入">模板文件拆分和引入</a></li>
+    <li><a href="#分页导航">分页导航</a>
+      <ol>
+        <li><a href="#内容分页">内容分页</a></li>
+        <li><a href="#关联分页">关联分页</a></li>
+        <li><a href="#列表分页">列表分页</a></li>
+      </ol>
+    </li>
+    <li><a href="#开启自动生成页面标题功能">开启自动生成页面标题功能</a></li>
+    <li><a href="#导航菜单功能">导航菜单功能</a>
+      <ol>
+        <li><a href="#wp_nav_menu详细参数">wp_nav_menu详细参数</a></li>
+      </ol>
+    </li>
+    <li><a href="#边栏工具功能">边栏工具功能</a>
+      <ol>
+        <li><a href="#开启边栏工具">开启边栏工具</a></li>
+        <li><a href="#前台显示指定边栏">前台显示指定边栏</a></li>
+        <li><a href="#判断边栏内是否包含小工具">判断边栏内是否包含小工具</a></li>
+      </ol>
+    </li>
+    <li><a href="#特色图像功能">特色图像功能</a>
+      <ol>
+        <li><a href="#开启特色图像">开启特色图像</a></li>
+        <li><a href="#获取特色图像">获取特色图像</a></li>
+        <li><a href="#定义更多图像尺寸">定义更多图像尺寸</a></li>
+        <li><a href="#常用函数">常用函数</a></li>
+      </ol>
+    </li>
+    <li><a href="#自定义栏目功能">自定义栏目功能</a>
+      <ol>
+        <li><a href="#后台设置">后台设置</a></li>
+        <li><a href="#获取自定义栏目信息">获取自定义栏目信息</a></li>
+        <li><a href="#通过代码设置">通过代码设置</a></li>
+        <li><a href="#隐藏的自定义栏目后台无法设置">隐藏的自定义栏目，后台无法设置</a></li>
+      </ol>
+    </li>
+    <li><a href="#常用功能">常用功能</a>
+      <ol>
+        <li><a href="#设置浏览次数">设置浏览次数</a></li>
+        <li><a href="#获取当前用户访问的网页网址">获取当前用户访问的网页网址</a></li>
+        <li><a href="#正文自动截取">正文自动截取</a></li>
+        <li><a href="#给嵌套评论添加回复关系信息">给嵌套评论添加回复关系信息</a></li>
+        <li><a href="#解决评论模板notice提示">解决评论模板notice提示</a></li>
+        <li><a href="#修改菜单输出结构">修改菜单输出结构</a></li>
+      </ol>
+    </li>
+    <li><a href="#实战案例">实战案例</a>
+      <ol>
+        <li><a href="#导入测试数据">导入测试数据</a></li>
+        <li><a href="#开启所需功能并引入所需的样式文件">开启所需功能并引入所需的样式文件</a></li>
+        <li><a href="#获取登录和注册的url">获取登录和注册的URL</a></li>
+        <li><a href="#获取文章作者">获取文章作者</a></li>
+        <li><a href="#回复评论不刷新定位到回复框">回复评论，不刷新定位到回复框</a></li>
+        <li><a href="#设置wp指定的class属性值">设置wp指定的class属性值</a></li>
+        <li><a href="#归档页标题调取以及获取文章的缩略图">归档页标题调取以及获取文章的缩略图</a></li>
+        <li><a href="#首页模板文件开发">首页模板文件开发</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/wordpress/" style="background-color: #2a9d8f; color: #fff;">
+                Wordpress
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/wordpress%E4%B8%BB%E9%A2%98%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86%E7%82%B9%E6%A2%B3%E7%90%86/">Wordpress主题核心知识点梳理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-03-23 02:17</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="内容类型和分类方式">内容类型和分类方式
+</h2><ul>
+<li>Debug Bar插件
+<ul>
+<li>Queries</li>
+<li>WP Query</li>
+<li>Object Cache</li>
+<li>Post Types</li>
+</ul>
+</li>
+<li>Post Type 内容类型</li>
+<li>Taxonomy 分类方式
+<ul>
+<li>category 分类目录</li>
+<li>post_tag 标签</li>
+<li>Debug Bar Taxonomy插件可以查看所有分类方式</li>
+</ul>
+</li>
+</ul>
+<h2 id="最小主题">最小主题
+</h2><ul>
+<li>style.css</li>
+</ul>
+<blockquote>
+<p>必填字段: Theme Name、Author、Description、Version、License、License URI、Text Domain</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">/* 
+</span></span><span class="line"><span class="cl">Theme Name: Mini Theme
+</span></span><span class="line"><span class="cl">Theme URI: 主题的详细介绍的网址，仅在官方主题库中才会用到
+</span></span><span class="line"><span class="cl">Author: Hollis
+</span></span><span class="line"><span class="cl">Author URI: http://www.1024plus.com
+</span></span><span class="line"><span class="cl">Description: 最小主题
+</span></span><span class="line"><span class="cl">Version: 1.0.0
+</span></span><span class="line"><span class="cl">License: 主题的版权信息
+</span></span><span class="line"><span class="cl">License URI: 版权详情网址
+</span></span><span class="line"><span class="cl">Text Domain: 国际化相关
+</span></span><span class="line"><span class="cl">Tags: 标签，方便用于在官方主题库中筛选
+</span></span><span class="line"><span class="cl">Domain Paths: 语言包路径
+</span></span><span class="line"><span class="cl">*/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>index.php</li>
+</ul>
+<h2 id="详情页模板层级">详情页模板层级
+</h2><h3 id="文章详情页">文章详情页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$custom</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">-</span><span class="nx">post</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">singular</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="附件详情页">附件详情页
+</h3><blockquote>
+<p>wp_posts表中post_mime_type记录了attachment的mimetype</p>
+<p>如：image/png，其中mimetype是image，subtype是png</p>
+<p>上传附件可能有大小限制，可以修改php.ini中的post_max_size</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$mimetype</span><span class="o">-</span><span class="nv">$subtype</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$subtype</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$mimetype</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">attachment</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">singular</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="自定义内容类型详情页">自定义内容类型详情页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$custom</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">-</span><span class="nv">$posttype</span><span class="o">-</span><span class="nv">$slug</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">-</span><span class="nv">$posttype</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">single</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">singular</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="页面详情页">页面详情页
+</h3><ul>
+<li>Custom Template 采用了自定义模板</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$custom</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果页面对应的自定义模板被删除了，但是数据中的对应关系还在，则按以下规则加载模板</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">page</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">singular</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Default Template 采用了默认模板</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">page</span><span class="o">-</span><span class="nv">$slug</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">page</span><span class="o">-</span><span class="nv">$id</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">page</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">singular</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="自定义模板文件">自定义模板文件
+</h2><blockquote>
+<p>Template Post Type 可以为空，默认只支持page</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* 
+</span></span></span><span class="line"><span class="cl"><span class="cm">Template Name: 自定义模板
+</span></span></span><span class="line"><span class="cl"><span class="cm">Template Post Type: post,page,product
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="分类目录归档页">分类目录归档页
+</h2><h3 id="category-archice">Category Archice
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">category</span><span class="o">-</span><span class="nv">$slug</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">category</span><span class="o">-</span><span class="nv">$id</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">category</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="tag-archive">Tag Archive
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">tag</span><span class="o">-</span><span class="nv">$slug</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tag</span><span class="o">-</span><span class="nv">$id</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tag</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="author-archive">Author Archive
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">author</span><span class="o">-</span><span class="nv">$nicename</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">author</span><span class="o">-</span><span class="nv">$id</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">author</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="date-archive-year-archivemonth-archiveday-archive">Date Archive (Year Archive、Month Archive、Day Archive)
+</h3><blockquote>
+<p>可以通过小工具，进入到日期归档页</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">date</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="自定义内容归档页custom-post-type">自定义内容归档页(custom post type)
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">-</span><span class="nv">$posttype</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="自定义分类方式归档页custom-taxonomy">自定义分类方式归档页(custom taxonomy)
+</h3><blockquote>
+<p>如：自定义产品分类product_cat，其中有phone、pc两个分类项目，则$taxonomy为product_cat、$term为phone和pc</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">taxonomy</span><span class="o">-</span><span class="nv">$taxonomy</span><span class="o">-</span><span class="nv">$term</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">taxonomy</span><span class="o">-</span><span class="nv">$taxonomy</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">taxonomy</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">archive</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="站点首页模板层级">站点首页模板层级
+</h2><ul>
+<li>Posts show on front（默认设置）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">front</span><span class="o">-</span><span class="nx">page</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">home</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Page show on front（一个静态页面）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">front</span><span class="o">-</span><span class="nx">page</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">后面的模板层级和页面详情页一致</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Blog Post Index Page(指定为文章页的页面)</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">home</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="404错误页搜索结果页被嵌入内容页">404错误页、搜索结果页、被嵌入内容页
+</h2><ul>
+<li>404错误页</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="mf">404.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>搜索结果页</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">search</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">index</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="归档页默认查询结果">归档页默认查询结果
+</h2><h3 id="分类目录归档页-1">分类目录归档页
+</h3><ul>
+<li>queried_object (WP_Term) 分类目录信息   -  日期分类归档页没有queried_object字段</li>
+<li>queried_object_id 分类目录id</li>
+<li>posts 归档页的文章信息数组</li>
+<li>post (WP_Post) 当前文章信息</li>
+<li>is_archive = 1 归档页</li>
+<li>is_category = 1 分类目录归档页</li>
+</ul>
+<h2 id="详情页默认查询结果">详情页默认查询结果
+</h2><h3 id="文章详情页-1">文章详情页
+</h3><ul>
+<li>queried_object 文章信息</li>
+<li>queried_object_id 文章id</li>
+<li>posts 数组里面只有一个文章信息</li>
+<li>post 当前文章信息</li>
+<li>is_single = 1 内容详情页</li>
+<li>is_singular = 1 详情页</li>
+</ul>
+<h2 id="首页和其他页面默认查询结果">首页和其他页面默认查询结果
+</h2><h3 id="首页默认">首页（默认）
+</h3><ul>
+<li>posts 最新发布的文章信息数组</li>
+<li>post 当前文章信息</li>
+<li>is_home = 1</li>
+</ul>
+<h3 id="首页设置了自定义页面">首页（设置了自定义页面）
+</h3><ul>
+<li>posts 自定义页面的信息，数组只有一个元素</li>
+<li>post 自定义页面的信息</li>
+<li>queried_object 自定义页面的信息</li>
+<li>queried_object_id 自定义页面id</li>
+<li>is_page = 1</li>
+<li>is_singular =  1 详情页</li>
+</ul>
+<h3 id="blog文章索引页就是在阅读设置中文章页指定了自定义页面">Blog文章索引页（就是在阅读设置中，文章页指定了自定义页面）
+</h3><ul>
+<li>queried_object 自定义页面的信息</li>
+<li>queried_object_id 自定义页面id</li>
+<li>posts 最新发布的文章信息数组</li>
+<li>post 当前文章信息</li>
+<li>is_home = 1</li>
+<li>is_posts_page = 1</li>
+</ul>
+<h3 id="搜索结果页">搜索结果页
+</h3><ul>
+<li>posts 搜索结果的所有文章信息数组</li>
+<li>post 当前文章信息</li>
+<li>is_search = 1</li>
+</ul>
+<h3 id="404错误页">404错误页
+</h3><ul>
+<li>is_404 = 1</li>
+</ul>
+<h2 id="获取文章各种数据的模板标签">获取文章各种数据的模板标签
+</h2><ul>
+<li>获取内容并输出</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//文章ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_ID</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章标题
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_title</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_content</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章摘要。如果没有设置摘要，会自动截取一部分内容作为摘要
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_excerpt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取作者信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_author</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章的网址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_permalink</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//发布时间。
+</span></span></span><span class="line"><span class="cl"><span class="c1">//时间格式可以在设置-&gt;常规中设置
+</span></span></span><span class="line"><span class="cl"><span class="c1">//也可以指定格式the_time(&#39;Y-m-d H:i:s&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_time</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>获取内容</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//文章ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_ID</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章标题
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_title</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_content</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//文章摘要。如果没有设置摘要，会自动截取一部分内容作为摘要
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_excerpt</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取作者信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_author</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//作者归档页超链接。用户名+超链接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_author_link</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章别名。自带了urlencode。使用的时候需要urldecode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">global</span> <span class="nv">$post</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$post</span><span class="o">-&gt;</span><span class="na">post_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章的网址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_permalink</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//发布时间。
+</span></span></span><span class="line"><span class="cl"><span class="c1">//时间格式可以在设置-&gt;常规中设置
+</span></span></span><span class="line"><span class="cl"><span class="c1">//也可以指定格式get_the_time(&#39;Y-m-d H:i:s&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_time</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章评论数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_comments_number</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="获取文章所属的分类目录信息">获取文章所属的分类目录信息
+</h2><ul>
+<li>the_category 获取内容并输出</li>
+<li>get_the_category_list 获取内容</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $separator 默认以⽆序列表输出分类链接，当⽂章指定了多个分类时，提供⼀个字符⽤于分隔这些分类链接。
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $parents  
+</span></span></span><span class="line"><span class="cl"><span class="sd">    &#39;&#39;：不显示父类信息；
+</span></span></span><span class="line"><span class="cl"><span class="sd">    &#39;multiple&#39;：显示父类信息，分开显示(有各自的超链接)；
+</span></span></span><span class="line"><span class="cl"><span class="sd">    &#39;single&#39;：显示父类信息，与子类合并显示(公用一个超链接)
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int    $post_id   在have_posts() 循环中使用时，不要传值，否则需要传入指定post_id
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 例子: 
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * the_category(&#39;,&#39;, &#39;multiple&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 输出：&lt;a href=&#34;#&#34;&gt;体育&lt;/a&gt;,&lt;a href=&#34;#&#34;&gt;篮球&lt;/a&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * the_category(&#39;,&#39;, &#39;single&#39;);
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 输出：&lt;a href=&#34;#&#34;&gt;体育,篮球&lt;/a&gt;
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">the_category</span><span class="p">(</span> <span class="nv">$separator</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$parents</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$post_id</span> <span class="o">=</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">echo</span> <span class="nx">get_the_category_list</span><span class="p">(</span> <span class="nv">$separator</span><span class="p">,</span> <span class="nv">$parents</span><span class="p">,</span> <span class="nv">$post_id</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>get_the_category（纯数据，不带html标签）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">* WP_Term Object
+</span></span></span><span class="line"><span class="cl"><span class="sd">*
+</span></span></span><span class="line"><span class="cl"><span class="sd">* term_id 分类ID
+</span></span></span><span class="line"><span class="cl"><span class="sd">* name 分类名称
+</span></span></span><span class="line"><span class="cl"><span class="sd">* slug 分类别名
+</span></span></span><span class="line"><span class="cl"><span class="sd">* description 分类描述
+</span></span></span><span class="line"><span class="cl"><span class="sd">* taxonomy 分类项目的分类方式 category
+</span></span></span><span class="line"><span class="cl"><span class="sd">* ......
+</span></span></span><span class="line"><span class="cl"><span class="sd">*/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$categorys</span> <span class="o">=</span> <span class="nx">get_the_category</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$categorys</span> <span class="k">as</span> <span class="nv">$category</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">编号：</span><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$category</span><span class="o">-&gt;</span><span class="na">term_id</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="err">&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;p&gt;名称：&lt;?php echo $category-&gt;name; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;p&gt;别名：&lt;?php echo $category-&gt;slug; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;p&gt;描述：&lt;?php echo $category-&gt;description; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;p&gt;⽹址：&lt;?php echo get_category_link($category); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">}
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="获取文章所属标签信息">获取文章所属标签信息
+</h2><ul>
+<li>the_tags 获取标签并输出</li>
+<li>get_the_tag_list 获取标签</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $before 标签链接前的内容
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $sep    多个标签之间的分隔符，默认为&#39;,&#39; 
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $after  标签链接后的内容
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">the_tags</span><span class="p">(</span> <span class="nv">$before</span> <span class="o">=</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$sep</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="p">,</span> <span class="nv">$after</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span> <span class="k">null</span> <span class="o">===</span> <span class="nv">$before</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$before</span> <span class="o">=</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">&#39;Tags: &#39;</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nv">$the_tags</span> <span class="o">=</span> <span class="nx">get_the_tag_list</span><span class="p">(</span> <span class="nv">$before</span><span class="p">,</span> <span class="nv">$sep</span><span class="p">,</span> <span class="nv">$after</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span> <span class="o">!</span> <span class="nx">is_wp_error</span><span class="p">(</span> <span class="nv">$the_tags</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">echo</span> <span class="nv">$the_tags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * $post_id 文章id
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">get_the_tag_list</span><span class="p">(</span> <span class="nv">$before</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$sep</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$after</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$post_id</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>get_the_tags（纯数据，不带html标签）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">* WP_Term Object
+</span></span></span><span class="line"><span class="cl"><span class="sd">*
+</span></span></span><span class="line"><span class="cl"><span class="sd">* term_id 分类ID
+</span></span></span><span class="line"><span class="cl"><span class="sd">* name 分类名称
+</span></span></span><span class="line"><span class="cl"><span class="sd">* slug 分类别名
+</span></span></span><span class="line"><span class="cl"><span class="sd">* description 分类描述
+</span></span></span><span class="line"><span class="cl"><span class="sd">* taxonomy 分类项目的分类方式 post_tag
+</span></span></span><span class="line"><span class="cl"><span class="sd">* ......
+</span></span></span><span class="line"><span class="cl"><span class="sd">*/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$posttags</span> <span class="o">=</span> <span class="nx">get_the_tags</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nv">$posttags</span><span class="p">)</span> <span class="k">foreach</span><span class="p">(</span><span class="nv">$posttags</span> <span class="k">as</span> <span class="nv">$tag</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s1">&#39;标签ID：&#39;</span> <span class="o">.</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="na">term_id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s1">&#39;&lt;br /&gt;标签名称：&#39;</span> <span class="o">.</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s1">&#39;&lt;br /&gt;标签描述：&#39;</span> <span class="o">.</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="na">description</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s1">&#39;&lt;br /&gt;标签网址：&#39;</span> <span class="o">.</span> <span class="nx">get_tag_link</span><span class="p">(</span><span class="nv">$tag</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="分类归档页中调用和显示数据">分类归档页中调用和显示数据
+</h2><h3 id="category-archive-分类目录归档页">Category Archive 分类目录归档页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//获取分类目录信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$category</span> <span class="o">=</span> <span class="nx">get_queried_object</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">编号：</span><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$category</span><span class="o">-&gt;</span><span class="na">term_id</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="err">&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;名称：&lt;?php echo $category-&gt;name; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;别名：&lt;?php echo $category-&gt;slug; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;描述：&lt;?php echo $category-&gt;description; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;⽹址：&lt;?php echo get_category_link($category); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    
+</span></span></span><span class="line"><span class="cl"><span class="err">//获取分类目录下面的文章信息
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php if( have_posts() ): ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php while( have_posts() ): the_post(); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_author(); //作者名称 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_title(); //标题 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_content(); //正文 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php echo get_comments_number(); //评论数量 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php endwhile; ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php endif; ?&gt;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="tag-archive-标签归档页">Tag Archive 标签归档页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//获取标签信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$tag</span> <span class="o">=</span> <span class="nx">get_queried_object</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">编号：</span><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="na">term_id</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="err">&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;名称：&lt;?php echo $tag-&gt;name; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;别名：&lt;?php echo $tag-&gt;slug; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;描述：&lt;?php echo $tag-&gt;description; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;⽹址：&lt;?php echo get_tag_link($tag); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    
+</span></span></span><span class="line"><span class="cl"><span class="err">//获取标签目录下面的文章信息
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php if( have_posts() ): ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php while( have_posts() ): the_post(); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_author(); //作者名称 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_title(); //标题 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php the_content(); //正文 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php echo get_comments_number(); //评论数量 ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php endwhile; ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php endif; ?&gt;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="author-archive-作者归档页">Author Archive 作者归档页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//获取作者信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$author</span> <span class="o">=</span> <span class="nx">get_queried_object</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">作者用户名：</span><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">echo</span> <span class="nv">$author</span><span class="o">-&gt;</span><span class="na">user_login</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="err">&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;作者ID：&lt;?php echo $author-&gt;ID; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;作者邮箱：&lt;?php echo $author-&gt;user_email; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;作者显示名：&lt;?php echo $author-&gt;user_display; ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;p&gt;作者归档页网址：&lt;?php echo get_the_author_posts_link(); ?&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    
+</span></span></span><span class="line"><span class="cl"><span class="err">//获取文章信息同上
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="date-archive-日期归档页">Date Archive 日期归档页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//日期归档页无法获取get_queried_object
+</span></span></span><span class="line"><span class="cl"><span class="c1">//获取日期信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">get_the_date</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//可以自定义日期格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">get_the_date</span><span class="p">(</span><span class="s1">&#39;Y-d-m&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章信息同上
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="通用获取分类title">通用获取分类title
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//直接使用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_archive_title</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//或者
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">get_the_archive_title</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="搜索结果归档页">搜索结果归档页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//日期归档页无法获取get_queried_object
+</span></span></span><span class="line"><span class="cl"><span class="c1">//获取搜索结果页搜索关键字
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$key</span> <span class="o">=</span> <span class="nx">get_search_query</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">//获取文章信息同上
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="模板标签所在的文件">模板标签所在的文件
+</h2><blockquote>
+<p>模板标签所在的文件，都有一个相同的后缀*-template.php，用于区分模板文件和其他文件。</p>
+<p>总共有9个模板文件：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">general</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">author</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">bookmark</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">category</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">comment</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">link</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">post</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">post</span><span class="o">-</span><span class="nx">thumbnail</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp</span><span class="o">-</span><span class="nx">includes</span><span class="o">/</span><span class="nx">nav</span><span class="o">-</span><span class="nx">menu</span><span class="o">-</span><span class="nx">template</span><span class="o">.</span><span class="nx">php</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="条件标签使用举例">条件标签使用举例
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">is_year</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">echo</span> <span class="nx">get_the_date</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nx">is_month</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">echo</span> <span class="nx">get_the_date</span><span class="p">(</span><span class="s1">&#39;Y-m&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span><span class="nx">is_day</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">echo</span> <span class="nx">get_the_date</span><span class="p">(</span><span class="s1">&#39;Y-m-d&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="首页相关条件标签">首页相关条件标签
+</h2><ul>
+<li><code>is_home</code></li>
+<li><code>is_front_page</code></li>
+</ul>
+<p>如果首页采用了默认页面，则：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">is_home</span><span class="o">:</span> <span class="k">true</span>
+</span></span><span class="line"><span class="cl"><span class="nx">is_front_page</span><span class="o">:</span> <span class="k">true</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果首页设置了指定页面，则：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">is_home</span><span class="o">:</span> <span class="k">false</span>
+</span></span><span class="line"><span class="cl"><span class="nx">is_front_page</span><span class="o">:</span> <span class="k">true</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="获取其他信息">获取其他信息
+</h2><h3 id="获取站点信息">获取站点信息
+</h3><ul>
+<li>关键函数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @see get_bloginfo() For possible `$show` values
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $show Optional. Site information to display. Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">bloginfo</span><span class="p">(</span> <span class="nv">$show</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">echo</span> <span class="nx">get_bloginfo</span><span class="p">(</span> <span class="nv">$show</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>通用信息</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//站点标题
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;blogname&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//站点描述
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//站点首页网址，等同于site_url()
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;wpurl&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//站点首页网址，等同于home_url()
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//站点管理员邮箱
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;admin_email&#39;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="评论信息">评论信息
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">comments_open</span><span class="p">()</span> <span class="o">||</span> <span class="nx">get_commments_number</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//如果文章允许评论被关闭，则只显示历史评论列表，不显示评论发表框
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">comments_template</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="主题路径及url信息">主题路径及url信息
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//获取当前主题所在目录的网址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_theme_file_uri</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//获取当前主题所在目录的绝对路径
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_theme_file_path</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="钩子机制">钩子机制
+</h2><ul>
+<li>动作钩子</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;hook_name&#39;</span><span class="p">,</span> <span class="s1">&#39;your_func&#39;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>过滤器钩子</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_filter</span><span class="p">(</span><span class="s1">&#39;hook_name&#39;</span><span class="p">,</span> <span class="s1">&#39;your_func&#39;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="传统引入css和js文件的方式">传统引入css和js文件的方式
+</h2><ul>
+<li>内联</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#34;width: 65px;height: 20px;border: 1px solid;&#34;</span><span class="p">&gt;</span>测试元素<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>页联</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text/css&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">div</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">width</span><span class="p">:</span> <span class="mi">65</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">height</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">background</span><span class="p">:</span> <span class="kc">greenyellow</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>外联</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text/css&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;*.css&#34;</span> <span class="p">/&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="推荐的引入css和js文件的方式">推荐的引入css和js文件的方式
+</h2><h3 id="引入css文件">引入css文件
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 引入css文件
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string           $handle Name of the stylesheet. Should be unique.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string           $src    
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string[]         $deps   
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string|bool|null $ver    
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string           $media  
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wp_enqueue_style</span><span class="p">(</span> <span class="nv">$handle</span><span class="p">,</span> <span class="nv">$src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$deps</span> <span class="o">=</span> <span class="k">array</span><span class="p">(),</span> <span class="nv">$ver</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$media</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span> <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="引入js文件">引入js文件
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 引入js文件 wp 6.3.0版本之后，$in_footer参数改成了$args
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @since 6.3.0 The $in_footer parameter of type boolean was overloaded to be an $args parameter of type array.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string           $handle    Name of the script. Should be unique.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string           $src       Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string[]         $deps      
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string|bool|null $ver       
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param array|bool       $args     {
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *     Optional. An array of additional script loading strategies. Default empty array.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *     Otherwise, it may be a boolean in which case it determines whether the script is printed in the footer. Default false.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *     @type string    $strategy     Optional. If provided, may be either &#39;defer&#39; or &#39;async&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *     @type bool      $in_footer    Optional. Whether to print the script in the footer. Default &#39;false&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * }
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wp_enqueue_script</span><span class="p">(</span> <span class="nv">$handle</span><span class="p">,</span> <span class="nv">$src</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$deps</span> <span class="o">=</span> <span class="k">array</span><span class="p">(),</span> <span class="nv">$ver</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$args</span> <span class="o">=</span> <span class="k">array</span><span class="p">()</span> <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用案例">使用案例
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;wp_enqueue_scripts&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">wp_enqueue_style</span><span class="p">(</span><span class="s1">&#39;common-style&#39;</span><span class="p">,</span> <span class="nx">get_theme_file_uri</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/css/commom.css&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">wp_enqueue_script</span><span class="p">(</span><span class="s1">&#39;commmon-js&#39;</span><span class="p">,</span> <span class="nx">get_theme_file_uri</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/js/common.js&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(),</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="模板文件拆分和引入">模板文件拆分和引入
+</h2><ul>
+<li>传统的引入方式</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">include</span> <span class="s1">&#39;template-part.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">//or
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">require</span> <span class="s1">&#39;template-part.php&#39;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>wp推荐方式</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//加载任意模板文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_template_part</span><span class="p">(</span><span class="s1">&#39;template-part&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//加载主题中header.php or header-$name.php
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nx">get_header</span><span class="p">(</span><span class="nv">$name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//加载主题中footer.php or footer-$name.php
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nx">get_footer</span><span class="p">(</span><span class="nv">$name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//加载主题中sidebar.php or sidebar-$name.php
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nx">get_sidebar</span><span class="p">(</span><span class="nv">$name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="分页导航">分页导航
+</h2><h3 id="内容分页">内容分页
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//1.手动插入分页符
+</span></span></span><span class="line"><span class="cl"><span class="c1">//2.通过wp_link_pages()显示页码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">wp_link_pages</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="关联分页">关联分页
+</h3><ul>
+<li>获取上一篇文章链接</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @see get_previous_post_link()
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $format         Optional. Link anchor format. Default &#39;&amp;laquo; %link&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $link           Optional. Link permalink format. Default &#39;%title&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param bool         $in_same_term   Optional. Whether link should be in the same taxonomy term.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                                     Default false.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int[]|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                                     Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $taxonomy       Optional. Taxonomy, if `$in_same_term` is true. Default &#39;category&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">previous_post_link</span><span class="p">(</span> <span class="nv">$format</span> <span class="o">=</span> <span class="s1">&#39;&amp;laquo; %link&#39;</span><span class="p">,</span> <span class="nv">$link</span> <span class="o">=</span> <span class="s1">&#39;%title&#39;</span><span class="p">,</span> <span class="nv">$in_same_term</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$excluded_terms</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$taxonomy</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span> <span class="p">)</span> 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>获取下一篇文章链接</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @see get_next_post_link()
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $format         Optional. Link anchor format. Default &#39;&amp;laquo; %link&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $link           Optional. Link permalink format. Default &#39;%title&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param bool         $in_same_term   Optional. Whether link should be in the same taxonomy term.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                                     Default false.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int[]|string $excluded_terms Optional. Array or comma-separated list of excluded term IDs.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                                     Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string       $taxonomy       Optional. Taxonomy, if `$in_same_term` is true. Default &#39;category&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">next_post_link</span><span class="p">(</span> <span class="nv">$format</span> <span class="o">=</span> <span class="s1">&#39;%link &amp;raquo;&#39;</span><span class="p">,</span> <span class="nv">$link</span> <span class="o">=</span> <span class="s1">&#39;%title&#39;</span><span class="p">,</span> <span class="nv">$in_same_term</span> <span class="o">=</span> <span class="k">false</span><span class="p">,</span> <span class="nv">$excluded_terms</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$taxonomy</span> <span class="o">=</span> <span class="s1">&#39;category&#39;</span> <span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用举例</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> <span class="k">if</span> <span class="p">(</span><span class="nx">have_posts</span><span class="p">())</span> <span class="o">:</span><span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;?php while (have_posts()) : the_post(); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;?php the_content(); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">        &lt;?php wp_link_pages(); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">    &lt;?php endwhile; ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php endif; ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php previous_post_link(&#39;上⼀篇：%link&#39;); ?&gt;
+</span></span></span><span class="line"><span class="cl"><span class="err">&lt;?php next_post_link(&#39;下⼀篇：%link&#39;); ?&gt;
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="列表分页">列表分页
+</h3><ul>
+<li>简单分页</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;p&gt;分别获取上⼀⻚和下⼀⻚的链接&lt;/p&gt;
+</span></span><span class="line"><span class="cl">&lt;?php previous_posts_link(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;?php next_posts_link(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;p&gt;同时获取上下⻚的链接&lt;/p&gt;
+</span></span><span class="line"><span class="cl">&lt;?php posts_nav_link(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>数字分页</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;p&gt;推荐的数字分⻚函数执⾏的效果&lt;/p&gt;
+</span></span><span class="line"><span class="cl">&lt;?php the_posts_pagination(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">//wp 4.1之前的方式
+</span></span><span class="line"><span class="cl">&lt;?php echo paginate_links(); ?&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="开启自动生成页面标题功能">开启自动生成页面标题功能
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">add_theme_support</span><span class="p">(</span><span class="s1">&#39;title-tag&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//通过wp_head();触发显示
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="导航菜单功能">导航菜单功能
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//1.主题的functions.php中注册菜单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//注册导航菜单，用于关联后台设置的菜单，这里nav-1相当于一个标识符，和前台wp_nav_menu的theme_location对应
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">register_nav_menus</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nav-1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;顶部导航&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">//2.前台显示菜单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">&lt;?</span><span class="nx">php</span> 
+</span></span><span class="line"><span class="cl"><span class="nx">wp_nav_menu</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;theme_location&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;nav-1&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">]);</span>    
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="wp_nav_menu详细参数">wp_nav_menu详细参数
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$defaults</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;theme_location&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//调⽤菜单的名称，名称是你⾃⼰注册菜单的时候⾃定义的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;menu&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//使⽤导航菜单的名称调⽤菜单，可以是 ID、别名和名字（按顺序匹配）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;container&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="c1">//最外层容器的标签，只⽀持 div 和 nav 标签
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;container_class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//外层容器的class
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;container_id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//外层容器的 ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;menu_class&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;menu&#39;</span><span class="p">,</span> <span class="c1">//ul ⽗节点的 class 属性
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;menu_id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//ul ⽗节点的 id 属性
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;echo&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span> <span class="c1">//布尔值，是否输出菜单，为false是可以⽤于赋值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;fallback_cb&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;wp_page_menu&#39;</span><span class="p">,</span> <span class="c1">//当前设置的菜单不存在时，显⽰此处设置的菜单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;before&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//显⽰在每个菜单链接前的⽂本
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;after&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//显⽰在每个菜单链接后的⽂本
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;link_before&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//显⽰在每个菜单链接⽂本前的⽂本
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;link_after&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="c1">//显⽰在每个菜单链接⽂本后的⽂本
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;items_wrap&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&lt;ul class=&#34;%1$s&#34; id=&#34;%2$s&#34;&gt;%3$s &lt;/ul&gt;&#39;</span><span class="p">,</span> <span class="c1">//菜单的输出结构，
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;depth&#39;</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="c1">//显⽰菜单深度，0为显⽰所有
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="s1">&#39;walker&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span> <span class="c1">//菜单的结构对象 通过改参数可以制作任意结构的导航菜单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">wp_nav_menu</span><span class="p">(</span> <span class="nv">$defaults</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="边栏工具功能">边栏工具功能
+</h2><h3 id="开启边栏工具">开启边栏工具
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;widgets_init&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">register_sidebar</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;边栏1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//⼩⼯具的区域名称，默认是 &#39;sidebar&#39; 加 数字 ID,如：sidebar-1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;id&#39;</span><span class="o">=&gt;</span> <span class="s1">&#39;footer_area_one&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域的ID，默认是⼀个⾃动递增的数字 ID
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;description&#39;</span><span class="o">=&gt;</span> <span class="s1">&#39;第1个边栏&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域的描述，默认为空
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;before_widget&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&lt;section id=&#34;%1$s&#34; class=&#34;%2$s widget&#34;&gt;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域的内容前的HTML代码，默认： &#39;&#39;）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;after_widget&#39;</span><span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域内容后的HTML代码，默认： &#34;\n&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;before_title&#39;</span><span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域标题前的HTML代码，默认：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="s1">&#39;after_title&#39;</span><span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//区域标题后的HTML代码，默认：&#34;\n&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="前台显示指定边栏">前台显示指定边栏
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;ul class=&#34;sidebar&#34;&gt;
+</span></span><span class="line"><span class="cl">&lt;?php dynamic_sidebar(&#39;sidebar-1&#39;); //通过id获取指定边栏信息 ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/ul&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="判断边栏内是否包含小工具">判断边栏内是否包含小工具
+</h3><ul>
+<li><code>is_active_sidebar()</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?php if(is_active_sidebar(&#39;left-sidebar&#39;)):?&gt;
+</span></span><span class="line"><span class="cl">&lt;ul class=&#34;sidebar&#34;&gt;
+</span></span><span class="line"><span class="cl">&lt;?php dynamic_sidebar(&#39;left-sidebar&#39;); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/ul&gt;
+</span></span><span class="line"><span class="cl">&lt;?php endif;?&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="特色图像功能">特色图像功能
+</h2><h3 id="开启特色图像">开启特色图像
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">add_theme_support</span><span class="p">(</span><span class="s1">&#39;post-thumbnails&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="获取特色图像">获取特色图像
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @see get_the_post_thumbnail()
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string|int[] $size Default &#39;post-thumbnail&#39;. 
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 系统内置的$size有 thumbnail：缩略图; meduim：中图; large：大图; full：原图
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 如果$size的尺寸找不到，则显示full原图.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string|array $attr Optional. Query string or array of attributes. Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">the_post_thumbnail</span><span class="p">(</span> <span class="nv">$size</span> <span class="o">=</span> <span class="s1">&#39;post-thumbnail&#39;</span><span class="p">,</span> <span class="nv">$attr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">echo</span> <span class="nx">get_the_post_thumbnail</span><span class="p">(</span> <span class="k">null</span><span class="p">,</span> <span class="nv">$size</span><span class="p">,</span> <span class="nv">$attr</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="定义更多图像尺寸">定义更多图像尺寸
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">add_theme_support</span><span class="p">(</span><span class="s1">&#39;post-thumbnails&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//post-thumbnail尺寸默认是不存在的，可以通过代码设置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">set_post_thumbnail_size</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//新增自定义尺寸
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">add_image_size</span><span class="p">(</span><span class="s1">&#39;category-thumbnail&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="常用函数">常用函数
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//获取图片说明信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">the_post_thumbnail_caption</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//判断文章是否包含特色图片
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">has_post_thumbnail</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//获取特色图像id
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_post_thumbnail_id</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//获取特色图像链接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_post_thumbnail_url</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="自定义栏目功能">自定义栏目功能
+</h2><h3 id="后台设置">后台设置
+</h3><h3 id="获取自定义栏目信息">获取自定义栏目信息
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int    $post_id Post ID.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $key     Optional. The meta key to retrieve. By default,
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                        returns data for all keys. Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param bool   $single  Optional. Whether to return a single value.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                        This parameter has no effect if `$key` is not specified.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                        Default false.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">get_post_meta</span><span class="p">(</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$key</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$single</span> <span class="o">=</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">get_metadata</span><span class="p">(</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$single</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用示例</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?php if( have_posts() ): ?&gt;
+</span></span><span class="line"><span class="cl">&lt;?php while( have_posts() ): the_post(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;strong&gt;⽂章相册信息（⾃定义的）：get_post_meta&lt;/strong&gt;
+</span></span><span class="line"><span class="cl">&lt;?php print_r( get_post_meta( get_the_ID(), &#39;gallary_img&#39;, false ) ); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;strong&gt;⽂章价格信息（⾃定义的）：get_post_meta&lt;/strong&gt;
+</span></span><span class="line"><span class="cl">&lt;strong&gt;因为价格信息就1个值，通过第3个个参数可以直接获取到值&lt;/strong&gt;
+</span></span><span class="line"><span class="cl">&lt;?php print_r( get_post_meta( get_the_ID(), &#39;price&#39;, true ) ); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span><span class="line"><span class="cl">&lt;div&gt;
+</span></span><span class="line"><span class="cl">&lt;strong&gt;⽂章价格信息（⾃定义的）：get_post_meta&lt;/strong&gt;
+</span></span><span class="line"><span class="cl">&lt;?php print_r( get_post_meta( get_the_ID(), &#39;price&#39; ) ); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span><span class="line"><span class="cl">&lt;?php endwhile; ?&gt;
+</span></span><span class="line"><span class="cl">&lt;?php endif; ?&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="通过代码设置">通过代码设置
+</h3><ul>
+<li>添加<code>add_post_meta</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int    $post_id    Post ID.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $meta_key   Metadata name.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param bool   $unique     Optional. Whether the same key should not be added.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                           Default false.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @return int|false Meta ID on success, false on failure.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">add_post_meta</span><span class="p">(</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span><span class="p">,</span> <span class="nv">$unique</span> <span class="o">=</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Make sure meta is added to the post, not a revision.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nv">$the_post</span> <span class="o">=</span> <span class="nx">wp_is_post_revision</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span> <span class="nv">$the_post</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$post_id</span> <span class="o">=</span> <span class="nv">$the_post</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">add_metadata</span><span class="p">(</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span><span class="p">,</span> <span class="nv">$unique</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>更新<code>update_post_meta</code>，不存在则新增</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int    $post_id    Post ID.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $meta_key   Metadata key.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param mixed  $meta_value Metadata value. Must be serializable if non-scalar.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param mixed  $prev_value Optional. Previous value to check before updating.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                           If specified, only update existing metadata entries with
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                           this value. Otherwise, update all entries. Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @return int|bool Meta ID if the key didn&#39;t exist, true on successful update,
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                  false on failure or if the value passed to the function
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                  is the same as the one that is already in the database.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">update_post_meta</span><span class="p">(</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span><span class="p">,</span> <span class="nv">$prev_value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Make sure meta is updated for the post, not for a revision.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nv">$the_post</span> <span class="o">=</span> <span class="nx">wp_is_post_revision</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span> <span class="nv">$the_post</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$post_id</span> <span class="o">=</span> <span class="nv">$the_post</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">update_metadata</span><span class="p">(</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span><span class="p">,</span> <span class="nv">$prev_value</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>删除<code>delete_post_meta</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int    $post_id    Post ID.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $meta_key   Metadata name.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param mixed  $meta_value Optional. Metadata value. If provided,
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                           rows will only be removed that match the value.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *                           Must be serializable if non-scalar. Default empty.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @return bool True on success, false on failure.
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">delete_post_meta</span><span class="p">(</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Make sure meta is deleted from the post, not from a revision.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nv">$the_post</span> <span class="o">=</span> <span class="nx">wp_is_post_revision</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span> <span class="nv">$the_post</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nv">$post_id</span> <span class="o">=</span> <span class="nv">$the_post</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">delete_metadata</span><span class="p">(</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="nv">$post_id</span><span class="p">,</span> <span class="nv">$meta_key</span><span class="p">,</span> <span class="nv">$meta_value</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="隐藏的自定义栏目后台无法设置">隐藏的自定义栏目，后台无法设置
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//下滑线开头的字段，后台不展示，用户无法设置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">add_post_meta</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">,</span> <span class="s1">&#39;_myKey&#39;</span><span class="p">,</span> <span class="s1">&#39;隐藏的值&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">get_post_meta</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">,</span> <span class="s1">&#39;_mykey&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常用功能">常用功能
+</h2><h3 id="设置浏览次数">设置浏览次数
+</h3><ul>
+<li>定义函数</li>
+</ul>
+<blockquote>
+<p>通过 隐藏的(下划线开头的key)自定义栏目实现浏览次数。functions.php中定义以下函数：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 设置⽂章/⻚⾯ 浏览次数
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * _wphollis_postviews是⾃定义栏⽬的名字
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int $post_id ⽂章的ID编号
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wphollis_set_postviews</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 详情⻚才处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="nx">is_singular</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="k">empty</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$views</span> <span class="o">=</span> <span class="nx">get_post_meta</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">,</span> <span class="s1">&#39;_wphollis_postviews&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$views</span> <span class="o">=</span> <span class="o">!</span> <span class="k">empty</span><span class="p">(</span> <span class="nv">$views</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$views</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$views</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">update_post_meta</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">,</span> <span class="s1">&#39;_wphollis_postviews&#39;</span><span class="p">,</span> <span class="nv">$views</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 获取⽂章/⻚⾯ 浏览次数
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int ⽂章的ID编号
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @return int 浏览次数
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wphollis_get_postviews</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span> <span class="k">empty</span><span class="p">(</span> <span class="nv">$post_id</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$views</span> <span class="o">=</span> <span class="nx">get_post_meta</span><span class="p">(</span><span class="nv">$post_id</span><span class="p">,</span> <span class="s1">&#39;_wphollis_postviews&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$views</span> <span class="o">=</span> <span class="o">!</span> <span class="k">empty</span><span class="p">(</span> <span class="nv">$views</span> <span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="nx">int</span><span class="p">)</span><span class="nv">$views</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$views</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>前台使用 （在内容详情页中添加以下代码）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?php wphollis_set_postviews(get_queried_object_id());//更新文章浏览次数 ?&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;?php if (have_posts()) :?&gt;
+</span></span><span class="line"><span class="cl">    &lt;?php while (have_posts()) : the_post(); ?&gt;
+</span></span><span class="line"><span class="cl">        &lt;?php the_title(); ?&gt;
+</span></span><span class="line"><span class="cl">        &lt;?php wphollis_get_postviews(get_the_ID());//获取文章浏览次数 ?&gt;
+</span></span><span class="line"><span class="cl">    &lt;?php endwhile; ?&gt;
+</span></span><span class="line"><span class="cl">&lt;?php endif; ?&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="获取当前用户访问的网页网址">获取当前用户访问的网页网址
+</h3><blockquote>
+<p>在当前主题functions.php文件中定义以下函数：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 获取⽤⼾当前访问的⽹址
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wphollis_get_current_url</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">global</span> <span class="nv">$wp</span><span class="p">,</span> <span class="nv">$wp_rewrite</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取重写规则，朴素模式规则为空
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$rewrite</span> <span class="o">=</span> <span class="nv">$wp_rewrite</span><span class="o">-&gt;</span><span class="na">wp_rewrite_rules</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ⾮朴素模式下，返回当前⽹址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$rewrite</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">home_url</span><span class="p">(</span> <span class="nv">$wp</span><span class="o">-&gt;</span><span class="na">request</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 在朴素模式下，返回当前⽹址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nx">home_url</span><span class="p">(</span> <span class="s1">&#39;?&#39;</span> <span class="o">.</span> <span class="nv">$wp</span><span class="o">-&gt;</span><span class="na">query_string</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="正文自动截取">正文自动截取
+</h3><blockquote>
+<p>在当前主题functions.php文件中定义以下函数：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @params $len 要截取的字符长度
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @params $suffix 后缀标记
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">hollis_strim_post_content</span><span class="p">(</span><span class="nv">$len</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="nv">$suffix</span> <span class="o">=</span> <span class="s1">&#39;...&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//获取正文信息，并做必要处理
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">get_the_content</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//这里触发the_content的钩子，执行挂载该钩子的所有方法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">//这里不写这个语句也可以，但是为了兼容wp的扩展性要求加上
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">apply_filters</span><span class="p">(</span><span class="s1">&#39;the_content&#39;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="s1">&#39;]]&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;]]&amp;gt;&#39;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">//去除正文中的HTML标签
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">strip_tags</span><span class="p">(</span><span class="nv">$content</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">mb_strlen</span><span class="p">(</span><span class="nv">$content</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nv">$len</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//字符数量少于要截取的长度，则展示全部
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="nv">$content</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$content</span> <span class="o">=</span> <span class="nx">mb_substr</span><span class="p">(</span><span class="nv">$content</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$len</span><span class="p">)</span> <span class="o">.</span> <span class="nv">$suffix</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="给嵌套评论添加回复关系信息">给嵌套评论添加回复关系信息
+</h3><blockquote>
+<p>原理就是通过get_comment_author_link钩子，把评论者的link扩展成带回复关系的两个link</p></blockquote>
+<blockquote>
+<p>在当前主题functions.php文件中定义以下函数：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 增加谁回复谁
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 所有⽤到的钩⼦信息⸺
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * apply_filters( &#39;get_comment_author_link&#39;, $return, $author, $comment-&gt;comment_ID );
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param string $out 未修改的评论数据，即wordpress默认提供的数据
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @param int $comment_id 评论的编号
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @return string
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">wphollis_who_resp_who</span><span class="p">(</span><span class="nv">$out</span><span class="p">,</span> <span class="nv">$author</span><span class="p">,</span> <span class="nv">$comment_id</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$comment</span> <span class="o">=</span> <span class="nx">get_comment</span><span class="p">(</span><span class="nv">$comment_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果没有⽗级评论，则正常返回，因为没有回复关系
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">comment_parent</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   		<span class="k">return</span> <span class="nv">$out</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">     * 如果有⽗级评论，则添加回复关系
+</span></span></span><span class="line"><span class="cl"><span class="sd">     */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取⽗（原）评论
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$parent</span> <span class="o">=</span> <span class="nx">get_comment</span><span class="p">(</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">comment_parent</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取⽗（原）评论作者
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$pauthor</span> <span class="o">=</span> <span class="nx">get_comment_author</span><span class="p">(</span><span class="nv">$parent</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 构件回复关系
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nv">$pcid</span> <span class="o">=</span> <span class="s1">&#39;#comment-&#39;</span> <span class="o">.</span> <span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">comment_ID</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$new</span> <span class="o">=</span> <span class="nv">$out</span> <span class="o">.</span> <span class="s1">&#39; 回复 &#39;</span><span class="o">.</span> <span class="s2">&#34;&lt;a href=&#39;</span><span class="si">{</span><span class="nv">$pcid</span><span class="si">}</span><span class="s2">&#39;&gt;</span><span class="si">{</span><span class="nv">$pauthor</span><span class="si">}</span><span class="s2">&lt;/a&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 返回修改后的评论数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nv">$new</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">add_filter</span><span class="p">(</span><span class="s1">&#39;get_comment_author_link&#39;</span><span class="p">,</span> <span class="s1">&#39;wphollis_who_resp_who&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="解决评论模板notice提示">解决评论模板notice提示
+</h3><blockquote>
+<p>调用comments_template()方法的时候，wp会优先查找当前主题下有没有comments.php文件，如果没有则采用wp自带的模板wp-includes/theme-compat/comments.php</p></blockquote>
+<h3 id="修改菜单输出结构">修改菜单输出结构
+</h3><ul>
+<li>
+<ol>
+<li>添加并定义⼀个⾃定义函数⽂件（名称随意）：class-my-nav-walker.php</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">wphollis_Nav_Walker</span> <span class="k">extends</span> <span class="nx">Walker_Nav_Menu</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd">    * 修改⼆级菜单
+</span></span></span><span class="line"><span class="cl"><span class="sd">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="nf">end_lvl</span><span class="p">(</span> <span class="o">&amp;</span><span class="nv">$output</span><span class="p">,</span> <span class="nv">$depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$args</span> <span class="o">=</span> <span class="k">array</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span> <span class="nx">isset</span><span class="p">(</span> <span class="nv">$args</span><span class="o">-&gt;</span><span class="na">item_spacing</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;discard&#39;</span> <span class="o">===</span> <span class="nv">$args</span><span class="o">-&gt;</span><span class="na">item_spacing</span> <span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$t</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$n</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$t</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="se">\t</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$n</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$indent</span> <span class="o">=</span> <span class="nx">str_repeat</span><span class="p">(</span> <span class="nv">$t</span><span class="p">,</span> <span class="nv">$depth</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$suffix</span> <span class="o">=</span> <span class="s1">&#39;&lt;span class=&#34;fa fa-angle-down&#34;&gt;&lt;/span&gt;&#39;</span><span class="p">;</span> <span class="c1">// 添加的按钮对应的HTML
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nv">$output</span> <span class="o">.=</span> <span class="s2">&#34;</span><span class="si">$indent</span><span class="s2">&lt;/ul&gt;</span><span class="si">{</span><span class="nv">$suffix</span><span class="si">}{</span><span class="nv">$n</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<ol start="2">
+<li>在funcitons.php中加载这个类</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nx">get_theme_file_path</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/inc/class-my-nav-walker.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<ol start="3">
+<li>前台页面中调用菜单</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?php 
+</span></span><span class="line"><span class="cl">wp_nav_menu([
+</span></span><span class="line"><span class="cl">    &#39;theme_location&#39; =&gt; &#39;nav-1&#39;,
+</span></span><span class="line"><span class="cl">    &#39;walker&#39; =&gt; new wphollis_Nav_Walker()
+</span></span><span class="line"><span class="cl">]);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">?&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="实战案例">实战案例
+</h2><h3 id="导入测试数据">导入测试数据
+</h3><blockquote>
+<p>下载好 xml的数据⽂件, 在 后台 ⼯具 &mdash;-&gt; 导⼊ &mdash;-&gt; WordPress导⼊器安装 &mdash;-&gt; 选择xml⽂件导⼊数</p>
+<p>据</p></blockquote>
+<h3 id="开启所需功能并引入所需的样式文件">开启所需功能并引入所需的样式文件
+</h3><blockquote>
+<p>functions.php文件中定义：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;after_setup_theme&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 开启⻚⾯标题功能
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">add_theme_support</span><span class="p">(</span><span class="s1">&#39;title-tag&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// 开启特色图像
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">add_theme_support</span><span class="p">(</span><span class="s1">&#39;post-thumbnails&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// 定义导航菜单
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">register_nav_menus</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;header_menu&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;顶部导航&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;footer_menu&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;底部导航&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 定义边栏
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;widgets_init&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">register_sidebar</span><span class="p">([</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;边栏1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;id&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;sidebar1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;decsription&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;边栏1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 引入所需的样式文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">add_action</span><span class="p">(</span><span class="s1">&#39;wp_enqueue_scripts&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">wp_enqueue_style</span><span class="p">(</span><span class="s1">&#39;main-css&#39;</span><span class="p">,</span> <span class="nx">get_theme_file_uri</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/main.css&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;1.0&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">wp_enqueue_script</span><span class="p">(</span><span class="s1">&#39;main-js&#39;</span><span class="p">,</span> <span class="nx">get_theme_file_uri</span><span class="p">()</span> <span class="o">.</span> <span class="s1">&#39;/main.js&#39;</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;1.0&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="获取登录和注册的url">获取登录和注册的URL
+</h3><ul>
+<li>注册地址</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">wp_registration_url</span><span class="p">();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>登录地址</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">wp_login_url</span><span class="p">(</span><span class="nx">wphollis_get_current_url</span><span class="p">());</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="获取文章作者">获取文章作者
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">// 获取文章作者归档页。 作者名称+链接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_author_posts_link</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取文章作者归档页url
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_author_posts_url</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取作者id
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_the_author_meta</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="c1">// 获取用户头像。get_avatar($id_or_email, $size);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">get_avatar</span><span class="p">(</span><span class="nx">get_the_author_meta</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">),</span> <span class="mi">24</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="回复评论不刷新定位到回复框">回复评论，不刷新定位到回复框
+</h3><blockquote>
+<p>在functions.php中添加：</p></blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="c1">//（是否是详情页 &amp;&amp; ⽂章是否开启评论 &amp;&amp; 后台是否开启嵌套评论）
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 调取官⽅原⽣回复评论跳转函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="nx">is_singular</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">comments_open</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">&#39;thread_comments&#39;</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">wp_enqueue_script</span><span class="p">(</span><span class="s1">&#39;comment-reply&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="设置wp指定的class属性值">设置wp指定的class属性值
+</h3><ul>
+<li>在body ⾥⾯设置class属性值</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;body &lt;?php body_class() ?&gt; &gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在article ⾥⾯设置class属性值</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;article &lt;?php post_class() ?&gt; &gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="归档页标题调取以及获取文章的缩略图">归档页标题调取以及获取文章的缩略图
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!-- 归档页标题 --&gt;
+</span></span><span class="line"><span class="cl">&lt;header class=&#34;list-header&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;h1&gt;
+</span></span><span class="line"><span class="cl">        &lt;span&gt;&lt;?php the_archivce_title(); ?&gt;&lt;/span&gt;
+</span></span><span class="line"><span class="cl">    &lt;/h1&gt;
+</span></span><span class="line"><span class="cl">&lt;/header&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!-- 获取文章缩略图 --&gt;
+</span></span><span class="line"><span class="cl">&lt;a href=&#34;&lt;?php the_permalink() ?&gt;&#34;&gt;
+</span></span><span class="line"><span class="cl">	&lt;?php if (has_post_thumbnail()) : ?&gt;
+</span></span><span class="line"><span class="cl">    &lt;?php the_post_thumbnail(&#39;thumbnail&#39;); ?&gt;
+</span></span><span class="line"><span class="cl">    &lt;?php else : ?&gt;
+</span></span><span class="line"><span class="cl">    &lt;img src=&#34;&lt;?php echo get_theme_file_uri(); ?&gt;/default.png&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;?php endif; ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/a&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="首页模板文件开发">首页模板文件开发
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!-- 判断置顶⽂章显⽰ is_sticky()--&gt;
+</span></span><span class="line"><span class="cl">&lt;?php if(is_sticky()) :?&gt;
+</span></span><span class="line"><span class="cl">&lt;span class=&#34;sticky&#34;&gt;置顶&lt;/span&gt;
+</span></span><span class="line"><span class="cl">&lt;?php endif; ?&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!--调取分⻚--&gt;
+</span></span><span class="line"><span class="cl">&lt;div class=&#34;posts-nav&#34;&gt;
+</span></span><span class="line"><span class="cl">&lt;?php echo the_posts_pagination(); ?&gt;
+</span></span><span class="line"><span class="cl">&lt;/div&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/wordpress/">Wordpress</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
