@@ -7,7 +7,217 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Mon, 17 Mar 2025 14:41:07 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 26 Mar 2025 10:10:47 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Shopify App开发知识整理</title>
+        <link>https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</link>
+        <pubDate>Wed, 26 Mar 2025 10:10:47 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</guid>
+        <description>&lt;h1 id=&#34;shopify-app开发知识整理&#34;&gt;Shopify App开发知识整理
+&lt;/h1&gt;&lt;h2 id=&#34;修订记录&#34;&gt;修订记录
+&lt;/h2&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;日期&lt;/th&gt;
+          &lt;th&gt;版本&lt;/th&gt;
+          &lt;th&gt;说明&lt;/th&gt;
+          &lt;th&gt;作者&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2024-07-08&lt;/td&gt;
+          &lt;td&gt;v1.0.0&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;Hollis&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;前期准备&#34;&gt;前期准备
+&lt;/h2&gt;&lt;h3 id=&#34;相关网址&#34;&gt;相关网址
+&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.shopify.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Shopify官网（https://www.shopify.com/）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Shopify开发文档（https://shopify.dev/）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.shopify.com/partners&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Shopify合作伙伴（https://www.shopify.com/partners）&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;相关概念&#34;&gt;相关概念
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Partner （合作伙伴）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Shopify 开发者账号，用于开发App、Theme、Extension等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;App （应用）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;扩展店铺的功能，可以发布到应用市场&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Theme (主题)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;设计店铺的样式，可以发布到主题市场&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Custom storefront （自定义店铺）&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;商店&#34;&gt;商店
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;在合作伙伴后台添加开发商城，跟着设置指南完成商店设置&lt;/p&gt;&lt;/blockquote&gt;
+&lt;img src=&#34;image-20240718140302937.png&#34; alt=&#34;image-20240718140302937&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;img src=&#34;image-20240718142737064.png&#34; alt=&#34;image-20240718142737064&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;img src=&#34;image-20240718142806567.png&#34; alt=&#34;image-20240718142806567&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h2 id=&#34;shopify-cli&#34;&gt;Shopify Cli
+&lt;/h2&gt;&lt;h4 id=&#34;本地开发环境&#34;&gt;本地开发环境
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;安装 &lt;strong&gt;Node.js 20.15+&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;安装Node.js包管理器 &lt;strong&gt;npm&lt;/strong&gt;、&lt;strong&gt;Yarn&lt;/strong&gt; 或 &lt;strong&gt;pnpm&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;安装 &lt;strong&gt;Ruby 2.7+&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;安装 &lt;strong&gt;Git 2.44+&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;安装shopify-cli&#34;&gt;安装Shopify Cli
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm install -g @shopify/cli@latest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;具体安装依赖参考官方文档：https://shopify.dev/docs/api/shopify-cli&lt;/p&gt;
+&lt;h4 id=&#34;应用&#34;&gt;应用
+&lt;/h4&gt;&lt;h5 id=&#34;商店后台应用&#34;&gt;商店后台应用
+&lt;/h5&gt;&lt;p&gt;您可以构建一个应用程序来为 Shopify 商店添加功能并扩展商家体验，或者为客户创造独特的购买体验。您还可以将 Shopify 商店数据提取到您的应用程序、平台或集成中。&lt;/p&gt;
+&lt;p&gt;为了根据他们的特定需求定制体验，商家使用 Shopify 应用来帮助建立他们的业务，与外部服务集成，并向他们的 Shopify 后台添加功能。
+官方文档：https://shopify.dev/docs/apps/build/scaffold-app&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建新应用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify app init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;本地运行应用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ho-app &lt;span class=&#34;c1&#34;&gt;#进入应用目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm run dev &lt;span class=&#34;c1&#34;&gt;#运行应用&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;img src=&#34;image-20240718160136651.png&#34; alt=&#34;image-20240718160136651&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;ul&gt;
+&lt;li&gt;通过控制台输出的Preview URL，查看App&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&#34;image-20240718160443151.png&#34; alt=&#34;image-20240718160443151&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h5 id=&#34;商店前台应用&#34;&gt;商店前台应用
+&lt;/h5&gt;&lt;p&gt;商店前台应用也叫：主题应用扩展Extension（应用程序块、应用程序嵌入块）&lt;/p&gt;
+&lt;p&gt;主题应用程序扩展为您的应用程序提供了两种扩展在线商店主题的集成类型：应用程序块和应用程序嵌入块。您提交到 Shopify 应用商店的每个新应用都需要使用主题应用扩展来与在线商店主题集成。&lt;/p&gt;
+&lt;p&gt;主题应用程序扩展允许商家轻松地将动态元素添加到他们的主题中，而无需与 Liquid 模板或代码进行交互。例如，动态元素可以包括产品评论、价格、评级或产品的交互式 3D 模型。&lt;/p&gt;
+&lt;p&gt;优点&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主题应用程序扩展会自动在主题编辑器中公开您的应用程序。您可以利用编辑器的可视化编辑功能，而无需在您的应用程序中复制它们。&lt;/li&gt;
+&lt;li&gt;您可以同时将您的应用程序部署到使用它的所有在线商店。您还可以访问Shopify CDN 上的应用程序版本控制和资产托管的生命周期管理。&lt;/li&gt;
+&lt;li&gt;一组集成逻辑和指令适用于所有主题。&lt;/li&gt;
+&lt;li&gt;商家不需要手动编辑他们的主题代码。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;该部分功能还未深入研究，构建步骤略。详情参考官方文档：https://shopify.dev/docs/apps/build/online-store&lt;/p&gt;
+&lt;h4 id=&#34;主题&#34;&gt;主题
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;创建主题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify theme init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;运行主题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ho-theme &lt;span class=&#34;c1&#34;&gt;# 进入主题目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 运行shopify theme dev --store {store}（store为开发商店的名称）。  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify theme dev --store quickstart-c1709595
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;img src=&#34;image-20240719091221722.png&#34; alt=&#34;image-20240719091221722&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;p&gt;运行成功之后，通过http://127.0.0.1:9292/访问主题&lt;/p&gt;
+&lt;h2 id=&#34;admin-api&#34;&gt;Admin API
+&lt;/h2&gt;&lt;p&gt;App需要获取shopify的信息如产品、订单、客户信息等，需要通过Admin API获取。&lt;/p&gt;
+&lt;p&gt;还有App的授权和鉴权都是通过Admin API方式。&lt;/p&gt;
+&lt;p&gt;Admin API分为GraphQL Admin API、REST Admin API。&lt;/p&gt;
+&lt;p&gt;GraphQL Admin API官方文档：https://shopify.dev/docs/api/admin-graphql&lt;/p&gt;
+&lt;p&gt;REST Admin API官方文档：https://shopify.dev/docs/api/admin-rest&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;特别说明：本报告中案例采用REST Admin API方式&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;app授权和鉴权&#34;&gt;App授权和鉴权
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Shopify中有两种Token，分别是Session Token会话令牌和Access Token访问令牌。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;会话令牌用于身份验证，不能替代&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization#authorization&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;授权&lt;/a&gt;。详细了解&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization#authentication-vs-authorization&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;身份验证和授权之间的区别&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;与 API 访问令牌不同，会话令牌不能用于向 Shopify API 发出经过身份验证的请求。API 访问令牌可用于从应用的后端向 Shopify 发送请求，以便从用户的商店中获取特定数据。&lt;/p&gt;
+&lt;p&gt;例如，要向&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/api/admin-graphql&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GraphQL Admin API&lt;/a&gt;发出&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization/get-access-tokens/exchange-tokens#step-3-make-authenticated-requests&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;经过身份验证的请求&lt;/a&gt;，您的应用必须存储其在 OAuth 流程中收到的访问令牌。相比之下，会话令牌由您的应用的后端用来验证来自您的应用前端的嵌入式请求。&lt;/p&gt;
+&lt;p&gt;下图显示了使用会话令牌和 API 访问令牌的身份验证过程：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926.png&#34;
+	width=&#34;1084&#34;
+	height=&#34;318&#34;
+	srcset=&#34;https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_c5d53d30ef15fbe8.png 480w, https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_7b5ae042a73e9bf8.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;image-20240718173013926&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;340&#34;
+		data-flex-basis=&#34;818px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;官方文档：https://shopify.dev/docs/apps/build/authentication-authorization/session-tokens&lt;/p&gt;
+&lt;p&gt;总结：Session Token是App 前端和后端交互的凭证；Access Token是App 后端和Shopify交互的凭证。&lt;/p&gt;
+&lt;h2 id=&#34;oauth授权&#34;&gt;OAuth授权
+&lt;/h2&gt;&lt;h4 id=&#34;流程图&#34;&gt;流程图
+&lt;/h4&gt;&lt;img src=&#34;https://shopify.dev/assets/apps/oauth-87049d6f3edf0b884c8c16f05813b02a4dc903e481993fc1cedb960b061018d2.png&#34; alt=&#34;Flowchart of the OAuth credential granting process&#34; style=&#34;zoom:20%;&#34; /&gt;
+&lt;h4 id=&#34;access-token&#34;&gt;Access Token
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;Shopify 的 Access Token 分为两种类型：在线 和 离线&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Online Access Token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用在线访问模式创建的访问令牌是临时的，并且一定会在一段时间后过期。访问令牌过期后，Shopify 会返回&lt;code&gt;401 Unauthorized&lt;/code&gt;响应代码。&lt;/p&gt;
+&lt;p&gt;用户可以随时撤销对您应用的访问权限，而不会影响其他用户访问令牌的有效性。当用户退出 Shopify 管理平台时，在同一网络会话期间创建的所有在线模式访问令牌都将被撤销。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Offline Access Token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用离线访问模式创建的访问令牌是永久性的。仅当从商店卸载应用程序时，它们才会被撤销。&lt;/p&gt;
+&lt;p&gt;多次授权应用进行离线访问时，每次都会返回相同的访问令牌。获得商店的离线访问权限后，只有在卸载应用或需要其他访问范围时才需要重新授权应用。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>微信支付签名（基于对称加密）vs电子签名（基于非对称加密）</title>
         <link>https://hollisho.github.io/p/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E7%AD%BE%E5%90%8D%E5%9F%BA%E4%BA%8E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86vs%E7%94%B5%E5%AD%90%E7%AD%BE%E5%90%8D%E5%9F%BA%E4%BA%8E%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/</link>
         <pubDate>Mon, 17 Mar 2025 14:41:07 +0800</pubDate>
@@ -422,216 +632,6 @@
 </description>
         </item>
         <item>
-        <title>Shopify App开发知识整理</title>
-        <link>https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</link>
-        <pubDate>Mon, 08 Jul 2024 10:10:47 +0800</pubDate>
-        
-        <guid>https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</guid>
-        <description>&lt;h1 id=&#34;shopify-app开发知识整理&#34;&gt;Shopify App开发知识整理
-&lt;/h1&gt;&lt;h2 id=&#34;修订记录&#34;&gt;修订记录
-&lt;/h2&gt;&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;日期&lt;/th&gt;
-          &lt;th&gt;版本&lt;/th&gt;
-          &lt;th&gt;说明&lt;/th&gt;
-          &lt;th&gt;作者&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;2024-07-08&lt;/td&gt;
-          &lt;td&gt;v1.0.0&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;Hollis&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;前期准备&#34;&gt;前期准备
-&lt;/h2&gt;&lt;h3 id=&#34;相关网址&#34;&gt;相关网址
-&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.shopify.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Shopify官网（https://www.shopify.com/）&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Shopify开发文档（https://shopify.dev/）&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.shopify.com/partners&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Shopify合作伙伴（https://www.shopify.com/partners）&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;相关概念&#34;&gt;相关概念
-&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Partner （合作伙伴）&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Shopify 开发者账号，用于开发App、Theme、Extension等&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;App （应用）&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;扩展店铺的功能，可以发布到应用市场&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Theme (主题)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;设计店铺的样式，可以发布到主题市场&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Custom storefront （自定义店铺）&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;商店&#34;&gt;商店
-&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;在合作伙伴后台添加开发商城，跟着设置指南完成商店设置&lt;/p&gt;&lt;/blockquote&gt;
-&lt;img src=&#34;image-20240718140302937.png&#34; alt=&#34;image-20240718140302937&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;image-20240718142737064.png&#34; alt=&#34;image-20240718142737064&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;image-20240718142806567.png&#34; alt=&#34;image-20240718142806567&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h2 id=&#34;shopify-cli&#34;&gt;Shopify Cli
-&lt;/h2&gt;&lt;h4 id=&#34;本地开发环境&#34;&gt;本地开发环境
-&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;安装 &lt;strong&gt;Node.js 20.15+&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;安装Node.js包管理器 &lt;strong&gt;npm&lt;/strong&gt;、&lt;strong&gt;Yarn&lt;/strong&gt; 或 &lt;strong&gt;pnpm&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;安装 &lt;strong&gt;Ruby 2.7+&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;安装 &lt;strong&gt;Git 2.44+&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;安装shopify-cli&#34;&gt;安装Shopify Cli
-&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm install -g @shopify/cli@latest
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;具体安装依赖参考官方文档：https://shopify.dev/docs/api/shopify-cli&lt;/p&gt;
-&lt;h4 id=&#34;应用&#34;&gt;应用
-&lt;/h4&gt;&lt;h5 id=&#34;商店后台应用&#34;&gt;商店后台应用
-&lt;/h5&gt;&lt;p&gt;您可以构建一个应用程序来为 Shopify 商店添加功能并扩展商家体验，或者为客户创造独特的购买体验。您还可以将 Shopify 商店数据提取到您的应用程序、平台或集成中。&lt;/p&gt;
-&lt;p&gt;为了根据他们的特定需求定制体验，商家使用 Shopify 应用来帮助建立他们的业务，与外部服务集成，并向他们的 Shopify 后台添加功能。
-官方文档：https://shopify.dev/docs/apps/build/scaffold-app&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;创建新应用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify app init
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;本地运行应用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ho-app &lt;span class=&#34;c1&#34;&gt;#进入应用目录&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;npm run dev &lt;span class=&#34;c1&#34;&gt;#运行应用&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;img src=&#34;image-20240718160136651.png&#34; alt=&#34;image-20240718160136651&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;ul&gt;
-&lt;li&gt;通过控制台输出的Preview URL，查看App&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;image-20240718160443151.png&#34; alt=&#34;image-20240718160443151&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h5 id=&#34;商店前台应用&#34;&gt;商店前台应用
-&lt;/h5&gt;&lt;p&gt;商店前台应用也叫：主题应用扩展Extension（应用程序块、应用程序嵌入块）&lt;/p&gt;
-&lt;p&gt;主题应用程序扩展为您的应用程序提供了两种扩展在线商店主题的集成类型：应用程序块和应用程序嵌入块。您提交到 Shopify 应用商店的每个新应用都需要使用主题应用扩展来与在线商店主题集成。&lt;/p&gt;
-&lt;p&gt;主题应用程序扩展允许商家轻松地将动态元素添加到他们的主题中，而无需与 Liquid 模板或代码进行交互。例如，动态元素可以包括产品评论、价格、评级或产品的交互式 3D 模型。&lt;/p&gt;
-&lt;p&gt;优点&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;主题应用程序扩展会自动在主题编辑器中公开您的应用程序。您可以利用编辑器的可视化编辑功能，而无需在您的应用程序中复制它们。&lt;/li&gt;
-&lt;li&gt;您可以同时将您的应用程序部署到使用它的所有在线商店。您还可以访问Shopify CDN 上的应用程序版本控制和资产托管的生命周期管理。&lt;/li&gt;
-&lt;li&gt;一组集成逻辑和指令适用于所有主题。&lt;/li&gt;
-&lt;li&gt;商家不需要手动编辑他们的主题代码。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;该部分功能还未深入研究，构建步骤略。详情参考官方文档：https://shopify.dev/docs/apps/build/online-store&lt;/p&gt;
-&lt;h4 id=&#34;主题&#34;&gt;主题
-&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;创建主题&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify theme init
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;运行主题&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ho-theme &lt;span class=&#34;c1&#34;&gt;# 进入主题目录&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 运行shopify theme dev --store {store}（store为开发商店的名称）。  &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shopify theme dev --store quickstart-c1709595
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;img src=&#34;image-20240719091221722.png&#34; alt=&#34;image-20240719091221722&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;运行成功之后，通过http://127.0.0.1:9292/访问主题&lt;/p&gt;
-&lt;h2 id=&#34;admin-api&#34;&gt;Admin API
-&lt;/h2&gt;&lt;p&gt;App需要获取shopify的信息如产品、订单、客户信息等，需要通过Admin API获取。&lt;/p&gt;
-&lt;p&gt;还有App的授权和鉴权都是通过Admin API方式。&lt;/p&gt;
-&lt;p&gt;Admin API分为GraphQL Admin API、REST Admin API。&lt;/p&gt;
-&lt;p&gt;GraphQL Admin API官方文档：https://shopify.dev/docs/api/admin-graphql&lt;/p&gt;
-&lt;p&gt;REST Admin API官方文档：https://shopify.dev/docs/api/admin-rest&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;特别说明：本报告中案例采用REST Admin API方式&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;app授权和鉴权&#34;&gt;App授权和鉴权
-&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;Shopify中有两种Token，分别是Session Token会话令牌和Access Token访问令牌。&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;会话令牌用于身份验证，不能替代&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization#authorization&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;授权&lt;/a&gt;。详细了解&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization#authentication-vs-authorization&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;身份验证和授权之间的区别&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;与 API 访问令牌不同，会话令牌不能用于向 Shopify API 发出经过身份验证的请求。API 访问令牌可用于从应用的后端向 Shopify 发送请求，以便从用户的商店中获取特定数据。&lt;/p&gt;
-&lt;p&gt;例如，要向&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/api/admin-graphql&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;GraphQL Admin API&lt;/a&gt;发出&lt;a class=&#34;link&#34; href=&#34;https://shopify.dev/docs/apps/build/authentication-authorization/get-access-tokens/exchange-tokens#step-3-make-authenticated-requests&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;经过身份验证的请求&lt;/a&gt;，您的应用必须存储其在 OAuth 流程中收到的访问令牌。相比之下，会话令牌由您的应用的后端用来验证来自您的应用前端的嵌入式请求。&lt;/p&gt;
-&lt;p&gt;下图显示了使用会话令牌和 API 访问令牌的身份验证过程：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926.png&#34;
-	width=&#34;1084&#34;
-	height=&#34;318&#34;
-	srcset=&#34;https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_c5d53d30ef15fbe8.png 480w, https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_7b5ae042a73e9bf8.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;image-20240718173013926&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;340&#34;
-		data-flex-basis=&#34;818px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;官方文档：https://shopify.dev/docs/apps/build/authentication-authorization/session-tokens&lt;/p&gt;
-&lt;p&gt;总结：Session Token是App 前端和后端交互的凭证；Access Token是App 后端和Shopify交互的凭证。&lt;/p&gt;
-&lt;h2 id=&#34;oauth授权&#34;&gt;OAuth授权
-&lt;/h2&gt;&lt;h4 id=&#34;流程图&#34;&gt;流程图
-&lt;/h4&gt;&lt;img src=&#34;https://shopify.dev/assets/apps/oauth-87049d6f3edf0b884c8c16f05813b02a4dc903e481993fc1cedb960b061018d2.png&#34; alt=&#34;Flowchart of the OAuth credential granting process&#34; style=&#34;zoom:20%;&#34; /&gt;
-&lt;h4 id=&#34;access-token&#34;&gt;Access Token
-&lt;/h4&gt;&lt;blockquote&gt;
-&lt;p&gt;Shopify 的 Access Token 分为两种类型：在线 和 离线&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Online Access Token&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;使用在线访问模式创建的访问令牌是临时的，并且一定会在一段时间后过期。访问令牌过期后，Shopify 会返回&lt;code&gt;401 Unauthorized&lt;/code&gt;响应代码。&lt;/p&gt;
-&lt;p&gt;用户可以随时撤销对您应用的访问权限，而不会影响其他用户访问令牌的有效性。当用户退出 Shopify 管理平台时，在同一网络会话期间创建的所有在线模式访问令牌都将被撤销。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Offline Access Token&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;使用离线访问模式创建的访问令牌是永久性的。仅当从商店卸载应用程序时，它们才会被撤销。&lt;/p&gt;
-&lt;p&gt;多次授权应用进行离线访问时，每次都会返回相同的访问令牌。获得商店的离线访问权限后，只有在卸载应用或需要其他访问范围时才需要重新授权应用。&lt;/p&gt;
-</description>
-        </item>
-        <item>
         <title>Wordpress插件架构设计</title>
         <link>https://hollisho.github.io/p/wordpress%E6%8F%92%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/</link>
         <pubDate>Sun, 26 May 2024 10:23:04 +0800</pubDate>
@@ -760,22 +760,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└── composer.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;软件架构设计图&#34;&gt;软件架构设计图
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://hollisho.github.io/p/wordpress%E6%8F%92%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/image-20250326102825504.png&#34;
-	width=&#34;760&#34;
-	height=&#34;717&#34;
-	srcset=&#34;https://hollisho.github.io/p/wordpress%E6%8F%92%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/image-20250326102825504_hu_cb6fbb9b9db42606.png 480w, https://hollisho.github.io/p/wordpress%E6%8F%92%E4%BB%B6%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/image-20250326102825504_hu_f60e4a93ec11ca0d.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-		alt=&#34;image-20250326102825504&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;105&#34;
-		data-flex-basis=&#34;254px&#34;
-	
-&gt;&lt;/p&gt;
-</description>
+&lt;/div&gt;&lt;h2 id=&#34;架构设计图&#34;&gt;架构设计图)
+&lt;/h2&gt;&lt;img src=&#34;image-20250326102825504.png&#34; alt=&#34;wordpress插件架构设计图.png&#34; style=&#34;zoom:80%;&#34; /&gt;</description>
+        </item>
+        <item>
+        <title>Wordpress页面生命周期</title>
+        <link>https://hollisho.github.io/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</link>
+        <pubDate>Thu, 18 Apr 2024 13:36:19 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</guid>
+        <description>&lt;img src=&#34;wordpress-lifecycle.jpg&#34; alt=&#34;wordpress生命周期.jpg&#34; style=&#34;zoom:50%;&#34; /&gt;</description>
         </item>
         <item>
         <title>Wordpress主题核心知识点梳理</title>
