@@ -760,8 +760,57 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;└── composer.json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;架构设计图&#34;&gt;架构设计图)
+&lt;/div&gt;&lt;h2 id=&#34;架构设计图&#34;&gt;架构设计图
 &lt;/h2&gt;&lt;img src=&#34;image-20250326102825504.png&#34; alt=&#34;wordpress插件架构设计图.png&#34; style=&#34;zoom:80%;&#34; /&gt;</description>
+        </item>
+        <item>
+        <title>Wordpress主题模板层级</title>
+        <link>https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/</link>
+        <pubDate>Sat, 20 Apr 2024 12:14:46 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/</guid>
+        <description>&lt;h2 id=&#34;singular-page详情页&#34;&gt;&lt;strong&gt;Singular Page:详情页&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;Single Post Page：Attachment Post、Custom Post、Blog Post&lt;/p&gt;
+&lt;p&gt;Static Page：Page Template&lt;/p&gt;
+&lt;h3 id=&#34;post模板文件加载顺序&#34;&gt;&lt;strong&gt;post模板文件加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;$customer.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single-post.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single.php&lt;/code&gt;-&amp;gt;&lt;code&gt;singular.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;page模板文件加载顺序&#34;&gt;&lt;strong&gt;page模板文件加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;$customer.php&lt;/code&gt;-&amp;gt;&lt;code&gt;page-$slug.php&lt;/code&gt;-&amp;gt;&lt;code&gt;page-$id.php&lt;/code&gt;-&amp;gt;&lt;code&gt;page.php&lt;/code&gt;-&amp;gt;&lt;code&gt;singular.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;attachment模板文件加载顺序&#34;&gt;&lt;strong&gt;attachment模板文件加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;$mimetype-$subtype.php&lt;/code&gt;-&amp;gt;&lt;code&gt;$subtype.php&lt;/code&gt;-&amp;gt;&lt;code&gt;$mimetype.php&lt;/code&gt;-&amp;gt;&lt;code&gt;attachment.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single.php&lt;/code&gt;-&amp;gt;&lt;code&gt;singular.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;archive-page归档页&#34;&gt;&lt;strong&gt;Archive Page：归档页&lt;/strong&gt;
+&lt;/h2&gt;&lt;h3 id=&#34;category-archive分类目录模板加载顺序&#34;&gt;&lt;strong&gt;Category Archive分类目录模板加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;category-$slug.php&lt;/code&gt;-&amp;gt;&lt;code&gt;category-$id.php&lt;/code&gt;-&amp;gt;&lt;code&gt;category.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;tag-archive标签模板加载顺序&#34;&gt;&lt;strong&gt;Tag Archive标签模板加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;tag-$slug.php&lt;/code&gt;-&amp;gt;&lt;code&gt;tag-$id.php&lt;/code&gt;-&amp;gt;&lt;code&gt;tag.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;author-archive作者归档页模板加载顺序&#34;&gt;&lt;strong&gt;Author Archive作者归档页模板加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;code&gt;author-$nicename.php&lt;/code&gt;-&amp;gt;&lt;code&gt;author-$id.php&lt;/code&gt;-&amp;gt;&lt;code&gt;author.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;date-archive日期归档页模板加载顺序&#34;&gt;&lt;strong&gt;Date Archive日期归档页模板加载顺序&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;YearArchive-&amp;gt;&lt;code&gt;date.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;MonthArchive-&amp;gt;&lt;code&gt;date.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;DayArchive-&amp;gt;&lt;code&gt;date.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;site-front-page首页&#34;&gt;&lt;strong&gt;Site Front Page：首页&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Page Shown On Front&lt;/em&gt; 表示在设置-&amp;gt;阅读设置-&amp;gt;首页指定为静态页面&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Posts Shown On Front&lt;/em&gt; 表示在设置-&amp;gt;阅读设置-&amp;gt;首页指定为最新文章&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Blog Posts Index Page&lt;/em&gt; 表示在设置-&amp;gt;阅读设置-&amp;gt;指定的文章页&lt;/p&gt;
+&lt;p&gt;Front-page.php-&amp;gt;&lt;em&gt;Posts Shown On Front&lt;/em&gt;-&amp;gt;&lt;code&gt;home.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Front-page.php-&amp;gt;&lt;em&gt;Page Shown On Front&lt;/em&gt;-&amp;gt;&lt;code&gt;page-$slug.php&lt;/code&gt;-&amp;gt;&lt;code&gt;page-$id.php&lt;/code&gt;-&amp;gt;&lt;code&gt;page.php&lt;/code&gt;-&amp;gt;&lt;code&gt;singular.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Blog Posts Index Page&lt;/em&gt;-&amp;gt;&lt;code&gt;home.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;404-page&#34;&gt;&lt;strong&gt;404 Page&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;404.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;search-page&#34;&gt;&lt;strong&gt;Search Page&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;search.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;embed-page嵌入页面&#34;&gt;&lt;strong&gt;Embed Page嵌入页面&lt;/strong&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;embed-$post-type-$post-format.php&lt;/code&gt;-&amp;gt;&lt;code&gt;embed-$post-type.php&lt;/code&gt;-&amp;gt;&lt;code&gt;embed.php&lt;/code&gt;-&amp;gt;&lt;code&gt;wp-include/theme-compat/embed.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;自定义内容详情页&#34;&gt;自定义内容详情页
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;$customer.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single-$posttype-$slug.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single-$posttype.php&lt;/code&gt;-&amp;gt;&lt;code&gt;single.php&lt;/code&gt;-&amp;gt;&lt;code&gt;singular.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;自定义内容归档页&#34;&gt;自定义内容归档页
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;archvice-$posttype.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;自定义分类项目归档页&#34;&gt;自定义分类项目归档页
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;taxonomy-$taxonomy-$term.php&lt;/code&gt;-&amp;gt;&lt;code&gt;taxonomy-$taxonomy.php&lt;/code&gt;-&amp;gt;&lt;code&gt;taxonomy.php&lt;/code&gt;-&amp;gt;&lt;code&gt;archive.php&lt;/code&gt;-&amp;gt;&lt;code&gt;index.php&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;wordpress模板层级图&#34;&gt;wordpress模板层级图
+&lt;/h2&gt;&lt;img src=&#34;wordpress-template-order.jpg&#34; alt=&#34;wp模板层级.jpg&#34; style=&#34;zoom:80%;&#34; /&gt;
+</description>
         </item>
         <item>
         <title>Wordpress页面生命周期</title>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
-<title>Wordpress页面生命周期</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Singular Page:详情页 Single Post Page：Attachment Post、Custom Post、Blog Post\nStatic Page：Page Template\npost模板文件加载顺序 $customer.php-&gt;single-post.php-&gt;single.php-&gt;singular.php-&gt;index.php\npage模板文件加载顺序 $customer.php-&gt;page-$slug.php-&gt;page-$id.php-&gt;page.php-&gt;singular.php-&gt;index.php\nattachment模板文件加载顺序 $mimetype-$subtype.php-&gt;$subtype.php-&gt;$mimetype.php-&gt;attachment.php-&gt;single.php-&gt;singular.php-&gt;index.php\nArchive Page：归档页 Category Archive分类目录模板加载顺序 category-$slug.php-&gt;category-$id.php-&gt;category.php-&gt;archive.php-&gt;index.php\n">
+<title>Wordpress主题模板层级</title>
 
-<link rel='canonical' href='https://hollisho.github.io/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/'>
+<link rel='canonical' href='https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Wordpress页面生命周期">
-<meta property='og:description' content="">
-<meta property='og:url' content='https://hollisho.github.io/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Wordpress主题模板层级">
+<meta property='og:description' content="Singular Page:详情页 Single Post Page：Attachment Post、Custom Post、Blog Post\nStatic Page：Page Template\npost模板文件加载顺序 $customer.php-&gt;single-post.php-&gt;single.php-&gt;singular.php-&gt;index.php\npage模板文件加载顺序 $customer.php-&gt;page-$slug.php-&gt;page-$id.php-&gt;page.php-&gt;singular.php-&gt;index.php\nattachment模板文件加载顺序 $mimetype-$subtype.php-&gt;$subtype.php-&gt;$mimetype.php-&gt;attachment.php-&gt;single.php-&gt;singular.php-&gt;index.php\nArchive Page：归档页 Category Archive分类目录模板加载顺序 category-$slug.php-&gt;category-$id.php-&gt;category.php-&gt;archive.php-&gt;index.php\n">
+<meta property='og:url' content='https://hollisho.github.io/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/'>
 <meta property='og:site_name' content='HoCode'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:published_time' content='2024-04-18T13:36:19&#43;08:00'/><meta property='article:modified_time' content='2024-04-18T13:36:19&#43;08:00'/>
-<meta name="twitter:title" content="Wordpress页面生命周期">
-<meta name="twitter:description" content="">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:published_time' content='2024-04-20T12:14:46&#43;08:00'/><meta property='article:modified_time' content='2024-04-20T12:14:46&#43;08:00'/>
+<meta name="twitter:title" content="Wordpress主题模板层级">
+<meta name="twitter:description" content="Singular Page:详情页 Single Post Page：Attachment Post、Custom Post、Blog Post\nStatic Page：Page Template\npost模板文件加载顺序 $customer.php-&gt;single-post.php-&gt;single.php-&gt;singular.php-&gt;index.php\npage模板文件加载顺序 $customer.php-&gt;page-$slug.php-&gt;page-$id.php-&gt;page.php-&gt;singular.php-&gt;index.php\nattachment模板文件加载顺序 $mimetype-$subtype.php-&gt;$subtype.php-&gt;$mimetype.php-&gt;attachment.php-&gt;single.php-&gt;singular.php-&gt;index.php\nArchive Page：归档页 Category Archive分类目录模板加载顺序 category-$slug.php-&gt;category-$id.php-&gt;category.php-&gt;archive.php-&gt;index.php\n">
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -239,7 +239,60 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#singular-page详情页"><strong>Singular Page:详情页</strong></a>
+      <ol>
+        <li><a href="#post模板文件加载顺序"><strong>post模板文件加载顺序</strong></a></li>
+        <li><a href="#page模板文件加载顺序"><strong>page模板文件加载顺序</strong></a></li>
+        <li><a href="#attachment模板文件加载顺序"><strong>attachment模板文件加载顺序</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#archive-page归档页"><strong>Archive Page：归档页</strong></a>
+      <ol>
+        <li><a href="#category-archive分类目录模板加载顺序"><strong>Category Archive分类目录模板加载顺序</strong></a></li>
+        <li><a href="#tag-archive标签模板加载顺序"><strong>Tag Archive标签模板加载顺序</strong></a></li>
+        <li><a href="#author-archive作者归档页模板加载顺序"><strong>Author Archive作者归档页模板加载顺序</strong></a></li>
+        <li><a href="#date-archive日期归档页模板加载顺序"><strong>Date Archive日期归档页模板加载顺序</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#site-front-page首页"><strong>Site Front Page：首页</strong></a></li>
+    <li><a href="#404-page"><strong>404 Page</strong></a></li>
+    <li><a href="#search-page"><strong>Search Page</strong></a></li>
+    <li><a href="#embed-page嵌入页面"><strong>Embed Page嵌入页面</strong></a></li>
+    <li><a href="#自定义内容详情页">自定义内容详情页</a></li>
+    <li><a href="#自定义内容归档页">自定义内容归档页</a></li>
+    <li><a href="#自定义分类项目归档页">自定义分类项目归档页</a></li>
+    <li><a href="#wordpress模板层级图">wordpress模板层级图</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -258,7 +311,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">Wordpress页面生命周期</a>
+            <a href="/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/">Wordpress主题模板层级</a>
         </h2>
     
         
@@ -280,7 +333,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2024-04-18 13:36</time>
+                <time class="article-time--published">2024-04-20 12:14</time>
             </div>
         
 
@@ -296,7 +349,48 @@
     <section class="article-content">
     
     
-    <img src="wordpress-lifecycle.jpg" alt="wordpress生命周期.jpg" style="zoom:50%;" />
+    <h2 id="singular-page详情页"><strong>Singular Page:详情页</strong>
+</h2><p>Single Post Page：Attachment Post、Custom Post、Blog Post</p>
+<p>Static Page：Page Template</p>
+<h3 id="post模板文件加载顺序"><strong>post模板文件加载顺序</strong>
+</h3><p><code>$customer.php</code>-&gt;<code>single-post.php</code>-&gt;<code>single.php</code>-&gt;<code>singular.php</code>-&gt;<code>index.php</code></p>
+<h3 id="page模板文件加载顺序"><strong>page模板文件加载顺序</strong>
+</h3><p><code>$customer.php</code>-&gt;<code>page-$slug.php</code>-&gt;<code>page-$id.php</code>-&gt;<code>page.php</code>-&gt;<code>singular.php</code>-&gt;<code>index.php</code></p>
+<h3 id="attachment模板文件加载顺序"><strong>attachment模板文件加载顺序</strong>
+</h3><p><code>$mimetype-$subtype.php</code>-&gt;<code>$subtype.php</code>-&gt;<code>$mimetype.php</code>-&gt;<code>attachment.php</code>-&gt;<code>single.php</code>-&gt;<code>singular.php</code>-&gt;<code>index.php</code></p>
+<h2 id="archive-page归档页"><strong>Archive Page：归档页</strong>
+</h2><h3 id="category-archive分类目录模板加载顺序"><strong>Category Archive分类目录模板加载顺序</strong>
+</h3><p><code>category-$slug.php</code>-&gt;<code>category-$id.php</code>-&gt;<code>category.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h3 id="tag-archive标签模板加载顺序"><strong>Tag Archive标签模板加载顺序</strong>
+</h3><p><code>tag-$slug.php</code>-&gt;<code>tag-$id.php</code>-&gt;<code>tag.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h3 id="author-archive作者归档页模板加载顺序"><strong>Author Archive作者归档页模板加载顺序</strong>
+</h3><p><code>author-$nicename.php</code>-&gt;<code>author-$id.php</code>-&gt;<code>author.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h3 id="date-archive日期归档页模板加载顺序"><strong>Date Archive日期归档页模板加载顺序</strong>
+</h3><p>YearArchive-&gt;<code>date.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<p>MonthArchive-&gt;<code>date.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<p>DayArchive-&gt;<code>date.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h2 id="site-front-page首页"><strong>Site Front Page：首页</strong>
+</h2><p><em>Page Shown On Front</em> 表示在设置-&gt;阅读设置-&gt;首页指定为静态页面</p>
+<p><em>Posts Shown On Front</em> 表示在设置-&gt;阅读设置-&gt;首页指定为最新文章</p>
+<p><em>Blog Posts Index Page</em> 表示在设置-&gt;阅读设置-&gt;指定的文章页</p>
+<p>Front-page.php-&gt;<em>Posts Shown On Front</em>-&gt;<code>home.php</code>-&gt;<code>index.php</code></p>
+<p>Front-page.php-&gt;<em>Page Shown On Front</em>-&gt;<code>page-$slug.php</code>-&gt;<code>page-$id.php</code>-&gt;<code>page.php</code>-&gt;<code>singular.php</code>-&gt;<code>index.php</code></p>
+<p><em>Blog Posts Index Page</em>-&gt;<code>home.php</code>-&gt;<code>index.php</code></p>
+<h2 id="404-page"><strong>404 Page</strong>
+</h2><p><code>404.php</code>-&gt;<code>index.php</code></p>
+<h2 id="search-page"><strong>Search Page</strong>
+</h2><p><code>search.php</code>-&gt;<code>index.php</code></p>
+<h2 id="embed-page嵌入页面"><strong>Embed Page嵌入页面</strong>
+</h2><p><code>embed-$post-type-$post-format.php</code>-&gt;<code>embed-$post-type.php</code>-&gt;<code>embed.php</code>-&gt;<code>wp-include/theme-compat/embed.php</code></p>
+<h2 id="自定义内容详情页">自定义内容详情页
+</h2><p><code>$customer.php</code>-&gt;<code>single-$posttype-$slug.php</code>-&gt;<code>single-$posttype.php</code>-&gt;<code>single.php</code>-&gt;<code>singular.php</code>-&gt;<code>index.php</code></p>
+<h2 id="自定义内容归档页">自定义内容归档页
+</h2><p><code>archvice-$posttype.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h2 id="自定义分类项目归档页">自定义分类项目归档页
+</h2><p><code>taxonomy-$taxonomy-$term.php</code>-&gt;<code>taxonomy-$taxonomy.php</code>-&gt;<code>taxonomy.php</code>-&gt;<code>archive.php</code>-&gt;<code>index.php</code></p>
+<h2 id="wordpress模板层级图">wordpress模板层级图
+</h2><img src="wordpress-template-order.jpg" alt="wp模板层级.jpg" style="zoom:80%;" />
+
 </section>
 
 
@@ -351,12 +445,12 @@
             
                 
 <article class="">
-    <a href="/p/wordpress%E4%B8%BB%E9%A2%98%E6%A8%A1%E6%9D%BF%E5%B1%82%E7%BA%A7/">
+    <a href="/p/wordpress%E9%A1%B5%E9%9D%A2%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Wordpress主题模板层级</h2>
+            <h2 class="article-title">Wordpress页面生命周期</h2>
         </div>
     </a>
 </article>
