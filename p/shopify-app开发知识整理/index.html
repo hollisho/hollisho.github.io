@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Shopify App开发知识整理 修订记录 日期 版本 说明 作者 2024-07-08 v1.0.0 Hollis 前期准备 相关网址 Shopify官网（https://www.shopify.com/）\nShopify开发文档（https://shopify.dev/）\n">
+<title>Shopify App开发知识整理</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Shopify App开发知识整理">
+<meta property='og:description' content="Shopify App开发知识整理 修订记录 日期 版本 说明 作者 2024-07-08 v1.0.0 Hollis 前期准备 相关网址 Shopify官网（https://www.shopify.com/）\nShopify开发文档（https://shopify.dev/）\n">
+<meta property='og:url' content='https://hollisho.github.io/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Shopify' /><meta property='article:published_time' content='2024-07-08T10:10:47&#43;08:00'/><meta property='article:modified_time' content='2024-07-08T10:10:47&#43;08:00'/>
+<meta name="twitter:title" content="Shopify App开发知识整理">
+<meta name="twitter:description" content="Shopify App开发知识整理 修订记录 日期 版本 说明 作者 2024-07-08 v1.0.0 Hollis 前期准备 相关网址 Shopify官网（https://www.shopify.com/）\nShopify开发文档（https://shopify.dev/）\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">Hollis Ho Blog</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#修订记录">修订记录</a></li>
+    <li><a href="#前期准备">前期准备</a>
+      <ol>
+        <li><a href="#相关网址">相关网址</a></li>
+        <li><a href="#相关概念">相关概念</a></li>
+      </ol>
+    </li>
+    <li><a href="#商店">商店</a></li>
+    <li><a href="#shopify-cli">Shopify Cli</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#本地开发环境">本地开发环境</a></li>
+            <li><a href="#安装shopify-cli">安装Shopify Cli</a></li>
+            <li><a href="#应用">应用</a></li>
+            <li><a href="#主题">主题</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#admin-api">Admin API</a></li>
+    <li><a href="#app授权和鉴权">App授权和鉴权</a></li>
+    <li><a href="#oauth授权">OAuth授权</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#流程图">流程图</a></li>
+            <li><a href="#access-token">Access Token</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/shopify/" style="background-color: #2a9d8f; color: #fff;">
+                Shopify
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">Shopify App开发知识整理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-07-08 10:10</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="shopify-app开发知识整理">Shopify App开发知识整理
+</h1><h2 id="修订记录">修订记录
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>日期</th>
+          <th>版本</th>
+          <th>说明</th>
+          <th>作者</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>2024-07-08</td>
+          <td>v1.0.0</td>
+          <td></td>
+          <td>Hollis</td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="前期准备">前期准备
+</h2><h3 id="相关网址">相关网址
+</h3><p><a class="link" href="https://www.shopify.com/"  target="_blank" rel="noopener"
+    >Shopify官网（https://www.shopify.com/）</a></p>
+<p><a class="link" href="https://shopify.dev/"  target="_blank" rel="noopener"
+    >Shopify开发文档（https://shopify.dev/）</a></p>
+<p><a class="link" href="https://www.shopify.com/partners"  target="_blank" rel="noopener"
+    >Shopify合作伙伴（https://www.shopify.com/partners）</a></p>
+<h3 id="相关概念">相关概念
+</h3><ul>
+<li>
+<p>Partner （合作伙伴）</p>
+<ul>
+<li>Shopify 开发者账号，用于开发App、Theme、Extension等</li>
+</ul>
+</li>
+<li>
+<p>App （应用）</p>
+<ul>
+<li>扩展店铺的功能，可以发布到应用市场</li>
+</ul>
+</li>
+<li>
+<p>Theme (主题)</p>
+<ul>
+<li>设计店铺的样式，可以发布到主题市场</li>
+</ul>
+</li>
+<li>
+<p>Custom storefront （自定义店铺）</p>
+</li>
+</ul>
+<h2 id="商店">商店
+</h2><blockquote>
+<p>在合作伙伴后台添加开发商城，跟着设置指南完成商店设置</p></blockquote>
+<img src="image-20240718140302937.png" alt="image-20240718140302937" style="zoom:50%;" />
+<img src="image-20240718142737064.png" alt="image-20240718142737064" style="zoom:50%;" />
+<img src="image-20240718142806567.png" alt="image-20240718142806567" style="zoom:50%;" />
+<h2 id="shopify-cli">Shopify Cli
+</h2><h4 id="本地开发环境">本地开发环境
+</h4><ul>
+<li>安装 <strong>Node.js 20.15+</strong></li>
+<li>安装Node.js包管理器 <strong>npm</strong>、<strong>Yarn</strong> 或 <strong>pnpm</strong></li>
+<li>安装 <strong>Ruby 2.7+</strong></li>
+<li>安装 <strong>Git 2.44+</strong></li>
+</ul>
+<h4 id="安装shopify-cli">安装Shopify Cli
+</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm install -g @shopify/cli@latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体安装依赖参考官方文档：https://shopify.dev/docs/api/shopify-cli</p>
+<h4 id="应用">应用
+</h4><h5 id="商店后台应用">商店后台应用
+</h5><p>您可以构建一个应用程序来为 Shopify 商店添加功能并扩展商家体验，或者为客户创造独特的购买体验。您还可以将 Shopify 商店数据提取到您的应用程序、平台或集成中。</p>
+<p>为了根据他们的特定需求定制体验，商家使用 Shopify 应用来帮助建立他们的业务，与外部服务集成，并向他们的 Shopify 后台添加功能。
+官方文档：https://shopify.dev/docs/apps/build/scaffold-app</p>
+<ul>
+<li>创建新应用</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify app init
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>本地运行应用</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ho-app <span class="c1">#进入应用目录</span>
+</span></span><span class="line"><span class="cl">npm run dev <span class="c1">#运行应用</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="image-20240718160136651.png" alt="image-20240718160136651" style="zoom:50%;" />
+<ul>
+<li>通过控制台输出的Preview URL，查看App</li>
+</ul>
+<img src="image-20240718160443151.png" alt="image-20240718160443151" style="zoom:50%;" />
+<h5 id="商店前台应用">商店前台应用
+</h5><p>商店前台应用也叫：主题应用扩展Extension（应用程序块、应用程序嵌入块）</p>
+<p>主题应用程序扩展为您的应用程序提供了两种扩展在线商店主题的集成类型：应用程序块和应用程序嵌入块。您提交到 Shopify 应用商店的每个新应用都需要使用主题应用扩展来与在线商店主题集成。</p>
+<p>主题应用程序扩展允许商家轻松地将动态元素添加到他们的主题中，而无需与 Liquid 模板或代码进行交互。例如，动态元素可以包括产品评论、价格、评级或产品的交互式 3D 模型。</p>
+<p>优点</p>
+<ol>
+<li>主题应用程序扩展会自动在主题编辑器中公开您的应用程序。您可以利用编辑器的可视化编辑功能，而无需在您的应用程序中复制它们。</li>
+<li>您可以同时将您的应用程序部署到使用它的所有在线商店。您还可以访问Shopify CDN 上的应用程序版本控制和资产托管的生命周期管理。</li>
+<li>一组集成逻辑和指令适用于所有主题。</li>
+<li>商家不需要手动编辑他们的主题代码。</li>
+</ol>
+<p>该部分功能还未深入研究，构建步骤略。详情参考官方文档：https://shopify.dev/docs/apps/build/online-store</p>
+<h4 id="主题">主题
+</h4><ul>
+<li>创建主题</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify theme init
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>运行主题</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> ho-theme <span class="c1"># 进入主题目录</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 运行shopify theme dev --store {store}（store为开发商店的名称）。  </span>
+</span></span><span class="line"><span class="cl">shopify theme dev --store quickstart-c1709595
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="image-20240719091221722.png" alt="image-20240719091221722" style="zoom:50%;" />
+<p>运行成功之后，通过http://127.0.0.1:9292/访问主题</p>
+<h2 id="admin-api">Admin API
+</h2><p>App需要获取shopify的信息如产品、订单、客户信息等，需要通过Admin API获取。</p>
+<p>还有App的授权和鉴权都是通过Admin API方式。</p>
+<p>Admin API分为GraphQL Admin API、REST Admin API。</p>
+<p>GraphQL Admin API官方文档：https://shopify.dev/docs/api/admin-graphql</p>
+<p>REST Admin API官方文档：https://shopify.dev/docs/api/admin-rest</p>
+<blockquote>
+<p>特别说明：本报告中案例采用REST Admin API方式</p></blockquote>
+<h2 id="app授权和鉴权">App授权和鉴权
+</h2><blockquote>
+<p>Shopify中有两种Token，分别是Session Token会话令牌和Access Token访问令牌。</p></blockquote>
+<p>会话令牌用于身份验证，不能替代<a class="link" href="https://shopify.dev/docs/apps/build/authentication-authorization#authorization"  target="_blank" rel="noopener"
+    >授权</a>。详细了解<a class="link" href="https://shopify.dev/docs/apps/build/authentication-authorization#authentication-vs-authorization"  target="_blank" rel="noopener"
+    >身份验证和授权之间的区别</a>。</p>
+<p>与 API 访问令牌不同，会话令牌不能用于向 Shopify API 发出经过身份验证的请求。API 访问令牌可用于从应用的后端向 Shopify 发送请求，以便从用户的商店中获取特定数据。</p>
+<p>例如，要向<a class="link" href="https://shopify.dev/docs/api/admin-graphql"  target="_blank" rel="noopener"
+    >GraphQL Admin API</a>发出<a class="link" href="https://shopify.dev/docs/apps/build/authentication-authorization/get-access-tokens/exchange-tokens#step-3-make-authenticated-requests"  target="_blank" rel="noopener"
+    >经过身份验证的请求</a>，您的应用必须存储其在 OAuth 流程中收到的访问令牌。相比之下，会话令牌由您的应用的后端用来验证来自您的应用前端的嵌入式请求。</p>
+<p>下图显示了使用会话令牌和 API 访问令牌的身份验证过程：</p>
+<p><img src="/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926.png"
+	width="1084"
+	height="318"
+	srcset="/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_c5d53d30ef15fbe8.png 480w, /p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/image-20240718173013926_hu_7b5ae042a73e9bf8.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240718173013926"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="340"
+		data-flex-basis="818px"
+	
+></p>
+<p>官方文档：https://shopify.dev/docs/apps/build/authentication-authorization/session-tokens</p>
+<p>总结：Session Token是App 前端和后端交互的凭证；Access Token是App 后端和Shopify交互的凭证。</p>
+<h2 id="oauth授权">OAuth授权
+</h2><h4 id="流程图">流程图
+</h4><img src="https://shopify.dev/assets/apps/oauth-87049d6f3edf0b884c8c16f05813b02a4dc903e481993fc1cedb960b061018d2.png" alt="Flowchart of the OAuth credential granting process" style="zoom:20%;" />
+<h4 id="access-token">Access Token
+</h4><blockquote>
+<p>Shopify 的 Access Token 分为两种类型：在线 和 离线</p></blockquote>
+<ul>
+<li>Online Access Token</li>
+</ul>
+<p>使用在线访问模式创建的访问令牌是临时的，并且一定会在一段时间后过期。访问令牌过期后，Shopify 会返回<code>401 Unauthorized</code>响应代码。</p>
+<p>用户可以随时撤销对您应用的访问权限，而不会影响其他用户访问令牌的有效性。当用户退出 Shopify 管理平台时，在同一网络会话期间创建的所有在线模式访问令牌都将被撤销。</p>
+<ul>
+<li>Offline Access Token</li>
+</ul>
+<p>使用离线访问模式创建的访问令牌是永久性的。仅当从商店卸载应用程序时，它们才会被撤销。</p>
+<p>多次授权应用进行离线访问时，每次都会返回相同的访问令牌。获得商店的离线访问权限后，只有在卸载应用或需要其他访问范围时才需要重新授权应用。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/shopify/">Shopify</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
