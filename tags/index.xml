@@ -7,7 +7,15 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Wed, 26 Mar 2025 10:10:47 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 28 Mar 2025 14:55:52 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Redis</title>
+        <link>https://hollisho.github.io/tags/redis/</link>
+        <pubDate>Fri, 28 Mar 2025 14:55:52 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/redis/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Shopify</title>
         <link>https://hollisho.github.io/tags/shopify/</link>
         <pubDate>Wed, 26 Mar 2025 10:10:47 +0800</pubDate>

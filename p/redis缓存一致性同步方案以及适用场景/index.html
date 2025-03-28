@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Redis缓存一致性同步方案以及适用场景 一、常见同步方案 1. Cache-Aside（旁路缓存） 原理 读操作：先查询Redis，未命中则读取MySQL，并将结果回写到Redis 写操作：直接写入MySQL，然后删除Redis中对应的缓存（或更新） 详细实现方案 架构组件：\n">
+<title>Redis缓存一致性同步方案以及适用场景</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/redis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88%E4%BB%A5%E5%8F%8A%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Redis缓存一致性同步方案以及适用场景">
+<meta property='og:description' content="Redis缓存一致性同步方案以及适用场景 一、常见同步方案 1. Cache-Aside（旁路缓存） 原理 读操作：先查询Redis，未命中则读取MySQL，并将结果回写到Redis 写操作：直接写入MySQL，然后删除Redis中对应的缓存（或更新） 详细实现方案 架构组件：\n">
+<meta property='og:url' content='https://hollisho.github.io/p/redis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88%E4%BB%A5%E5%8F%8A%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Redis' /><meta property='article:published_time' content='2025-03-28T14:55:52&#43;08:00'/><meta property='article:modified_time' content='2025-03-28T14:55:52&#43;08:00'/>
+<meta name="twitter:title" content="Redis缓存一致性同步方案以及适用场景">
+<meta name="twitter:description" content="Redis缓存一致性同步方案以及适用场景 一、常见同步方案 1. Cache-Aside（旁路缓存） 原理 读操作：先查询Redis，未命中则读取MySQL，并将结果回写到Redis 写操作：直接写入MySQL，然后删除Redis中对应的缓存（或更新） 详细实现方案 架构组件：\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">难得一身好本领</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一常见同步方案">一、常见同步方案</a>
+      <ol>
+        <li><a href="#1-cache-aside旁路缓存">1. Cache-Aside（旁路缓存）</a>
+          <ol>
+            <li><a href="#原理">原理</a></li>
+            <li><a href="#详细实现方案">详细实现方案</a></li>
+            <li><a href="#优点">优点</a></li>
+            <li><a href="#缺点">缺点</a></li>
+            <li><a href="#适用场景">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#2-readwrite-through穿透读写">2. Read/Write Through（穿透读写）</a>
+          <ol>
+            <li><a href="#原理-1">原理</a></li>
+            <li><a href="#详细实现方案-1">详细实现方案</a></li>
+            <li><a href="#优点-1">优点</a></li>
+            <li><a href="#缺点-1">缺点</a></li>
+            <li><a href="#适用场景-1">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#3-write-behind异步回写">3. Write Behind（异步回写）</a>
+          <ol>
+            <li><a href="#原理-2">原理</a></li>
+            <li><a href="#详细实现方案-2">详细实现方案</a></li>
+            <li><a href="#优点-2">优点</a></li>
+            <li><a href="#缺点-2">缺点</a></li>
+            <li><a href="#适用场景-2">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#4-双写double-write">4. 双写（Double Write）</a>
+          <ol>
+            <li><a href="#原理-3">原理</a></li>
+            <li><a href="#详细实现方案-3">详细实现方案</a></li>
+            <li><a href="#优点-3">优点</a></li>
+            <li><a href="#缺点-3">缺点</a></li>
+            <li><a href="#适用场景-3">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#5-基于binlog的异步同步">5. 基于Binlog的异步同步</a>
+          <ol>
+            <li><a href="#原理-4">原理</a></li>
+            <li><a href="#详细实现方案-4">详细实现方案</a></li>
+            <li><a href="#优点-4">优点</a></li>
+            <li><a href="#缺点-4">缺点</a></li>
+            <li><a href="#适用场景-4">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#6-消息队列异步处理">6. 消息队列异步处理</a>
+          <ol>
+            <li><a href="#原理-5">原理</a></li>
+            <li><a href="#详细实现方案-5">详细实现方案</a></li>
+            <li><a href="#优点-5">优点</a></li>
+            <li><a href="#缺点-5">缺点</a></li>
+            <li><a href="#适用场景-5">适用场景</a></li>
+          </ol>
+        </li>
+        <li><a href="#7-定时任务同步">7. 定时任务同步</a>
+          <ol>
+            <li><a href="#原理-6">原理</a></li>
+            <li><a href="#详细实现方案-6">详细实现方案</a></li>
+            <li><a href="#优点-6">优点</a></li>
+            <li><a href="#缺点-6">缺点</a></li>
+            <li><a href="#适用场景-6">适用场景</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#二场景与方案匹配">二、场景与方案匹配</a></li>
+    <li><a href="#三关键注意事项">三、关键注意事项</a>
+      <ol>
+        <li><a href="#一致性权衡">一致性权衡</a></li>
+        <li><a href="#异常处理">异常处理</a></li>
+        <li><a href="#缓存策略">缓存策略</a></li>
+        <li><a href="#性能监控">性能监控</a></li>
+      </ol>
+    </li>
+    <li><a href="#四典型案例">四、典型案例</a>
+      <ol>
+        <li><a href="#电商库存系统">电商库存系统</a></li>
+        <li><a href="#社交媒体动态系统">社交媒体动态系统</a></li>
+        <li><a href="#用户会话管理">用户会话管理</a></li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/redis/" >
+                Redis
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/redis%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88%E4%BB%A5%E5%8F%8A%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF/">Redis缓存一致性同步方案以及适用场景</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2025-03-28 14:55</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="redis缓存一致性同步方案以及适用场景">Redis缓存一致性同步方案以及适用场景
+</h1><h2 id="一常见同步方案">一、常见同步方案
+</h2><h3 id="1-cache-aside旁路缓存">1. Cache-Aside（旁路缓存）
+</h3><h4 id="原理">原理
+</h4><ul>
+<li><strong>读操作</strong>：先查询Redis，未命中则读取MySQL，并将结果回写到Redis</li>
+<li><strong>写操作</strong>：直接写入MySQL，然后删除Redis中对应的缓存（或更新）</li>
+</ul>
+<h4 id="详细实现方案">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：负责协调缓存和数据库操作</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis → (缓存未命中) → MySQL → 应用层 → Redis</li>
+<li>写入流程：应用层 → MySQL → 应用层 → Redis(删除缓存)</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>采用「先更新数据库，后删除缓存」的策略</li>
+<li>使用延迟双删策略：更新DB后立即删除缓存，并在一定延迟后再次删除缓存，避免并发问题</li>
+<li>缓存删除操作失败时，通过重试队列进行补偿</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>缓存删除失败：记录日志，加入重试队列</li>
+<li>数据库操作失败：事务回滚，不执行缓存操作</li>
+<li>缓存穿透防护：布隆过滤器 + 空值缓存</li>
+<li>缓存击穿防护：热点数据互斥锁</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点">优点
+</h4><ul>
+<li>实现简单、灵活，适用于大部分场景</li>
+<li>读写分离，互不影响</li>
+<li>可根据业务需求灵活调整缓存策略</li>
+</ul>
+<h4 id="缺点">缺点
+</h4><ul>
+<li>存在短暂不一致窗口（如删除缓存失败）</li>
+<li>有缓存穿透/击穿风险</li>
+<li>在高并发场景下可能出现「写-读」并发导致的不一致</li>
+</ul>
+<h4 id="适用场景">适用场景
+</h4><ul>
+<li>读多写少的业务（如用户信息、商品详情）</li>
+<li>允许短暂不一致的业务场景</li>
+<li>对缓存命中率要求较高的系统</li>
+</ul>
+<h3 id="2-readwrite-through穿透读写">2. Read/Write Through（穿透读写）
+</h3><h4 id="原理-1">原理
+</h4><ul>
+<li><strong>读操作</strong>：请求先到缓存，未命中则由缓存层从MySQL加载并返回</li>
+<li><strong>写操作</strong>：应用直接写缓存，缓存层同步写MySQL</li>
+</ul>
+<h4 id="详细实现方案-1">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：只与缓存层交互</li>
+<li>缓存代理层：封装缓存与数据库的交互逻辑</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → 缓存代理层 → Redis → (缓存未命中) → 缓存代理层 → MySQL → 缓存代理层 → Redis → 应用层</li>
+<li>写入流程：应用层 → 缓存代理层 → Redis → 缓存代理层 → MySQL</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>缓存代理层负责协调缓存和数据库的一致性</li>
+<li>写操作可采用事务机制确保缓存和数据库的原子性更新</li>
+<li>可实现为分布式缓存框架，如Spring Cache、Redisson等</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>数据库写入失败：回滚缓存更新，返回错误</li>
+<li>缓存更新失败：可选择回滚数据库或重试缓存更新</li>
+<li>读取异常：降级为直接读取数据库</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-1">优点
+</h4><ul>
+<li>对应用层透明，一致性较好</li>
+<li>简化应用层逻辑，集中处理缓存逻辑</li>
+<li>减少应用层与数据库的直接交互</li>
+</ul>
+<h4 id="缺点-1">缺点
+</h4><ul>
+<li>需要实现或引入专门的缓存代理层</li>
+<li>增加了系统复杂度</li>
+<li>写操作性能可能受到影响（同步写入数据库）</li>
+</ul>
+<h4 id="适用场景-1">适用场景
+</h4><ul>
+<li>需要高一致性且缓存层支持自动回写的业务（如金融账户余额）</li>
+<li>希望简化应用层缓存逻辑的系统</li>
+<li>读写比例相对均衡的业务场景</li>
+</ul>
+<h3 id="3-write-behind异步回写">3. Write Behind（异步回写）
+</h3><h4 id="原理-2">原理
+</h4><ul>
+<li>应用直接写Redis，Redis异步批量写入MySQL</li>
+</ul>
+<h4 id="详细实现方案-2">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：只与缓存层交互</li>
+<li>缓存层：Redis集群</li>
+<li>异步写入服务：负责将缓存变更异步写入数据库</li>
+<li>存储层：MySQL数据库</li>
+<li>写入队列：存储待写入数据库的操作</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis</li>
+<li>写入流程：应用层 → Redis → 写入队列 → 异步写入服务 → MySQL</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>采用写入队列持久化缓存变更操作</li>
+<li>批量写入策略：按时间窗口或数据量阈值触发批量写入</li>
+<li>写入确认机制：成功写入数据库后标记队列中的操作为已完成</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>队列容错：使用持久化队列（如Redis Stream、Kafka）确保消息不丢失</li>
+<li>写入失败：重试机制 + 告警通知</li>
+<li>缓存宕机：从队列恢复未完成的写入操作</li>
+<li>数据库宕机：队列堆积，设置最大重试次数和告警阈值</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-2">优点
+</h4><ul>
+<li>高吞吐量，减少数据库写入压力</li>
+<li>支持批量写入优化</li>
+<li>应用层写入延迟低</li>
+</ul>
+<h4 id="缺点-2">缺点
+</h4><ul>
+<li>数据丢失风险（缓存宕机时）</li>
+<li>一致性较弱（最终一致性）</li>
+<li>实现复杂度高</li>
+</ul>
+<h4 id="适用场景-2">适用场景
+</h4><ul>
+<li>写密集型且允许最终一致性的场景（如日志记录、计数器）</li>
+<li>高并发写入场景（如社交媒体点赞、评论）</li>
+<li>对写入性能要求高的系统</li>
+</ul>
+<h3 id="4-双写double-write">4. 双写（Double Write）
+</h3><h4 id="原理-3">原理
+</h4><ul>
+<li>应用同时写Redis和MySQL，依赖事务或重试机制保证原子性</li>
+</ul>
+<h4 id="详细实现方案-3">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：同时负责写入缓存和数据库</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+<li>分布式锁服务：确保并发安全</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis → (缓存未命中) → MySQL → 应用层 → Redis</li>
+<li>写入流程：应用层 → [分布式锁] → MySQL + Redis（并行或串行）</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>使用分布式锁确保同一数据的写入串行化</li>
+<li>采用本地事务 + 补偿机制：先写数据库，再写缓存，缓存写入失败则加入重试队列</li>
+<li>可选择TCC（Try-Confirm-Cancel）模式实现跨资源的事务</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>数据库写入成功但缓存失败：记录失败操作，异步重试或定时补偿</li>
+<li>缓存写入成功但数据库失败：事务回滚，删除缓存</li>
+<li>并发冲突：通过分布式锁避免，或使用乐观锁进行冲突检测</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-3">优点
+</h4><ul>
+<li>实时性高，读取时数据一致性好</li>
+<li>无需额外的异步组件</li>
+<li>架构相对简单</li>
+</ul>
+<h4 id="缺点-3">缺点
+</h4><ul>
+<li>需要处理写失败的不一致（如Redis成功但MySQL失败）</li>
+<li>增加了写操作的延迟</li>
+<li>分布式事务复杂度高</li>
+</ul>
+<h4 id="适用场景-3">适用场景
+</h4><ul>
+<li>对实时性要求高且写操作较少的业务（如配置信息）</li>
+<li>对数据一致性要求较高的场景</li>
+<li>读写比例相对均衡且并发不是特别高的系统</li>
+</ul>
+<h3 id="5-基于binlog的异步同步">5. 基于Binlog的异步同步
+</h3><h4 id="原理-4">原理
+</h4><ul>
+<li>通过监听MySQL的Binlog（如Canal、Debezium），解析变更后同步到Redis</li>
+</ul>
+<h4 id="详细实现方案-4">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：只负责写入数据库，读取时优先读缓存</li>
+<li>Binlog采集器：如Canal、Debezium等</li>
+<li>变更处理服务：解析Binlog并转换为缓存操作</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis → (缓存未命中) → MySQL → 应用层</li>
+<li>写入流程：应用层 → MySQL → Binlog → Binlog采集器 → 变更处理服务 → Redis</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>利用Binlog的有序性和事务特性确保数据变更的顺序一致</li>
+<li>变更处理服务保存处理位点，支持从断点续传</li>
+<li>定期全量同步校验，修复不一致数据</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>Binlog解析失败：记录错误位点，人工介入</li>
+<li>网络中断：基于位点机制，恢复后从断点继续处理</li>
+<li>Redis更新失败：重试机制，持久化失败记录</li>
+<li>数据不一致检测：定期对比校验机制</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-4">优点
+</h4><ul>
+<li>解耦应用层，对应用透明</li>
+<li>保证最终一致性</li>
+<li>可靠性高，基于数据库事务日志</li>
+</ul>
+<h4 id="缺点-4">缺点
+</h4><ul>
+<li>架构复杂，需要额外组件</li>
+<li>延迟较高（通常秒级）</li>
+<li>需要处理Binlog格式变更等问题</li>
+</ul>
+<h4 id="适用场景-4">适用场景
+</h4><ul>
+<li>强一致性要求的业务（如订单状态、库存扣减）</li>
+<li>希望减轻应用层负担的系统</li>
+<li>已有成熟的Binlog采集基础设施的团队</li>
+</ul>
+<h3 id="6-消息队列异步处理">6. 消息队列异步处理
+</h3><h4 id="原理-5">原理
+</h4><ul>
+<li>写MySQL后发送消息到队列（如Kafka、RabbitMQ），消费者更新Redis</li>
+</ul>
+<h4 id="详细实现方案-5">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：写入数据库并发送消息到队列</li>
+<li>消息队列：如Kafka、RabbitMQ</li>
+<li>缓存更新服务：消费消息并更新缓存</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis → (缓存未命中) → MySQL → 应用层</li>
+<li>写入流程：应用层 → MySQL → 应用层 → 消息队列 → 缓存更新服务 → Redis</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>本地事务确保数据库更新和消息发送的原子性（如本地消息表模式）</li>
+<li>消息队列的可靠投递机制（如持久化、确认机制）</li>
+<li>消费者的幂等处理，避免重复消费导致的问题</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>消息发送失败：本地重试或消息表补偿</li>
+<li>消息消费失败：重试策略 + 死信队列</li>
+<li>缓存更新失败：记录失败操作，定时重试</li>
+<li>消息堆积：监控告警，动态扩容消费者</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-5">优点
+</h4><ul>
+<li>系统解耦，便于扩展</li>
+<li>支持削峰填谷，提高系统稳定性</li>
+<li>可以灵活处理复杂的缓存更新逻辑</li>
+</ul>
+<h4 id="缺点-5">缺点
+</h4><ul>
+<li>需要容忍一定的延迟</li>
+<li>可能因消息堆积导致不一致时间延长</li>
+<li>需要处理消息重复消费问题</li>
+</ul>
+<h4 id="适用场景-5">适用场景
+</h4><ul>
+<li>异步处理高并发写入（如社交点赞、评论数更新）</li>
+<li>需要解耦的分布式系统</li>
+<li>允许最终一致性的业务场景</li>
+</ul>
+<h3 id="7-定时任务同步">7. 定时任务同步
+</h3><h4 id="原理-6">原理
+</h4><ul>
+<li>定时从MySQL拉取增量数据，批量更新Redis</li>
+</ul>
+<h4 id="详细实现方案-6">详细实现方案
+</h4><ul>
+<li>
+<p><strong>架构组件</strong>：</p>
+<ul>
+<li>应用层：只负责写入数据库，读取时优先读缓存</li>
+<li>定时同步服务：定期从数据库读取数据并更新缓存</li>
+<li>缓存层：Redis集群</li>
+<li>存储层：MySQL数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>数据流向</strong>：</p>
+<ol>
+<li>读取流程：应用层 → Redis → (缓存未命中) → MySQL → 应用层</li>
+<li>写入流程：应用层 → MySQL</li>
+<li>同步流程：定时同步服务 → MySQL → 定时同步服务 → Redis</li>
+</ol>
+</li>
+<li>
+<p><strong>一致性保障</strong>：</p>
+<ul>
+<li>基于时间戳或版本号识别增量数据</li>
+<li>批量同步策略：全量同步 + 增量更新</li>
+<li>同步任务的分片和并行处理，提高效率</li>
+</ul>
+</li>
+<li>
+<p><strong>异常处理</strong>：</p>
+<ul>
+<li>同步任务失败：记录失败点，下次继续</li>
+<li>数据库负载过高：动态调整同步频率和批次大小</li>
+<li>缓存更新冲突：基于版本号或时间戳解决</li>
+</ul>
+</li>
+</ul>
+<h4 id="优点-6">优点
+</h4><ul>
+<li>实现简单，易于维护</li>
+<li>对应用层完全透明</li>
+<li>可控的同步频率，避免对数据库造成冲击</li>
+</ul>
+<h4 id="缺点-6">缺点
+</h4><ul>
+<li>实时性差，存在较长的不一致窗口</li>
+<li>可能重复更新相同数据</li>
+<li>全量同步资源消耗大</li>
+</ul>
+<h4 id="适用场景-6">适用场景
+</h4><ul>
+<li>对实时性不敏感的数据（如每日排行榜）</li>
+<li>数据变更频率低的业务</li>
+<li>系统负载敏感，需要控制同步频率的场景</li>
+</ul>
+<h2 id="二场景与方案匹配">二、场景与方案匹配
+</h2><div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>场景类型</th>
+          <th>推荐方案</th>
+          <th>理由</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>高并发读，弱一致性</td>
+          <td>Cache-Aside + 过期时间</td>
+          <td>简单有效，缓存穿透可通过布隆过滤器或空值缓存优化。延迟双删策略可减少不一致窗口。</td>
+      </tr>
+      <tr>
+          <td>高并发写，允许最终一致性</td>
+          <td>Write Behind 或消息队列</td>
+          <td>降低数据库压力，通过异步批量写入保证吞吐量。写入队列可确保数据不丢失。</td>
+      </tr>
+      <tr>
+          <td>强一致性要求（如金融交易）</td>
+          <td>Binlog 同步 + 事务机制</td>
+          <td>通过Binlog保证数据变更可靠性，结合事务避免中间状态。支持断点续传和全量校验。</td>
+      </tr>
+      <tr>
+          <td>读多写少，需高实时性</td>
+          <td>双写 + 分布式锁（或事务）</td>
+          <td>确保双写原子性，分布式锁避免并发问题。补偿机制处理异常情况。</td>
+      </tr>
+      <tr>
+          <td>数据更新低频，容忍延迟</td>
+          <td>定时任务同步</td>
+          <td>实现成本低，适合不频繁变更的数据。可控的同步频率减轻系统负担。</td>
+      </tr>
+      <tr>
+          <td>架构解耦，需高扩展性</td>
+          <td>消息队列 + Binlog 同步</td>
+          <td>结合消息队列的异步处理与Binlog的可靠性，适合分布式系统。支持多种消费者模式。</td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="三关键注意事项">三、关键注意事项
+</h2><h3 id="一致性权衡">一致性权衡
+</h3><ul>
+<li><strong>强一致性</strong>：通常牺牲性能和可用性，适用于金融交易等核心业务</li>
+<li><strong>最终一致性</strong>：提高系统吞吐量，但需业务容忍短暂的数据不一致</li>
+<li><strong>弱一致性</strong>：性能最佳，适用于对一致性要求不高的场景（如统计数据）</li>
+</ul>
+<h3 id="异常处理">异常处理
+</h3><ul>
+<li>
+<p><strong>双写失败</strong>：</p>
+<ul>
+<li>设计补偿机制（如重试队列、定时任务检查）</li>
+<li>实现回滚机制，确保数据库和缓存的一致性</li>
+<li>关键操作日志记录和告警通知</li>
+</ul>
+</li>
+<li>
+<p><strong>Binlog同步</strong>：</p>
+<ul>
+<li>处理网络中断后的数据追赶（位点管理）</li>
+<li>处理Binlog格式变更和表结构变更</li>
+<li>实现数据校验和修复机制</li>
+</ul>
+</li>
+</ul>
+<h3 id="缓存策略">缓存策略
+</h3><ul>
+<li>
+<p><strong>过期时间设置</strong>：</p>
+<ul>
+<li>根据数据更新频率和重要性设置差异化过期时间</li>
+<li>避免冷数据长期占用内存</li>
+<li>考虑使用LRU/LFU等淘汰策略</li>
+</ul>
+</li>
+<li>
+<p><strong>缓存防护</strong>：</p>
+<ul>
+<li>使用分布式锁防止缓存击穿（热点key失效）</li>
+<li>布隆过滤器防止缓存穿透（查询不存在的数据）</li>
+<li>限流熔断机制防止缓存雪崩（大量key同时失效）</li>
+</ul>
+</li>
+</ul>
+<h3 id="性能监控">性能监控
+</h3><ul>
+<li>监控Redis和MySQL的延迟、命中率、连接数等指标</li>
+<li>设置关键指标的告警阈值</li>
+<li>根据监控数据动态调整缓存策略（如扩容、调整过期时间）</li>
+<li>构建缓存预热机制，避免冷启动问题</li>
+</ul>
+<h2 id="四典型案例">四、典型案例
+</h2><h3 id="电商库存系统">电商库存系统
+</h3><ul>
+<li><strong>方案</strong>：Binlog同步（强一致性）+ 缓存预扣减</li>
+<li><strong>实现细节</strong>：
+<ul>
+<li>Redis存储商品当前库存，支持原子减操作</li>
+<li>库存扣减先在Redis执行，成功后异步通知MySQL</li>
+<li>通过Binlog同步确保MySQL和Redis最终一致</li>
+<li>定期全量校验修复不一致数据</li>
+</ul>
+</li>
+<li><strong>异常处理</strong>：
+<ul>
+<li>超卖防护：Redis分布式锁 + 库存校验</li>
+<li>库存不足：快速失败，提升用户体验</li>
+<li>数据不一致：告警 + 自动修复</li>
+</ul>
+</li>
+</ul>
+<h3 id="社交媒体动态系统">社交媒体动态系统
+</h3><ul>
+<li><strong>方案</strong>：消息队列异步更新计数</li>
+<li><strong>实现细节</strong>：
+<ul>
+<li>Redis存储点赞、评论等计数器</li>
+<li>用户操作写入MySQL，同时发送消息到队列</li>
+<li>消费者批量更新Redis计数器</li>
+<li>定时任务校准计数，修正偏差</li>
+</ul>
+</li>
+<li><strong>优化点</strong>：
+<ul>
+<li>消息批量处理提高吞吐量</li>
+<li>计数器分片减少热点问题</li>
+<li>容忍短暂不一致，提升用户体验</li>
+</ul>
+</li>
+</ul>
+<h3 id="用户会话管理">用户会话管理
+</h3><ul>
+<li><strong>方案</strong>：Cache-Aside + 短过期时间</li>
+<li><strong>实现细节</strong>：
+<ul>
+<li>Redis存储用户会话信息，设置合理过期时间</li>
+<li>读取优先从Redis获取，未命中则从MySQL加载</li>
+<li>更新会话信息时先更新MySQL，再删除Redis缓存</li>
+<li>采用延迟双删策略减少不一致窗口</li>
+</ul>
+</li>
+<li><strong>安全考虑</strong>：
+<ul>
+<li>敏感信息加密存储</li>
+<li>会话标识定期轮换</li>
+<li>异常登录检测和防护</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结">总结
+</h2><p>选择缓存一致性方案时，需综合考虑以下因素：</p>
+<ul>
+<li><strong>业务需求</strong>：一致性要求、实时性要求、读写比例</li>
+<li><strong>团队技术栈</strong>：现有基础设施、技术能力、维护成本</li>
+<li><strong>运维成本</strong>：监控、告警、故障恢复能力</li>
+</ul>
+<p>在实际应用中，通常会混合使用多种策略：</p>
+<ul>
+<li>核心交易数据：使用Binlog同步或双写 + 分布式锁</li>
+<li>高频读取数据：使用Cache-Aside + 合理过期时间</li>
+<li>高并发写入数据：使用Write Behind或消息队列</li>
+<li>统计类数据：使用定时任务同步或异步更新</li>
+</ul>
+<p>最佳实践是根据数据特性和业务场景，为不同类型的数据选择最合适的缓存一致性策略，在保证系统可靠性的同时，最大化性能和用户体验。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/redis/">Redis</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="hollisho/hollisho-blog-talks"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
