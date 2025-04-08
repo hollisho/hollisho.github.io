@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="原理 Shopify App 本质上是一个 独立的 Web 应用，但可以嵌入到 Shopify 后台（Admin）或店铺前端（Online Store）。 你可以选择用 Remix + Node.js，或者 PHP（Laravel、Slim 等）。\n">
+<title>传统 PHP 实现 Shopify App</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="传统 PHP 实现 Shopify App">
+<meta property='og:description' content="原理 Shopify App 本质上是一个 独立的 Web 应用，但可以嵌入到 Shopify 后台（Admin）或店铺前端（Online Store）。 你可以选择用 Remix + Node.js，或者 PHP（Laravel、Slim 等）。\n">
+<meta property='og:url' content='https://hollisho.github.io/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Shopify' /><meta property='article:published_time' content='2025-04-08T15:20:25&#43;08:00'/><meta property='article:modified_time' content='2025-04-08T15:20:25&#43;08:00'/>
+<meta name="twitter:title" content="传统 PHP 实现 Shopify App">
+<meta name="twitter:description" content="原理 Shopify App 本质上是一个 独立的 Web 应用，但可以嵌入到 Shopify 后台（Admin）或店铺前端（Online Store）。 你可以选择用 Remix + Node.js，或者 PHP（Laravel、Slim 等）。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">难得一身好本领</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#原理">原理</a>
+      <ol>
+        <li><a href="#-传统-php-实现-shopify-app">🔹 传统 PHP 实现 Shopify App</a></li>
+      </ol>
+    </li>
+    <li><a href="#手动创建应用">手动创建应用</a></li>
+    <li><a href="#配置应用信息">配置应用信息</a></li>
+    <li><a href="#让shopify-cli识别现有项目">让Shopify Cli识别现有项目</a>
+      <ol>
+        <li><a href="#先创建-shopify-app-配置"><strong>先创建 Shopify App 配置</strong></a></li>
+        <li><a href="#初始化-packagejson-文件">初始化 <code>package.json</code> 文件</a></li>
+      </ol>
+    </li>
+    <li><a href="#选择测试商店">选择测试商店</a></li>
+    <li><a href="#如何添加-theme-app-extension">如何添加 Theme App Extension</a>
+      <ol>
+        <li><a href="#什么是-theme-app-extension">什么是 Theme App Extension？</a></li>
+        <li><a href="#php-shopify-app-添加-theme-app-extension-的步骤">PHP Shopify App 添加 Theme App Extension 的步骤</a>
+          <ol>
+            <li><a href="#在-shopify-cli-里创建-theme-app-extension">🔹在 Shopify CLI 里创建 Theme App Extension</a></li>
+            <li><a href="#修改-theme-app-extension-的-liquid-代码"><strong>🔹修改 Theme App Extension 的 Liquid 代码</strong></a></li>
+            <li><a href="#让-php-处理语言切换"><strong>🔹让 PHP 处理语言切换</strong></a></li>
+            <li><a href="#在-php-里修改-api-响应"><strong>🔹在 PHP 里修改 API 响应</strong></a></li>
+            <li><a href="#部署-theme-app-extension"><strong>🔹部署 Theme App Extension</strong></a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/shopify/" style="background-color: #2a9d8f; color: #fff;">
+                Shopify
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/">传统 PHP 实现 Shopify App</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2025-04-08 15:20</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="原理">原理
+</h2><p>Shopify App 本质上是一个 <strong>独立的 Web 应用</strong>，但可以嵌入到 Shopify 后台（Admin）或店铺前端（Online Store）。
+你可以选择用 <strong>Remix + Node.js</strong>，或者 <strong>PHP（Laravel、Slim 等）</strong>。</p>
+<h3 id="-传统-php-实现-shopify-app">🔹 传统 PHP 实现 Shopify App
+</h3><ul>
+<li>1️⃣ <strong>Shopify 后台 → 访问你的 PHP 服务器</strong>（Admin API / Storefront API）</li>
+<li>2️⃣ <strong>PHP 处理请求，查询数据库</strong></li>
+<li>3️⃣ <strong>PHP 渲染 HTML，返回给 Shopify</strong></li>
+</ul>
+<h2 id="手动创建应用">手动创建应用
+</h2><p><img src="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408144940525.png"
+	width="871"
+	height="271"
+	srcset="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408144940525_hu_44d8da7717508c8d.png 480w, /p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408144940525_hu_cdfbf1ca55167254.png 1024w"
+	loading="lazy"
+	
+		alt="image-20250408144940525"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="321"
+		data-flex-basis="771px"
+	
+></p>
+<h2 id="配置应用信息">配置应用信息
+</h2><p><img src="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150038093.png"
+	width="883"
+	height="670"
+	srcset="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150038093_hu_f658e19061d7bc70.png 480w, /p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150038093_hu_5dc2c8327de3fd46.png 1024w"
+	loading="lazy"
+	
+		alt="image-20250408150038093"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="316px"
+	
+></p>
+<h2 id="让shopify-cli识别现有项目">让Shopify Cli识别现有项目
+</h2><h3 id="先创建-shopify-app-配置"><strong>先创建 Shopify App 配置</strong>
+</h3><p>在 PHP 项目根目录<strong>手动创建</strong> <code>shopify.app.toml</code> 文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">touch shopify.app.toml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后在 <code>shopify.app.toml</code> 里添加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="nx">name</span> <span class="p">=</span> <span class="s2">&#34;My Laravel Shopify App&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">scopes</span> <span class="p">=</span> <span class="s2">&#34;read_products, write_products&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="初始化-packagejson-文件">初始化 <code>package.json</code> 文件
+</h3><p>在根目录生成一个空壳 <code>package.json</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bash复制编辑cd ~/workspace/shopify-php
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">echo &#39;{}&#39; &gt; package.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">npm init -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这会生成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shopify-php&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;1.0.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;main&#34;</span><span class="p">:</span> <span class="s2">&#34;index.js&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;license&#34;</span><span class="p">:</span> <span class="s2">&#34;MIT&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>📌 <strong>这样 Shopify CLI 就能识别你的 PHP 项目是一个 Shopify App 了！</strong></p>
+<p>然后，再运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify app dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="选择测试商店">选择测试商店
+</h2><p><img src="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150214448.png"
+	width="762"
+	height="376"
+	srcset="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150214448_hu_4d9f2728b0f81dd2.png 480w, /p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150214448_hu_ef90e302a43c1964.png 1024w"
+	loading="lazy"
+	
+		alt="image-20250408150214448"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="202"
+		data-flex-basis="486px"
+	
+></p>
+<h2 id="如何添加-theme-app-extension">如何添加 Theme App Extension
+</h2><h3 id="什么是-theme-app-extension">什么是 Theme App Extension？
+</h3><p>Theme App Extension 允许你的 Shopify App <strong>自动在商店的 Liquid 主题里添加代码</strong>，比如 <strong>插入翻译 JS、按钮、HTML 片段</strong> 等，而<strong>无需商家手动修改代码</strong>。</p>
+<hr>
+<h3 id="php-shopify-app-添加-theme-app-extension-的步骤">PHP Shopify App 添加 Theme App Extension 的步骤
+</h3><h4 id="在-shopify-cli-里创建-theme-app-extension">🔹在 Shopify CLI 里创建 Theme App Extension
+</h4><p>你的 PHP App 是后台，<strong>Theme App Extension 需要单独用 Shopify CLI 创建</strong>。</p>
+<p>1️⃣ <strong>进入你的 PHP App 目录</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> /your-laravel-shopify-app
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2️⃣ <strong>使用 Shopify CLI 创建 Theme App Extension</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify app generate extension
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150711209.png"
+	width="532"
+	height="298"
+	srcset="/p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150711209_hu_a8780d8f96eb49a.png 480w, /p/%E4%BC%A0%E7%BB%9F-php-%E5%AE%9E%E7%8E%B0-shopify-app/image-20250408150711209_hu_63f30b197e0cf7db.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="178"
+		data-flex-basis="428px"
+	
+></p>
+<p>📌 这里选择 <code>Theme app extension</code> 主题扩展。然后根据提示输入扩展的名称</p>
+<p>3️⃣ <strong>进入新创建的扩展目录</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd extensions/theme-translation
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4️⃣ <strong>运行开发模式（用于本地预览）</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">shopify app dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>📌 这样 Shopify 主题就可以加载你的 Theme App Extension 进行测试。</p>
+<hr>
+<h4 id="修改-theme-app-extension-的-liquid-代码"><strong>🔹修改 Theme App Extension 的 Liquid 代码</strong>
+</h4><p>创建扩展后，你会看到 <code>blocks/</code> 目录，里面有 <code>.liquid</code> 文件。</p>
+<p>你可以添加 <strong>一个翻译切换组件</strong>，让用户点击切换语言：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">liquid复制编辑</span><span class="o">&lt;</span><span class="n">div</span> <span class="k">class</span><span class="o">=</span><span class="s2">&#34;translation-widget&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">button</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&#34;switchLanguage(&#39;en&#39;)&#34;</span><span class="o">&gt;</span><span class="n">English</span><span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">button</span> <span class="n">onclick</span><span class="o">=</span><span class="s2">&#34;switchLanguage(&#39;fr&#39;)&#34;</span><span class="o">&gt;</span><span class="n">Français</span><span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">script</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">function</span> <span class="n">switchLanguage</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;/apps/translation/switch&#39;</span><span class="p">,</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">method</span><span class="p">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">headers</span><span class="p">:</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">},</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">body</span><span class="p">:</span> <span class="n">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">({</span> <span class="n">language</span><span class="p">:</span> <span class="n">lang</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span><span class="o">.</span><span class="n">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="n">location</span><span class="o">.</span><span class="n">reload</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>📌 <strong>这段代码会被插入到店铺主题里</strong>，让用户可以点击按钮切换语言。</p>
+<hr>
+<h4 id="让-php-处理语言切换"><strong>🔹让 PHP 处理语言切换</strong>
+</h4><p>在 Laravel 后端，添加一个 <strong>路由来处理翻译切换</strong>：</p>
+<p>📌 <strong><code>routes/web.php</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Http\Request</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">use</span> <span class="nx">Illuminate\Support\Facades\Session</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Route</span><span class="o">::</span><span class="na">post</span><span class="p">(</span><span class="s1">&#39;/apps/translation/switch&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nx">Request</span> <span class="nv">$request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$language</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">input</span><span class="p">(</span><span class="s1">&#39;language&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Session</span><span class="o">::</span><span class="na">put</span><span class="p">(</span><span class="s1">&#39;shopify_locale&#39;</span><span class="p">,</span> <span class="nv">$language</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">response</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">json</span><span class="p">([</span><span class="s1">&#39;success&#39;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>📌 <strong>这会在 Session 里存储语言信息</strong>，然后你的 Laravel API 就可以返回不同语言的数据。</p>
+<hr>
+<h4 id="在-php-里修改-api-响应"><strong>🔹在 PHP 里修改 API 响应</strong>
+</h4><p>如果你的 PHP App 需要返回不同语言的数据，你可以在 API 里动态返回翻译内容：</p>
+<p>📌 <strong><code>routes/api.php</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">Route</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;/translations&#39;</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$language</span> <span class="o">=</span> <span class="nx">Session</span><span class="o">::</span><span class="na">get</span><span class="p">(</span><span class="s1">&#39;shopify_locale&#39;</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$translations</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;en&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;welcome&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Welcome to our store!&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;fr&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;welcome&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Bienvenue dans notre magasin!&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">response</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">json</span><span class="p">([</span><span class="s1">&#39;message&#39;</span> <span class="o">=&gt;</span> <span class="nv">$translations</span><span class="p">[</span><span class="nv">$language</span><span class="p">][</span><span class="s1">&#39;welcome&#39;</span><span class="p">]]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>📌 这样，你的前端可以调用 <code>/api/translations</code> 来获取翻译后的内容。</p>
+<hr>
+<h4 id="部署-theme-app-extension"><strong>🔹部署 Theme App Extension</strong>
+</h4><p><strong>1️⃣ 构建扩展</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify extension build
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2️⃣ 提交扩展</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">shopify extension push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3️⃣ 在 Shopify Partner Dashboard 里发布</strong></p>
+<ul>
+<li>进入 Shopify Partner Dashboard</li>
+<li>进入你的 App</li>
+<li>在 <strong>App Extensions</strong> 里找到 <strong>Theme App Extension</strong></li>
+<li>点击 <strong>发布</strong></li>
+</ul>
+<p>📌 <strong>这样，商家安装你的 App 后，扩展就会自动出现在他们的主题里！</strong></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/shopify/">Shopify</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/shopify-app%E5%BC%80%E5%8F%91%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Shopify App开发知识整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="hollisho/hollisho-blog-talks"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
