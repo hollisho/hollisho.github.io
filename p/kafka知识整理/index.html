@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Kafka 简介 Kafka 是一个分布式的流处理平台，最初由 LinkedIn 开发，后来成为 Apache 项目。它具有高吞吐量、可靠性和可扩展性的特点，被广泛应用于日志收集、消息系统、活动追踪、流式处理等场景。\n">
+<title>Kafka知识整理</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/kafka%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Kafka知识整理">
+<meta property='og:description' content="Kafka 简介 Kafka 是一个分布式的流处理平台，最初由 LinkedIn 开发，后来成为 Apache 项目。它具有高吞吐量、可靠性和可扩展性的特点，被广泛应用于日志收集、消息系统、活动追踪、流式处理等场景。\n">
+<meta property='og:url' content='https://hollisho.github.io/p/kafka%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2024-01-10T11:34:49&#43;08:00'/><meta property='article:modified_time' content='2024-01-10T11:34:49&#43;08:00'/>
+<meta name="twitter:title" content="Kafka知识整理">
+<meta name="twitter:description" content="Kafka 简介 Kafka 是一个分布式的流处理平台，最初由 LinkedIn 开发，后来成为 Apache 项目。它具有高吞吐量、可靠性和可扩展性的特点，被广泛应用于日志收集、消息系统、活动追踪、流式处理等场景。\n">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">难得一身好本领</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#kafka-简介">Kafka 简介</a></li>
+    <li><a href="#kafka-架构设计">Kafka 架构设计</a>
+      <ol>
+        <li><a href="#broker">Broker</a></li>
+        <li><a href="#producer">Producer</a></li>
+        <li><a href="#consumer">Consumer</a></li>
+        <li><a href="#topic">Topic</a></li>
+        <li><a href="#partition">Partition</a></li>
+        <li><a href="#segment">Segment</a></li>
+        <li><a href="#log">Log</a></li>
+        <li><a href="#zookeeper">ZooKeeper</a></li>
+      </ol>
+    </li>
+    <li><a href="#kafka-副本同步方式">Kafka 副本同步方式</a>
+      <ol>
+        <li><a href="#1-ack0-半同步复制">1. ack=0 (半同步复制)</a></li>
+        <li><a href="#2-ack1-异步复制">2. ack=1 (异步复制)</a></li>
+        <li><a href="#3-ackall-1-同步复制">3. ack=all/-1 (同步复制)</a></li>
+        <li><a href="#isr-机制-in-sync-replicas">ISR 机制 (In-Sync Replicas)</a></li>
+      </ol>
+    </li>
+    <li><a href="#kafka-消息发送流程">Kafka 消息发送流程</a></li>
+    <li><a href="#kafka-消息存储流程">Kafka 消息存储流程</a></li>
+    <li><a href="#kafka-消息消费流程">Kafka 消息消费流程</a></li>
+    <li><a href="#主从同步">主从同步</a></li>
+    <li><a href="#高可用">高可用</a></li>
+    <li><a href="#消息顺序">消息顺序</a></li>
+    <li><a href="#消息重复">消息重复</a></li>
+    <li><a href="#消息丢失">消息丢失</a></li>
+    <li><a href="#消息积压">消息积压</a></li>
+    <li><a href="#消息延迟">消息延迟</a></li>
+    <li><a href="#零拷贝">零拷贝</a></li>
+    <li><a href="#kafka-调优">Kafka 调优</a>
+      <ol>
+        <li><a href="#broker-调优">Broker 调优</a></li>
+        <li><a href="#producer-调优">Producer 调优</a></li>
+        <li><a href="#consumer-调优">Consumer 调优</a></li>
+      </ol>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#kafka-存储结构详解">Kafka 存储结构详解</a>
+      <ol>
+        <li><a href="#topic-与-partition">Topic 与 Partition</a></li>
+        <li><a href="#segment-文件">Segment 文件</a></li>
+        <li><a href="#索引机制">索引机制</a></li>
+        <li><a href="#日志清理">日志清理</a></li>
+        <li><a href="#文件系统与页缓存">文件系统与页缓存</a></li>
+        <li><a href="#存储格式">存储格式</a></li>
+        <li><a href="#批量写入与压缩">批量写入与压缩</a></li>
+      </ol>
+    </li>
+    <li><a href="#存储优化最佳实践">存储优化最佳实践</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kafka/" >
+                Kafka
+            </a>
+        
+            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" >
+                消息队列
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/kafka%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">Kafka知识整理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-01-10 11:34</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="kafka-简介">Kafka 简介
+</h2><p>Kafka 是一个分布式的流处理平台，最初由 LinkedIn 开发，后来成为 Apache 项目。它具有高吞吐量、可靠性和可扩展性的特点，被广泛应用于日志收集、消息系统、活动追踪、流式处理等场景。</p>
+<h2 id="kafka-架构设计">Kafka 架构设计
+</h2><p>Kafka 的核心架构包含以下几个关键组件：</p>
+<h3 id="broker">Broker
+</h3><p>Broker 是 Kafka 集群中的服务器节点，负责接收和处理客户端请求，存储消息数据。每个 Broker 都有一个唯一的 ID，可以独立运行。</p>
+<h3 id="producer">Producer
+</h3><p>Producer 是消息生产者，负责将消息发送到 Kafka 集群中的特定 Topic。Producer 可以选择同步或异步的方式发送消息。</p>
+<h3 id="consumer">Consumer
+</h3><p>Consumer 是消息消费者，负责从 Kafka 集群中订阅并消费消息。Consumer 可以单独消费，也可以组成 Consumer Group 共同消费。</p>
+<h3 id="topic">Topic
+</h3><p>Topic 是消息的逻辑分类，每个 Topic 可以有多个 Partition。Producer 发送消息到特定的 Topic，Consumer 从特定的 Topic 消费消息。</p>
+<h3 id="partition">Partition
+</h3><p>Partition 是 Topic 的物理分区，每个 Partition 是一个有序的、不可变的消息序列。Partition 的引入使得 Kafka 可以实现水平扩展和并行处理。</p>
+<h3 id="segment">Segment
+</h3><p>Segment 是 Partition 的物理存储单元，每个 Partition 由多个 Segment 组成。当 Segment 达到一定大小或时间阈值时，会创建新的 Segment。</p>
+<h3 id="log">Log
+</h3><p>Log 是 Kafka 中最基本的数据存储单元，每个 Partition 对应一个 Log，Log 由多个 Segment 文件组成。</p>
+<h3 id="zookeeper">ZooKeeper
+</h3><p>ZooKeeper 用于管理和协调 Kafka 集群，存储元数据信息，如 Broker 节点、Topic 配置、消费者偏移量等。（注：新版本 Kafka 正在逐步减少对 ZooKeeper 的依赖）</p>
+<h2 id="kafka-副本同步方式">Kafka 副本同步方式
+</h2><p>Kafka 提供了三种不同的副本同步方式，通过 <code>acks</code> 参数控制：</p>
+<h3 id="1-ack0-半同步复制">1. ack=0 (半同步复制)
+</h3><ul>
+<li>Producer 发送消息后不等待任何确认</li>
+<li>最高的吞吐量，但无法保证消息已被接收</li>
+<li>可能导致消息丢失</li>
+<li>适用于对数据一致性要求不高的场景，如日志收集</li>
+</ul>
+<h3 id="2-ack1-异步复制">2. ack=1 (异步复制)
+</h3><ul>
+<li>Producer 发送消息后，等待 Leader 副本确认</li>
+<li>不等待 Follower 副本同步完成</li>
+<li>在 Leader 崩溃时可能丢失数据</li>
+<li>吞吐量和可靠性的折中方案</li>
+</ul>
+<h3 id="3-ackall-1-同步复制">3. ack=all/-1 (同步复制)
+</h3><ul>
+<li>Producer 发送消息后，等待所有 ISR 中的副本确认</li>
+<li>最高的可靠性，但吞吐量最低</li>
+<li>只要有一个 ISR 中的副本存活，就不会丢失数据</li>
+<li>适用于对数据一致性要求高的场景，如金融交易</li>
+</ul>
+<h3 id="isr-机制-in-sync-replicas">ISR 机制 (In-Sync Replicas)
+</h3><ul>
+<li>ISR 是与 Leader 保持同步的副本集合</li>
+<li>AR (Assigned Replicas) = ISR (In-Sync Replicas) + OSR (Out-of-Sync Replicas)</li>
+<li>副本滞后超过 <code>replica.lag.time.max.ms</code> 会被踢出 ISR</li>
+<li>当副本重新追上 Leader 时，会被重新加入 ISR</li>
+<li>ISR 机制是 Kafka 实现高可用和数据一致性的核心</li>
+</ul>
+<h2 id="kafka-消息发送流程">Kafka 消息发送流程
+</h2><ol>
+<li>Producer 创建 ProducerRecord，指定 Topic 和消息内容</li>
+<li>消息经过序列化器、分区器处理</li>
+<li>分区器根据 Key 或轮询方式选择目标 Partition</li>
+<li>消息被添加到内存中的批次 (Batch)</li>
+<li>Sender 线程定期将批次发送到对应的 Broker</li>
+<li>Broker 接收消息并写入对应 Partition 的 Leader 副本</li>
+<li>根据 acks 配置，等待副本同步完成</li>
+<li>返回响应给 Producer</li>
+</ol>
+<h2 id="kafka-消息存储流程">Kafka 消息存储流程
+</h2><ol>
+<li>Broker 接收到消息后，将其追加到对应 Partition 的当前活跃 Segment 中</li>
+<li>消息以追加写的方式写入磁盘，提高写入效率</li>
+<li>消息按照 Offset 顺序存储，每条消息有唯一的 Offset</li>
+<li>当 Segment 达到配置的大小或时间阈值，创建新的 Segment</li>
+<li>旧的 Segment 会在配置的保留时间后被删除或压缩</li>
+<li>Kafka 使用页缓存和零拷贝技术优化 I/O 性能</li>
+</ol>
+<h2 id="kafka-消息消费流程">Kafka 消息消费流程
+</h2><ol>
+<li>Consumer 向 Coordinator 发送 JoinGroup 请求加入消费组</li>
+<li>Coordinator 选择一个 Consumer 作为 Leader，进行分区分配</li>
+<li>分配结果通过 SyncGroup 请求同步给所有 Consumer</li>
+<li>Consumer 向对应的 Broker 发送 Fetch 请求获取消息</li>
+<li>Broker 返回消息给 Consumer</li>
+<li>Consumer 处理消息并定期提交消费位移 (Offset)</li>
+<li>位移提交可以是自动的或手动的，保存在内部 Topic <code>__consumer_offsets</code> 中</li>
+</ol>
+<h2 id="主从同步">主从同步
+</h2><p>Kafka 的主从同步基于 Leader-Follower 模型：</p>
+<ol>
+<li>每个 Partition 有一个 Leader 和多个 Follower</li>
+<li>所有读写请求都由 Leader 处理</li>
+<li>Follower 通过 Fetch 请求从 Leader 拉取消息</li>
+<li>HW (High Watermark) 表示所有 ISR 副本都已复制的位置</li>
+<li>LEO (Log End Offset) 表示每个副本的日志末端位置</li>
+<li>消费者只能消费到 HW 位置的消息，保证数据一致性</li>
+<li>当 Leader 失效时，从 ISR 中选举新的 Leader</li>
+</ol>
+<h2 id="高可用">高可用
+</h2><p>Kafka 通过以下机制实现高可用：</p>
+<ol>
+<li><strong>多副本机制</strong>：每个 Partition 可以配置多个副本，分布在不同的 Broker 上</li>
+<li><strong>Leader 选举</strong>：当 Leader 失效时，Controller 会从 ISR 中选择一个 Follower 成为新的 Leader</li>
+<li><strong>Controller 选举</strong>：集群中的一个 Broker 会被选为 Controller，负责分区分配和故障转移</li>
+<li><strong>Rebalance 机制</strong>：当 Consumer 加入或离开消费组时，会触发 Rebalance，重新分配分区</li>
+<li><strong>自动平衡</strong>：Kafka 支持自动平衡 Leader 分区，避免单个 Broker 负载过高</li>
+</ol>
+<h2 id="消息顺序">消息顺序
+</h2><p>Kafka 对消息顺序的保证：</p>
+<ol>
+<li>单个 Partition 内的消息是有序的</li>
+<li>不同 Partition 之间的消息无法保证顺序</li>
+<li>如果需要全局顺序，可以使用只有一个 Partition 的 Topic</li>
+<li>如果需要按 Key 顺序，可以确保相同 Key 的消息路由到同一个 Partition</li>
+</ol>
+<h2 id="消息重复">消息重复
+</h2><p>消息重复的原因和处理：</p>
+<ol>
+<li><strong>原因</strong>：网络问题、Broker 崩溃、Consumer 崩溃等导致重试或重新消费</li>
+<li><strong>Producer 端</strong>：启用幂等性 (<code>enable.idempotence=true</code>) 和事务功能</li>
+<li><strong>Consumer 端</strong>：实现幂等消费，如使用唯一标识、状态检查、分布式锁等</li>
+<li><strong>最佳实践</strong>：设计业务逻辑时考虑幂等性，确保多次处理同一消息不会产生副作用</li>
+</ol>
+<h2 id="消息丢失">消息丢失
+</h2><p>消息丢失的场景和防止措施：</p>
+<ol>
+<li>
+<p><strong>Producer 端</strong>：</p>
+<ul>
+<li>使用 <code>acks=all</code> 确保所有 ISR 副本都收到消息</li>
+<li>启用重试机制 (<code>retries</code> 参数)</li>
+<li>使用回调机制确认消息发送结果</li>
+</ul>
+</li>
+<li>
+<p><strong>Broker 端</strong>：</p>
+<ul>
+<li>配置足够的副本数 (<code>replication.factor&gt;=3</code>)</li>
+<li>配置最小 ISR 数量 (<code>min.insync.replicas&gt;=2</code>)</li>
+<li>合理配置刷盘策略 (<code>log.flush.*</code> 参数)</li>
+</ul>
+</li>
+<li>
+<p><strong>Consumer 端</strong>：</p>
+<ul>
+<li>手动提交位移，确保消息处理成功后再提交</li>
+<li>使用事务确保消息处理和位移提交的原子性</li>
+<li>避免长时间处理单条消息，防止会话超时</li>
+</ul>
+</li>
+</ol>
+<h2 id="消息积压">消息积压
+</h2><p>消息积压的原因和解决方案：</p>
+<ol>
+<li>
+<p><strong>原因</strong>：</p>
+<ul>
+<li>Consumer 处理能力不足</li>
+<li>突发流量高峰</li>
+<li>Consumer 异常或宕机</li>
+<li>网络问题</li>
+</ul>
+</li>
+<li>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li>增加 Consumer 实例和 Partition 数量</li>
+<li>优化 Consumer 处理逻辑，提高处理效率</li>
+<li>实现背压机制，控制生产速度</li>
+<li>使用更高性能的硬件</li>
+<li>临时将消息转储到其他存储，离线处理</li>
+</ul>
+</li>
+</ol>
+<h2 id="消息延迟">消息延迟
+</h2><p>Kafka 中的延迟消息实现：</p>
+<ol>
+<li>Kafka 原生不支持延迟消息，但可以通过以下方式实现：
+<ul>
+<li>使用定时任务扫描特定 Topic</li>
+<li>使用时间轮算法在应用层实现</li>
+<li>创建多个 Topic 代表不同的延迟级别</li>
+<li>使用外部组件如 Apache Pulsar 或 RocketMQ 的延迟功能</li>
+</ul>
+</li>
+</ol>
+<h2 id="零拷贝">零拷贝
+</h2><p>Kafka 使用零拷贝技术提高性能：</p>
+<ol>
+<li><strong>传统 I/O 模型</strong>：数据在磁盘、内核空间、用户空间和网络之间多次拷贝</li>
+<li><strong>零拷贝技术</strong>：利用 <code>sendfile()</code> 系统调用，直接从磁盘到网络接口传输数据</li>
+<li><strong>优势</strong>：
+<ul>
+<li>减少数据拷贝次数</li>
+<li>减少上下文切换</li>
+<li>降低 CPU 使用率</li>
+<li>提高吞吐量</li>
+</ul>
+</li>
+<li><strong>应用场景</strong>：Kafka 的日志文件传输、Consumer 消费消息</li>
+</ol>
+<h2 id="kafka-调优">Kafka 调优
+</h2><h3 id="broker-调优">Broker 调优
+</h3><ul>
+<li>合理设置 <code>num.network.threads</code> 和 <code>num.io.threads</code></li>
+<li>优化 JVM 参数，如堆大小、GC 策略</li>
+<li>配置适当的 <code>log.retention.hours</code> 和 <code>log.segment.bytes</code></li>
+<li>使用 RAID 10 磁盘阵列提高 I/O 性能</li>
+</ul>
+<h3 id="producer-调优">Producer 调优
+</h3><ul>
+<li>增大 <code>batch.size</code> 和 <code>linger.ms</code> 提高批量发送效率</li>
+<li>配置合适的 <code>buffer.memory</code> 避免内存溢出</li>
+<li>根据场景选择合适的 <code>compression.type</code></li>
+<li>调整 <code>max.in.flight.requests.per.connection</code> 平衡吞吐量和顺序性</li>
+</ul>
+<h3 id="consumer-调优">Consumer 调优
+</h3><ul>
+<li>合理设置 <code>fetch.min.bytes</code> 和 <code>fetch.max.wait.ms</code></li>
+<li>优化 <code>max.poll.records</code> 控制单次拉取的消息数量</li>
+<li>调整 <code>max.poll.interval.ms</code> 避免消费者被踢出消费组</li>
+<li>实现并行处理提高消费效率</li>
+</ul>
+<h2 id="总结">总结
+</h2><p>Kafka 作为一个高性能、分布式的流处理平台，通过精心设计的架构和机制，实现了高吞吐量、可靠性和可扩展性。理解 Kafka 的核心概念和工作原理，对于构建高效、可靠的消息系统至关重要。</p>
+<h2 id="kafka-存储结构详解">Kafka 存储结构详解
+</h2><p>Kafka 的存储结构是其高性能的关键因素之一，它采用了分层的存储设计，从上到下依次为：Topic、Partition、Segment、Index 和 Log。</p>
+<h3 id="topic-与-partition">Topic 与 Partition
+</h3><p>Topic 是消息的逻辑分类，而 Partition 是 Topic 的物理分区。每个 Topic 可以有多个 Partition，这些 Partition 分布在不同的 Broker 上，实现了数据的分布式存储和并行处理。</p>
+<p>Partition 的数量决定了 Topic 的并行度，增加 Partition 数量可以提高吞吐量，但也会增加系统开销和复杂性。Partition 的数量一旦设定，通常不建议减少，因为这可能导致数据丢失。</p>
+<h3 id="segment-文件">Segment 文件
+</h3><p>每个 Partition 由多个 Segment 文件组成，Segment 是 Kafka 存储的基本单位。当 Segment 达到一定大小（默认 1GB）或时间阈值时，会创建新的 Segment。</p>
+<p>Segment 文件命名规则为：<code>[baseOffset].[index|log|timeindex]</code>，其中 <code>baseOffset</code> 是该 Segment 中第一条消息的 Offset。</p>
+<p>每个 Segment 包含以下文件：</p>
+<ul>
+<li><code>.log</code> 文件：存储实际的消息数据</li>
+<li><code>.index</code> 文件：存储消息的物理位置索引</li>
+<li><code>.timeindex</code> 文件：存储时间戳索引（Kafka 0.10.0 版本后引入）</li>
+</ul>
+<h3 id="索引机制">索引机制
+</h3><p>Kafka 使用稀疏索引来提高查找效率。索引文件中并不是每条消息都有索引项，而是每隔一定字节数（默认 4KB）的消息才会创建一个索引项。</p>
+<p>索引项包含两个部分：</p>
+<ul>
+<li>相对 Offset：消息的 Offset 相对于 Segment 基准 Offset 的值</li>
+<li>物理位置：消息在 <code>.log</code> 文件中的物理位置（字节偏移量）</li>
+</ul>
+<p>当需要查找特定 Offset 的消息时，Kafka 首先找到该 Offset 所在的 Segment，然后在索引文件中找到小于等于目标 Offset 的最大索引项，从该位置开始顺序扫描 <code>.log</code> 文件，直到找到目标消息。</p>
+<h3 id="日志清理">日志清理
+</h3><p>Kafka 提供了两种日志清理策略：</p>
+<ol>
+<li><strong>基于时间的删除</strong>：通过 <code>log.retention.hours</code> 配置，删除超过保留时间的旧 Segment</li>
+<li><strong>基于大小的删除</strong>：通过 <code>log.retention.bytes</code> 配置，当 Partition 大小超过阈值时，删除最旧的 Segment</li>
+<li><strong>日志压缩</strong>：通过 <code>log.cleanup.policy=compact</code> 配置，保留每个 Key 的最新值，删除旧值</li>
+</ol>
+<p>日志压缩特别适用于需要保留最新状态的场景，如配置更新、状态变更等。</p>
+<h3 id="文件系统与页缓存">文件系统与页缓存
+</h3><p>Kafka 直接使用文件系统存储数据，而不是使用数据库。它充分利用操作系统的页缓存（Page Cache）来提高 I/O 性能：</p>
+<ol>
+<li>写入操作：追加写入文件系统，由操作系统负责刷盘</li>
+<li>读取操作：优先从页缓存读取，命中率高时可以避免磁盘 I/O</li>
+</ol>
+<p>这种设计使得 Kafka 在处理大量数据时仍能保持高性能，同时简化了系统架构。</p>
+<h3 id="存储格式">存储格式
+</h3><p>Kafka 消息的存储格式经过精心设计，包含以下字段：</p>
+<ul>
+<li>8 字节 Offset</li>
+<li>4 字节消息大小</li>
+<li>4 字节 CRC32 校验和</li>
+<li>1 字节魔数（Magic Byte）</li>
+<li>1 字节属性（压缩类型等）</li>
+<li>4 字节 Key 长度（-1 表示没有 Key）</li>
+<li>Key 数据（如果存在）</li>
+<li>4 字节 Value 长度</li>
+<li>Value 数据（实际消息内容）</li>
+</ul>
+<p>这种格式设计既保证了数据完整性，又兼顾了存储效率。</p>
+<h3 id="批量写入与压缩">批量写入与压缩
+</h3><p>Kafka 支持消息批量写入和压缩，以提高存储效率和网络传输效率：</p>
+<ol>
+<li><strong>批量写入</strong>：多条消息组成一个批次（Batch），一次性写入磁盘</li>
+<li><strong>压缩</strong>：支持 GZIP、Snappy、LZ4、ZStandard 等压缩算法</li>
+<li><strong>端到端压缩</strong>：Producer 压缩，Broker 保持压缩状态存储，Consumer 解压</li>
+</ol>
+<p>压缩率取决于消息内容的特性，对于文本类数据，通常可以达到 3-5 倍的压缩比。</p>
+<h2 id="存储优化最佳实践">存储优化最佳实践
+</h2><ol>
+<li>
+<p><strong>合理设置 Partition 数量</strong>：</p>
+<ul>
+<li>考虑并行度需求和资源限制</li>
+<li>一般建议每个 Broker 的 Partition 数不超过 2000-4000</li>
+</ul>
+</li>
+<li>
+<p><strong>优化磁盘配置</strong>：</p>
+<ul>
+<li>使用 SSD 提高随机读写性能</li>
+<li>使用 RAID 10 而非 RAID 5/6</li>
+<li>分离操作系统和数据目录</li>
+</ul>
+</li>
+<li>
+<p><strong>调整 Segment 大小</strong>：</p>
+<ul>
+<li>较小的 Segment 有利于及时清理过期数据</li>
+<li>较大的 Segment 减少文件数量，降低管理开销</li>
+</ul>
+</li>
+<li>
+<p><strong>合理配置保留策略</strong>：</p>
+<ul>
+<li>根据业务需求设置 <code>log.retention.hours</code> 和 <code>log.retention.bytes</code></li>
+<li>对不同 Topic 设置不同的保留策略</li>
+</ul>
+</li>
+<li>
+<p><strong>监控磁盘使用率</strong>：</p>
+<ul>
+<li>保持足够的磁盘空间（至少 20% 空闲）</li>
+<li>设置磁盘使用率告警</li>
+</ul>
+</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="hollisho/hollisho-blog-talks"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
