@@ -7,7 +7,77 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Wed, 10 Jan 2024 11:34:49 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 10 Jan 2024 13:41:18 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Rabbitmq知识整理</title>
+        <link>https://hollisho.github.io/p/rabbitmq%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</link>
+        <pubDate>Wed, 10 Jan 2024 13:41:18 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/rabbitmq%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</guid>
+        <description>&lt;h2 id=&#34;rabbitmq-简介&#34;&gt;Rabbitmq 简介
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 是一个开源的消息代理，实现了高级消息队列协议（AMQP）。它具有高可用性、可扩展性和可靠性的特点，被广泛应用于分布式系统、微服务架构、事件驱动的应用程序等场景。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-架构设计&#34;&gt;Rabbitmq 架构设计
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 的核心架构包含以下几个关键组件：&lt;/p&gt;
+&lt;h3 id=&#34;broker&#34;&gt;Broker
+&lt;/h3&gt;&lt;p&gt;Broker 是 Rabbitmq 集群中的服务器节点，负责接收和处理客户端请求，存储消息数据。每个 Broker 都有一个唯一的 ID，可以独立运行。&lt;/p&gt;
+&lt;h3 id=&#34;producer&#34;&gt;Producer
+&lt;/h3&gt;&lt;p&gt;Producer 是消息生产者，负责将消息发送到 Rabbitmq 集群中的特定 Exchange。Producer 可以选择同步或异步的方式发送消息。&lt;/p&gt;
+&lt;h3 id=&#34;consumer&#34;&gt;Consumer
+&lt;/h3&gt;&lt;p&gt;Consumer 是消息消费者，负责从 Rabbitmq 集群中消费消息。Consumer 可以选择手动确认或自动确认消息。&lt;/p&gt;
+&lt;h3 id=&#34;exchange&#34;&gt;Exchange
+&lt;/h3&gt;&lt;p&gt;Exchange 是消息路由和转发的组件，根据消息的路由键（Routing Key）将消息转发到一个或多个 Queue。常见的 Exchange 类型包括 Direct、Topic、Fanout 等。&lt;/p&gt;
+&lt;h3 id=&#34;queue&#34;&gt;Queue
+&lt;/h3&gt;&lt;p&gt;Queue 是消息存储的组件，用于存储消息数据。每个 Queue 都有一个唯一的名称，可以绑定多个 Exchange。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-消息模型&#34;&gt;Rabbitmq 消息模型
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 消息模型主要包括以下几个部分：&lt;/p&gt;
+&lt;h3 id=&#34;消息&#34;&gt;消息
+&lt;/h3&gt;&lt;p&gt;消息是 Rabbitmq 中最小的传输单元，包含消息头和消息体。消息头包含消息的元数据信息，如消息的路由键、消息的优先级等。消息体包含实际的数据内容。&lt;/p&gt;
+&lt;h3 id=&#34;消息队列&#34;&gt;消息队列
+&lt;/h3&gt;&lt;p&gt;消息队列是 Rabbitmq 中消息的存储和转发组件。每个消息队列都有一个唯一的名称，可以绑定多个 Exchange。消息队列可以设置为持久化或非持久化，以保证消息的可靠性。&lt;/p&gt;
+&lt;h3 id=&#34;消息路由&#34;&gt;消息路由
+&lt;/h3&gt;&lt;p&gt;消息路由是 Rabbitmq 中消息的转发组件。根据消息的路由键，消息会被转发到一个或多个 Queue。消息路由可以设置为直接路由、通配符路由、主题路由等。&lt;/p&gt;
+&lt;h3 id=&#34;消息确认&#34;&gt;消息确认
+&lt;/h3&gt;&lt;p&gt;消息确认是 Rabbitmq 中消息的确认机制。当消息被消费者消费后，消费者需要向 Rabbitmq 发送确认消息，以保证消息的可靠性。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-如何保证消息的可靠性&#34;&gt;Rabbitmq 如何保证消息的可靠性
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 如何保证消息的可靠性主要包括以下几个方面：&lt;/p&gt;
+&lt;h3 id=&#34;消息持久化&#34;&gt;消息持久化
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以将消息持久化到磁盘上，以保证消息的可靠性。当 Broker 重启后，消息不会丢失。&lt;/p&gt;
+&lt;h3 id=&#34;消息确认-1&#34;&gt;消息确认
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以将消息确认机制设置为手动确认或自动确认。手动确认可以保证消息的可靠性，自动确认可以提高消息的吞吐量。&lt;/p&gt;
+&lt;h3 id=&#34;消息重试&#34;&gt;消息重试
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以将消息重试机制设置为自动重试或手动重试。自动重试可以保证消息的可靠性，手动重试可以提高消息的可靠性。&lt;/p&gt;
+&lt;h3 id=&#34;消息备份&#34;&gt;消息备份
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以将消息备份到多个 Broker 上，以保证消息的可靠性。当某个 Broker 宕机后，消息不会丢失。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-如何保证消息不被重复消费&#34;&gt;Rabbitmq 如何保证消息不被重复消费
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 如何保证消息不被重复消费主要包括以下几个方面：&lt;/p&gt;
+&lt;h3 id=&#34;消息唯一标识&#34;&gt;消息唯一标识
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以为每条消息生成一个唯一的消息 ID，以保证消息的唯一性。&lt;/p&gt;
+&lt;h3 id=&#34;消息状态检查&#34;&gt;消息状态检查
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以将消息的状态存储到数据库中，以保证消息的状态一致性。&lt;/p&gt;
+&lt;h3 id=&#34;分布式锁&#34;&gt;分布式锁
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以使用分布式锁机制，以保证消息的一致性。&lt;/p&gt;
+&lt;h3 id=&#34;消息幂等性&#34;&gt;消息幂等性
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以实现消息的幂等性，以保证消息的一致性。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-如何解决消息积压问题&#34;&gt;Rabbitmq 如何解决消息积压问题
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 如何解决消息积压问题主要包括以下几个方面：&lt;/p&gt;
+&lt;h3 id=&#34;增加消费者数量&#34;&gt;增加消费者数量
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以增加消费者数量，以提高消息的处理速度。&lt;/p&gt;
+&lt;h3 id=&#34;增加-broker-数量&#34;&gt;增加 Broker 数量
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以增加 Broker 数量，以提高消息的处理速度。&lt;/p&gt;
+&lt;h3 id=&#34;优化消息路由&#34;&gt;优化消息路由
+&lt;/h3&gt;&lt;p&gt;Rabbitmq 可以优化消息路由，以提高消息的处理速度。&lt;/p&gt;
+&lt;h2 id=&#34;rabbitmq-交换机类型&#34;&gt;Rabbitmq 交换机类型
+&lt;/h2&gt;&lt;p&gt;Rabbitmq 交换机类型主要包括以下几种：&lt;/p&gt;
+&lt;h3 id=&#34;direct-exchange&#34;&gt;Direct Exchange
+&lt;/h3&gt;&lt;p&gt;Direct Exchange 是最简单的交换机类型，它根据消息的路由键将消息转发到一个或多个 Queue。&lt;/p&gt;
+&lt;h3 id=&#34;topic-exchange&#34;&gt;Topic Exchange
+&lt;/h3&gt;&lt;p&gt;Topic Exchange 是一种多播交换机类型，它根据消息的路由键将消息转发到一个或多个 Queue。&lt;/p&gt;
+&lt;h3 id=&#34;fanout-exchange&#34;&gt;Fanout Exchange
+&lt;/h3&gt;&lt;p&gt;Fanout Exchange 是一种广播交换机类型，它将消息转发到所有绑定的 Queue。&lt;/p&gt;
+&lt;h3 id=&#34;headers-exchange&#34;&gt;Headers Exchange
+&lt;/h3&gt;&lt;p&gt;Headers Exchange 是一种根据消息头的属性将消息转发到一个或多个 Queue 的交换机类型。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Kafka知识整理</title>
         <link>https://hollisho.github.io/p/kafka%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</link>
         <pubDate>Wed, 10 Jan 2024 11:34:49 +0800</pubDate>
