@@ -300,7 +300,6 @@
         <li><a href="#consumer-调优">Consumer 调优</a></li>
       </ol>
     </li>
-    <li><a href="#总结">总结</a></li>
     <li><a href="#kafka-存储结构详解">Kafka 存储结构详解</a>
       <ol>
         <li><a href="#topic-与-partition">Topic 与 Partition</a></li>
@@ -313,6 +312,7 @@
       </ol>
     </li>
     <li><a href="#存储优化最佳实践">存储优化最佳实践</a></li>
+    <li><a href="#总结">总结</a></li>
   </ol>
 </nav>
         </div>
@@ -599,8 +599,6 @@
 <li>调整 <code>max.poll.interval.ms</code> 避免消费者被踢出消费组</li>
 <li>实现并行处理提高消费效率</li>
 </ul>
-<h2 id="总结">总结
-</h2><p>Kafka 作为一个高性能、分布式的流处理平台，通过精心设计的架构和机制，实现了高吞吐量、可靠性和可扩展性。理解 Kafka 的核心概念和工作原理，对于构建高效、可靠的消息系统至关重要。</p>
 <h2 id="kafka-存储结构详解">Kafka 存储结构详解
 </h2><p>Kafka 的存储结构是其高性能的关键因素之一，它采用了分层的存储设计，从上到下依次为：Topic、Partition、Segment、Index 和 Log。</p>
 <h3 id="topic-与-partition">Topic 与 Partition
@@ -699,6 +697,8 @@
 </ul>
 </li>
 </ol>
+<h2 id="总结">总结
+</h2><p>Kafka 作为一个高性能、分布式的流处理平台，通过精心设计的架构和机制，实现了高吞吐量、可靠性和可扩展性。理解 Kafka 的核心概念和工作原理，对于构建高效、可靠的消息系统至关重要。</p>
 
 </section>
 

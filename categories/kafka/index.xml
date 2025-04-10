@@ -230,8 +230,6 @@
 &lt;li&gt;调整 &lt;code&gt;max.poll.interval.ms&lt;/code&gt; 避免消费者被踢出消费组&lt;/li&gt;
 &lt;li&gt;实现并行处理提高消费效率&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;总结&#34;&gt;总结
-&lt;/h2&gt;&lt;p&gt;Kafka 作为一个高性能、分布式的流处理平台，通过精心设计的架构和机制，实现了高吞吐量、可靠性和可扩展性。理解 Kafka 的核心概念和工作原理，对于构建高效、可靠的消息系统至关重要。&lt;/p&gt;
 &lt;h2 id=&#34;kafka-存储结构详解&#34;&gt;Kafka 存储结构详解
 &lt;/h2&gt;&lt;p&gt;Kafka 的存储结构是其高性能的关键因素之一，它采用了分层的存储设计，从上到下依次为：Topic、Partition、Segment、Index 和 Log。&lt;/p&gt;
 &lt;h3 id=&#34;topic-与-partition&#34;&gt;Topic 与 Partition
@@ -330,6 +328,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;Kafka 作为一个高性能、分布式的流处理平台，通过精心设计的架构和机制，实现了高吞吐量、可靠性和可扩展性。理解 Kafka 的核心概念和工作原理，对于构建高效、可靠的消息系统至关重要。&lt;/p&gt;
 </description>
         </item>
         
