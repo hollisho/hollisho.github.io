@@ -261,7 +261,11 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#kafka-简介">Kafka 简介</a></li>
+    <li><a href="#kafka-简介">Kafka 简介</a>
+      <ol>
+        <li><a href="#应用场景">应用场景</a></li>
+      </ol>
+    </li>
     <li><a href="#kafka-架构设计">Kafka 架构设计</a>
       <ol>
         <li><a href="#broker">Broker</a></li>
@@ -380,24 +384,218 @@
     
     <h2 id="kafka-简介">Kafka 简介
 </h2><p>Kafka 是一个分布式的流处理平台，最初由 LinkedIn 开发，后来成为 Apache 项目。它具有高吞吐量、可靠性和可扩展性的特点，被广泛应用于日志收集、消息系统、活动追踪、流式处理等场景。</p>
+<h3 id="应用场景">应用场景
+</h3><ol>
+<li>
+<p><strong>日志聚合</strong>：收集分布式系统中的日志数据，集中存储以便分析和监控</p>
+<ul>
+<li>案例：电商平台将用户行为日志（浏览、点击、购买）通过Kafka收集，用于实时分析用户行为和个性化推荐</li>
+</ul>
+</li>
+<li>
+<p><strong>消息队列</strong>：解耦系统组件，提高系统弹性和可扩展性</p>
+<ul>
+<li>案例：订单系统将新订单发送到Kafka，库存系统、支付系统、物流系统各自消费消息进行处理</li>
+</ul>
+</li>
+<li>
+<p><strong>流处理</strong>：实时处理和转换数据流</p>
+<ul>
+<li>案例：金融机构使用Kafka Streams处理交易数据流，实时检测欺诈行为</li>
+</ul>
+</li>
+<li>
+<p><strong>事件溯源</strong>：记录状态变更事件，用于系统重建和审计</p>
+<ul>
+<li>案例：银行系统记录账户所有操作事件，用于账户状态重建和合规审计</li>
+</ul>
+</li>
+<li>
+<p><strong>指标监控</strong>：收集系统和应用指标，用于监控和告警</p>
+<ul>
+<li>案例：云服务提供商收集基础设施指标，实时监控系统健康状态</li>
+</ul>
+</li>
+</ol>
 <h2 id="kafka-架构设计">Kafka 架构设计
 </h2><p>Kafka 的核心架构包含以下几个关键组件：</p>
 <h3 id="broker">Broker
 </h3><p>Broker 是 Kafka 集群中的服务器节点，负责接收和处理客户端请求，存储消息数据。每个 Broker 都有一个唯一的 ID，可以独立运行。</p>
+<p><strong>应用案例</strong>：大型电商平台通常部署多个Broker节点组成集群，每个节点可能处理不同类型的消息流量。例如，用户行为数据可能分配到特定的Broker组，而订单处理数据分配到另一组Broker，以实现负载均衡和资源隔离。</p>
 <h3 id="producer">Producer
 </h3><p>Producer 是消息生产者，负责将消息发送到 Kafka 集群中的特定 Topic。Producer 可以选择同步或异步的方式发送消息。</p>
+<p><strong>代码示例</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 创建Producer配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Properties</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Properties</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;bootstrap.servers&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;kafka1:9092,kafka2:9092&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;key.serializer&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;value.serializer&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 创建Producer实例</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">KafkaProducer</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">producer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KafkaProducer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">props</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 发送消息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ProducerRecord</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ProducerRecord</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="s">&#34;order-topic&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">orderId</span><span class="p">,</span><span class="w"> </span><span class="n">orderJson</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">producer</span><span class="p">.</span><span class="na">send</span><span class="p">(</span><span class="n">record</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">metadata</span><span class="p">,</span><span class="w"> </span><span class="n">exception</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">exception</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;消息发送成功: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="na">offset</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exception</span><span class="p">.</span><span class="na">printStackTrace</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">});</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 关闭Producer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">producer</span><span class="p">.</span><span class="na">close</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>应用场景</strong>：在微服务架构中，订单服务作为Producer，将新创建的订单信息发送到Kafka，实现与库存服务、支付服务等的解耦。</p>
 <h3 id="consumer">Consumer
 </h3><p>Consumer 是消息消费者，负责从 Kafka 集群中订阅并消费消息。Consumer 可以单独消费，也可以组成 Consumer Group 共同消费。</p>
+<p><strong>代码示例</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// 创建Consumer配置</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Properties</span><span class="w"> </span><span class="n">props</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Properties</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;bootstrap.servers&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;kafka1:9092,kafka2:9092&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;group.id&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;inventory-service&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;key.deserializer&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;value.deserializer&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">props</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&#34;auto.offset.reset&#34;</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;earliest&#34;</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 创建Consumer实例</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">KafkaConsumer</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">consumer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">KafkaConsumer</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="n">props</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 订阅Topic</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">consumer</span><span class="p">.</span><span class="na">subscribe</span><span class="p">(</span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span><span class="s">&#34;order-topic&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 消费消息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ConsumerRecords</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">records</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">consumer</span><span class="p">.</span><span class="na">poll</span><span class="p">(</span><span class="n">Duration</span><span class="p">.</span><span class="na">ofMillis</span><span class="p">(</span><span class="n">100</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">ConsumerRecord</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">record</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">records</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&#34;收到订单: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="na">key</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">&#34;, 内容: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">record</span><span class="p">.</span><span class="na">value</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 处理订单逻辑</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">processOrder</span><span class="p">(</span><span class="n">record</span><span class="p">.</span><span class="na">value</span><span class="p">());</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 手动提交偏移量</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">consumer</span><span class="p">.</span><span class="na">commitSync</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>应用场景</strong>：库存服务作为Consumer，消费订单Topic中的消息，实时更新库存数量。多个库存服务实例可以组成Consumer Group，每个实例处理部分分区的消息，实现负载均衡。</p>
 <h3 id="topic">Topic
 </h3><p>Topic 是消息的逻辑分类，每个 Topic 可以有多个 Partition。Producer 发送消息到特定的 Topic，Consumer 从特定的 Topic 消费消息。</p>
+<p><strong>应用案例</strong>：电商平台可能设置多个不同的Topic：</p>
+<ul>
+<li><code>user-events</code>：用户行为事件（浏览、搜索、收藏）</li>
+<li><code>orders</code>：订单相关事件</li>
+<li><code>inventory-changes</code>：库存变更事件</li>
+<li><code>payment-events</code>：支付相关事件</li>
+</ul>
+<p>这种分类使得不同的业务系统可以只关注与自己相关的消息流。</p>
 <h3 id="partition">Partition
 </h3><p>Partition 是 Topic 的物理分区，每个 Partition 是一个有序的、不可变的消息序列。Partition 的引入使得 Kafka 可以实现水平扩展和并行处理。</p>
+<p><strong>设计考量</strong>：</p>
+<ul>
+<li>分区数量决定了Topic的并行度，通常应该至少等于预期的Consumer数量</li>
+<li>实际案例：高流量电商平台的订单Topic可能配置32个分区，允许最多32个消费者实例并行处理订单</li>
+</ul>
 <h3 id="segment">Segment
-</h3><p>Segment 是 Partition 的物理存储单元，每个 Partition 由多个 Segment 组成。当 Segment 达到一定大小或时间阈值时，会创建新的 Segment。</p>
+</h3><p>Segment 是 Partition 的物理存储单元，每个 Partition 由多个 Segment 组成。当 Segment 达到一定大小（默认1GB）或时间阈值时，会创建新的 Segment。</p>
+<p><strong>性能影响</strong>：Segment大小设置会影响：</p>
+<ul>
+<li>文件管理效率：较大的Segment减少文件数量</li>
+<li>数据清理效率：较小的Segment使过期数据清理更精确</li>
+<li>实际案例：日志系统可能使用较小的Segment（如256MB）以便及时清理过期日志</li>
+</ul>
 <h3 id="log">Log
 </h3><p>Log 是 Kafka 中最基本的数据存储单元，每个 Partition 对应一个 Log，Log 由多个 Segment 文件组成。</p>
-<h3 id="zookeeper">ZooKeeper
-</h3><p>ZooKeeper 用于管理和协调 Kafka 集群，存储元数据信息，如 Broker 节点、Topic 配置、消费者偏移量等。（注：新版本 Kafka 正在逐步减少对 ZooKeeper 的依赖）</p>
+<p><strong>存储结构</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/kafka-logs/
+</span></span><span class="line"><span class="cl">  ├── topic1-0/                # topic1的第0个分区
+</span></span><span class="line"><span class="cl">  │   ├── 00000000000000000000.log    # 数据文件
+</span></span><span class="line"><span class="cl">  │   ├── 00000000000000000000.index  # 索引文件
+</span></span><span class="line"><span class="cl">  │   ├── 00000000000000367104.log    # 下一个segment
+</span></span><span class="line"><span class="cl">  │   └── 00000000000000367104.index
+</span></span><span class="line"><span class="cl">  ├── topic1-1/                # topic1的第1个分区
+</span></span><span class="line"><span class="cl">  │   └── ...
+</span></span><span class="line"><span class="cl">  └── topic2-0/                # topic2的第0个分区
+</span></span><span class="line"><span class="cl">      └── ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="zookeeper">ZooKeeper
+</h3><p>ZooKeeper 用于管理和协调 Kafka 集群，存储元数据信息，如 Broker 节点、Topic 配置、消费者偏移量等。（注：新版本 Kafka 正在逐步减少对 ZooKeeper 的依赖，Kafka 2.8.0引入了KRaft模式，可以完全不依赖ZooKeeper）</p>
+<p><strong>ZooKeeper存储的关键信息</strong>：</p>
+<ul>
+<li><code>/brokers/ids/[broker-id]</code>：Broker节点信息</li>
+<li><code>/brokers/topics/[topic]/partitions/[partition]/state</code>：分区状态</li>
+<li><code>/consumers/[group_id]/offsets/[topic]/[partition]</code>：消费者偏移量（旧版本）</li>
+</ul>
 <h2 id="kafka-副本同步方式">Kafka 副本同步方式
 </h2><p>Kafka 提供了三种不同的副本同步方式，通过 <code>acks</code> 参数控制：</p>
 <h3 id="1-ack0-半同步复制">1. ack=0 (半同步复制)
