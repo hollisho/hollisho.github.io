@@ -7,7 +7,43 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Thu, 10 Apr 2025 17:19:18 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Apr 2025 18:56:38 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>基于MQ的分布式事务管理方案</title>
+        <link>https://hollisho.github.io/p/%E5%9F%BA%E4%BA%8Emq%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/</link>
+        <pubDate>Mon, 21 Apr 2025 18:56:38 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/%E5%9F%BA%E4%BA%8Emq%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/</guid>
+        <description>&lt;p&gt;基于消息队列的PHP分布式事务管理组件，提供可靠的分布式事务解决方案。&lt;/p&gt;
+&lt;h2 id=&#34;基本原理&#34;&gt;基本原理
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;预发送消息&lt;/strong&gt;：事务开始前，先将消息保存到本地消息表&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;执行本地事务&lt;/strong&gt;：执行业务操作并提交本地事务&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异步投递消息&lt;/strong&gt;：后台进程定期扫描未成功发送的消息并投递到MQ&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;消费者幂等处理&lt;/strong&gt;：消费者接收消息并幂等处理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;补偿机制&lt;/strong&gt;：当消息投递或消费失败时，触发补偿操作&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;架构图&#34;&gt;架构图
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;https://hollisho.github.io/p/%E5%9F%BA%E4%BA%8Emq%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/image-20250422010453834.png&#34;
+	width=&#34;953&#34;
+	height=&#34;753&#34;
+	srcset=&#34;https://hollisho.github.io/p/%E5%9F%BA%E4%BA%8Emq%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/image-20250422010453834_hu_c5619e0186600a85.png 480w, https://hollisho.github.io/p/%E5%9F%BA%E4%BA%8Emq%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88/image-20250422010453834_hu_2ee9e81730d77888.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;基于MQ分布式事务架构图&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;126&#34;
+		data-flex-basis=&#34;303px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;php-mq-transaction-组件&#34;&gt;PHP MQ Transaction 组件
+&lt;/h2&gt;&lt;h3 id=&#34;github地址&#34;&gt;Github地址
+&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/hollisho/php-mq-transaction&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/hollisho/php-mq-transaction&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Redis知识整理</title>
         <link>https://hollisho.github.io/p/redis%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</link>
         <pubDate>Thu, 10 Apr 2025 17:19:18 +0800</pubDate>
