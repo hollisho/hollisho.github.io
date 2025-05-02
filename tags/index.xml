@@ -7,7 +7,39 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Mon, 21 Apr 2025 18:56:38 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 03 May 2025 01:03:07 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>AI</title>
+        <link>https://hollisho.github.io/tags/ai/</link>
+        <pubDate>Sat, 03 May 2025 01:03:07 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/ai/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>DeepSeek</title>
+        <link>https://hollisho.github.io/tags/deepseek/</link>
+        <pubDate>Sat, 03 May 2025 01:03:07 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/deepseek/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Ollama</title>
+        <link>https://hollisho.github.io/tags/ollama/</link>
+        <pubDate>Sat, 03 May 2025 01:03:07 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/ollama/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RAG</title>
+        <link>https://hollisho.github.io/tags/rag/</link>
+        <pubDate>Sat, 03 May 2025 00:44:50 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/rag/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Mq</title>
         <link>https://hollisho.github.io/tags/mq/</link>
         <pubDate>Mon, 21 Apr 2025 18:56:38 +0800</pubDate>
