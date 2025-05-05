@@ -6092,20 +6092,18 @@
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;”配送类型“针对单个产品设置的，可以看作是”配送方式-&amp;gt;统一费率（标准运费）“中更细粒度的设置&lt;/p&gt;&lt;/blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;产品编辑页面可以单独设置运费类别&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240604172601948.png&#34; alt=&#34;image-20240604172601948&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;ul&gt;
-&lt;li&gt;如果设置了”配送类型“，在统一费率的编辑界面可以设置”配送类型“的费用。
+&lt;li&gt;
+&lt;p&gt;产品编辑页面可以单独设置运费类别&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果设置了”配送类型“，在统一费率的编辑界面可以设置”配送类型“的费用。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;配送类型的费用也可以采用前面成本中的公式[qty]、[cost]等&lt;/li&gt;
 &lt;li&gt;如果设置了成本和配送类型的费用，实际的运费是两者的计算结果之和&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240604174707331.png&#34; alt=&#34;image-20240604174707331&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;ul&gt;
-&lt;li&gt;计算方式
+&lt;li&gt;
+&lt;p&gt;计算方式&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;每个配送类型：每个配送类型单独收费&lt;/li&gt;
 &lt;li&gt;每个订单：按最贵的配送类型进行收费&lt;/li&gt;
@@ -6127,7 +6125,6 @@
 &lt;/h2&gt;&lt;h3 id=&#34;rest-api&#34;&gt;Rest API
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;查看所有的路由：http://wordpress.localhost/wp-json/wc/v2&lt;/p&gt;&lt;/blockquote&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240606142007638.png&#34; alt=&#34;image-20240606142007638&#34; style=&#34;zoom:50%;&#34; /&gt;
 &lt;ul&gt;
 &lt;li&gt;生成Api Key&lt;/li&gt;
 &lt;li&gt;OAuth 1.0 （http）&lt;/li&gt;
@@ -6255,8 +6252,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240607135551148.png&#34; alt=&#34;image-20240607135551148&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240607135606946.png&#34; alt=&#34;image-20240607135606946&#34; style=&#34;zoom:50%;&#34; /&gt;
 &lt;h3 id=&#34;库存&#34;&gt;库存
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;SKU&lt;/li&gt;
@@ -6706,9 +6701,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;product_visibility IN (&amp;#39;featured&amp;#39;)&amp;#34;&lt;/span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240607161128729.png&#34; alt=&#34;image-20240607161128729&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;C:\Users\H\AppData\Roaming\Typora\typora-user-images\image-20240607161350580.png&#34; alt=&#34;image-20240607161350580&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;产品可见性查询示例&#34;&gt;产品可见性查询示例
+&lt;/div&gt;&lt;h3 id=&#34;产品可见性查询示例&#34;&gt;产品可见性查询示例
 &lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
