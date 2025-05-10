@@ -5693,7 +5693,7 @@
 &lt;/ul&gt;
 &lt;h2 id=&#34;特别说明&#34;&gt;特别说明
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;由于thinkphp验证器的原因，本扩展包不支持php8.0以上的版本，请在使用前确认您的PHP版本。&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;由于thinkphp验证器的原因，本扩展包不支持php8.0以上的版本，请在使用前确认您的PHP版本。&lt;/del&gt;&lt;/li&gt;
 &lt;li&gt;本扩展包仅提供了基本的请求验证功能，对于更复杂的验证需求，您可以根据实际情况自行扩展。（例如场景的支持目前尚未支持）&lt;/li&gt;
 &lt;/ul&gt;
 </description>
