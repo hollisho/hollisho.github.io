@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>CI/CD on HoCode</title>
+        <link>https://hollisho.github.io/tags/ci/cd/</link>
+        <description>Recent content in CI/CD on HoCode</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Hollis Ho</copyright>
+        <lastBuildDate>Tue, 15 Jul 2025 00:17:11 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/ci/cd/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>使用 Jenkins 和 Docker 部署 Webman 项目</title>
+        <link>https://hollisho.github.io/p/%E4%BD%BF%E7%94%A8-jenkins-%E5%92%8C-docker-%E9%83%A8%E7%BD%B2-webman-%E9%A1%B9%E7%9B%AE/</link>
+        <pubDate>Tue, 15 Jul 2025 00:17:11 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/p/%E4%BD%BF%E7%94%A8-jenkins-%E5%92%8C-docker-%E9%83%A8%E7%BD%B2-webman-%E9%A1%B9%E7%9B%AE/</guid>
+        <description>&lt;p&gt;在实际开发中，我们经常需要将代码自动部署到运行中的容器中，尤其是在使用 Jenkins 做持续集成的场景里。本篇文章介绍如何通过 Jenkins 脚本，将 Webman 项目部署到一个基于 Alpine 的 Docker 容器中。&lt;/p&gt;
+&lt;h2 id=&#34;-背景&#34;&gt;🚀 背景
+&lt;/h2&gt;&lt;p&gt;我们有一个使用 Webman 框架开发的 PHP 项目，部署在名为 &lt;code&gt;webman-admin-php82&lt;/code&gt; 的容器中。代码托管在 Gitea 中，Jenkins 通过 SSH 拉取代码并部署。&lt;/p&gt;
+&lt;h2 id=&#34;-拉取代码&#34;&gt;🧩 拉取代码
+&lt;/h2&gt;&lt;h3 id=&#34;方式一使用-gitea-用户名--密码--token推荐&#34;&gt;方式一：使用 Gitea 用户名 + 密码 / Token（推荐）
+&lt;/h3&gt;&lt;p&gt;最简单稳定的方式，适用于 HTTP/HTTPS 仓库地址。&lt;/p&gt;
+&lt;h4 id=&#34;步骤-1生成-gitea-访问-token&#34;&gt;步骤 1：生成 Gitea 访问 Token
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;登录 Gitea&lt;/li&gt;
+&lt;li&gt;点击右上角头像 → &lt;strong&gt;Settings&lt;/strong&gt;（设置）&lt;/li&gt;
+&lt;li&gt;左侧菜单选择：&lt;strong&gt;Applications&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;Generate Token&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;输入名称，如：&lt;code&gt;jenkins-ci&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;生成后，复制 Token，保存好（只显示一次）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;步骤-2在-jenkins-中添加-gitea-凭据&#34;&gt;步骤 2：在 Jenkins 中添加 Gitea 凭据
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;打开 Jenkins → &lt;strong&gt;Manage Jenkins&lt;/strong&gt; → &lt;strong&gt;Credentials&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;找到 &lt;strong&gt;(global)&lt;/strong&gt; → 点击 &lt;strong&gt;Add Credentials&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;类型选择：&lt;strong&gt;Username with password&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;配置如下：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Username&lt;/strong&gt;：你在 Gitea 的用户名&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Password&lt;/strong&gt;：刚才生成的 Token&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ID/Description&lt;/strong&gt;：比如 &lt;code&gt;gitea-token&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;保存&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;步骤-3在-jenkins-job-中使用-gitea-凭据&#34;&gt;步骤 3：在 Jenkins Job 中使用 Gitea 凭据
+&lt;/h4&gt;&lt;p&gt;如果是 Freestyle Job：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;源码管理 → Git Repository&lt;/li&gt;
+&lt;li&gt;Repository URL: &lt;code&gt;http://your-gitea-host:3000/youruser/yourrepo.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Credentials: 选择刚刚添加的 &lt;code&gt;gitea-token&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;方式二使用-ssh-密钥对适用于-git-over-ssh&#34;&gt;方式二：使用 SSH 密钥对（适用于 Git over SSH）
+&lt;/h3&gt;&lt;p&gt;适合高安全性或你偏好 SSH 的场景。&lt;/p&gt;
+&lt;h4 id=&#34;步骤-1在-jenkins-生成-ssh-公私钥对&#34;&gt;步骤 1：在 Jenkins 生成 SSH 公私钥对
+&lt;/h4&gt;&lt;p&gt;在 Jenkins 容器或宿主机执行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh-keygen -t rsa -b &lt;span class=&#34;m&#34;&gt;4096&lt;/span&gt; -C &lt;span class=&#34;s2&#34;&gt;&amp;#34;jenkins@gitea&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;保存为 &lt;code&gt;/var/jenkins_home/.ssh/id_rsa&lt;/code&gt;（或你自定义路径）&lt;/p&gt;
+&lt;h4 id=&#34;步骤-2将公钥添加到-gitea-用户的-ssh-key&#34;&gt;步骤 2：将公钥添加到 Gitea 用户的 SSH Key
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;登录 Gitea&lt;/li&gt;
+&lt;li&gt;点击头像 → &lt;strong&gt;Settings&lt;/strong&gt; → &lt;strong&gt;SSH Keys&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;添加新 Key，粘贴 Jenkins 的 &lt;code&gt;id_rsa.pub&lt;/code&gt; 内容&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;步骤-3在-jenkins-添加-ssh-凭据&#34;&gt;步骤 3：在 Jenkins 添加 SSH 凭据
+&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;Jenkins → &lt;strong&gt;Manage Jenkins&lt;/strong&gt; → &lt;strong&gt;Credentials&lt;/strong&gt; → &lt;strong&gt;(global)&lt;/strong&gt; → &lt;strong&gt;Add Credentials&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;类型选择：&lt;strong&gt;SSH Username with Private Key&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;配置：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Username&lt;/strong&gt;: &lt;code&gt;git&lt;/code&gt;（Gitea 默认的 SSH 用户名）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Private Key&lt;/strong&gt;: 粘贴 &lt;code&gt;id_rsa&lt;/code&gt; 内容（私钥）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ID&lt;/strong&gt;: &lt;code&gt;gitea-ssh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;步骤-4配置-jenkins-job-使用-ssh-拉仓库&#34;&gt;步骤 4：配置 Jenkins Job 使用 SSH 拉仓库
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Git URL 示例&lt;/strong&gt;：&lt;code&gt;git@your-gitea-host:youruser/yourrepo.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;凭据&lt;/strong&gt;：选择 &lt;code&gt;gitea-ssh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-构建脚本&#34;&gt;🧩 构建脚本
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/sh
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; -e
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 定义变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;BUILD_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$WORKSPACE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;DEPLOY_DIR&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/var/www/wms
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CONTAINER_NAME&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;webman-admin-php82
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;📦 同步代码到容器...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker cp &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$BUILD_DIR&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/.&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$CONTAINER_NAME&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$DEPLOY_DIR&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;🚀 在容器内执行部署...&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -i &lt;span class=&#34;nv&#34;&gt;$CONTAINER_NAME&lt;/span&gt; sh -c &lt;span class=&#34;s2&#34;&gt;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    cd &lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$DEPLOY_DIR&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt; &amp;amp;&amp;amp; \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    composer install --no-dev -o &amp;amp;&amp;amp; \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    php start.php stop &amp;amp;&amp;amp; \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;    php start.php start -d
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;✅ 部署完成！&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;-脚本说明&#34;&gt;📝 脚本说明
+&lt;/h2&gt;&lt;h3 id=&#34;变量定义&#34;&gt;变量定义
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;BUILD_DIR=$WORKSPACE&lt;/code&gt;：Jenkins 工作空间目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DEPLOY_DIR=/var/www/wms&lt;/code&gt;：容器内的部署目录&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CONTAINER_NAME=webman-admin-php82&lt;/code&gt;：目标容器名称&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;部署流程&#34;&gt;部署流程
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;同步代码&lt;/strong&gt;：使用 &lt;code&gt;docker cp&lt;/code&gt; 将构建目录的所有文件复制到容器内&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;安装依赖&lt;/strong&gt;：在容器内执行 &lt;code&gt;composer install --no-dev -o&lt;/code&gt; 安装生产环境依赖&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;重启服务&lt;/strong&gt;：停止并重新启动 Webman 服务&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;关键参数说明&#34;&gt;关键参数说明
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--no-dev&lt;/code&gt;：不安装开发依赖&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt;：优化自动加载器&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt;：以守护进程模式启动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-注意事项&#34;&gt;🔧 注意事项
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;容器状态&lt;/strong&gt;：确保目标容器 &lt;code&gt;webman-admin-php82&lt;/code&gt; 正在运行&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;权限问题&lt;/strong&gt;：Jenkins 需要有执行 Docker 命令的权限&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目录权限&lt;/strong&gt;：确保容器内的部署目录有正确的读写权限&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;服务依赖&lt;/strong&gt;：如果项目依赖数据库等服务，确保这些服务已启动&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;-故障排除&#34;&gt;🚨 故障排除
+&lt;/h2&gt;&lt;h3 id=&#34;常见问题&#34;&gt;常见问题
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;容器不存在&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Error: No such container: webman-admin-php82
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;解决：检查容器名称是否正确，容器是否正在运行&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;权限被拒绝&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;permission denied &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; trying to connect to the Docker daemon socket
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;解决：将 Jenkins 用户添加到 docker 组&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Composer 安装失败&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;composer install failed
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;解决：检查网络连接，或配置 Composer 镜像源&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;调试技巧&#34;&gt;调试技巧
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;在脚本中添加更多 &lt;code&gt;echo&lt;/code&gt; 语句来跟踪执行进度&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;docker logs $CONTAINER_NAME&lt;/code&gt; 查看容器日志&lt;/li&gt;
+&lt;li&gt;临时移除 &lt;code&gt;set -e&lt;/code&gt; 来继续执行后续命令进行调试&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;-相关资源&#34;&gt;📚 相关资源
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.workerman.net/doc/webman&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Webman 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.jenkins.io/doc/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Jenkins 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.docker.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Docker 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.gitea.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Gitea 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

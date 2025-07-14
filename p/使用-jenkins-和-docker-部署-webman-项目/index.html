@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="在 Jenkins 中通过容器部署基于 Webman 框架的 PHP 项目。">
+<title>使用 Jenkins 和 Docker 部署 Webman 项目</title>
+
+<link rel='canonical' href='https://hollisho.github.io/p/%E4%BD%BF%E7%94%A8-jenkins-%E5%92%8C-docker-%E9%83%A8%E7%BD%B2-webman-%E9%A1%B9%E7%9B%AE/'>
+
+<link rel="stylesheet" href="/scss/style.min.946cca6c6259ef94ac55abfae7c7bf3291ea3ed5eea17ef77500b257217c6710.css"><meta property='og:title' content="使用 Jenkins 和 Docker 部署 Webman 项目">
+<meta property='og:description' content="在 Jenkins 中通过容器部署基于 Webman 框架的 PHP 项目。">
+<meta property='og:url' content='https://hollisho.github.io/p/%E4%BD%BF%E7%94%A8-jenkins-%E5%92%8C-docker-%E9%83%A8%E7%BD%B2-webman-%E9%A1%B9%E7%9B%AE/'>
+<meta property='og:site_name' content='HoCode'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Jenkins' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='Webman' /><meta property='article:tag' content='CI/CD' /><meta property='article:published_time' content='2025-07-15T00:17:11&#43;08:00'/><meta property='article:modified_time' content='2025-07-15T00:17:11&#43;08:00'/>
+<meta name="twitter:title" content="使用 Jenkins 和 Docker 部署 Webman 项目">
+<meta name="twitter:description" content="在 Jenkins 中通过容器部署基于 Webman 框架的 PHP 项目。">
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_1badc3931a35b1a0.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🧐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">HoCode</a></h1>
+            <h2 class="site-description">闲静少言，不慕荣利。好读书，不求甚解；每有会意，便欣然忘食。</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/hollisho'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://gitee.com/hollisho'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Gitee</title><path d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.593.592H9.777c-.982 0-1.778.796-1.778 1.778v5.63c0 .327.266.592.593.592h5.63c.982 0 1.778-.796 1.778-1.778v-.296a.593.593 0 0 0-.592-.593h-4.15a.592.592 0 0 1-.592-.592v-1.482a.593.593 0 0 1 .593-.592h6.815c.327 0 .593.265.593.592v3.408a4 4 0 0 1-4 4H5.926a.593.593 0 0 1-.593-.593V9.778a4.444 4.444 0 0 1 4.445-4.444h8.296Z"/></svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>技术链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#-背景">🚀 背景</a></li>
+    <li><a href="#-拉取代码">🧩 拉取代码</a>
+      <ol>
+        <li><a href="#方式一使用-gitea-用户名--密码--token推荐">方式一：使用 Gitea 用户名 + 密码 / Token（推荐）</a>
+          <ol>
+            <li><a href="#步骤-1生成-gitea-访问-token">步骤 1：生成 Gitea 访问 Token</a></li>
+            <li><a href="#步骤-2在-jenkins-中添加-gitea-凭据">步骤 2：在 Jenkins 中添加 Gitea 凭据</a></li>
+            <li><a href="#步骤-3在-jenkins-job-中使用-gitea-凭据">步骤 3：在 Jenkins Job 中使用 Gitea 凭据</a></li>
+          </ol>
+        </li>
+        <li><a href="#方式二使用-ssh-密钥对适用于-git-over-ssh">方式二：使用 SSH 密钥对（适用于 Git over SSH）</a>
+          <ol>
+            <li><a href="#步骤-1在-jenkins-生成-ssh-公私钥对">步骤 1：在 Jenkins 生成 SSH 公私钥对</a></li>
+            <li><a href="#步骤-2将公钥添加到-gitea-用户的-ssh-key">步骤 2：将公钥添加到 Gitea 用户的 SSH Key</a></li>
+            <li><a href="#步骤-3在-jenkins-添加-ssh-凭据">步骤 3：在 Jenkins 添加 SSH 凭据</a></li>
+            <li><a href="#步骤-4配置-jenkins-job-使用-ssh-拉仓库">步骤 4：配置 Jenkins Job 使用 SSH 拉仓库</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#-构建脚本">🧩 构建脚本</a></li>
+    <li><a href="#-脚本说明">📝 脚本说明</a>
+      <ol>
+        <li><a href="#变量定义">变量定义</a></li>
+        <li><a href="#部署流程">部署流程</a></li>
+        <li><a href="#关键参数说明">关键参数说明</a></li>
+      </ol>
+    </li>
+    <li><a href="#-注意事项">🔧 注意事项</a></li>
+    <li><a href="#-故障排除">🚨 故障排除</a>
+      <ol>
+        <li><a href="#常见问题">常见问题</a></li>
+        <li><a href="#调试技巧">调试技巧</a></li>
+      </ol>
+    </li>
+    <li><a href="#-相关资源">📚 相关资源</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/devops/" >
+                DevOps
+            </a>
+        
+            <a href="/categories/webman/" >
+                Webman
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E4%BD%BF%E7%94%A8-jenkins-%E5%92%8C-docker-%E9%83%A8%E7%BD%B2-webman-%E9%A1%B9%E7%9B%AE/">使用 Jenkins 和 Docker 部署 Webman 项目</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            在 Jenkins 中通过容器部署基于 Webman 框架的 PHP 项目。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2025-07-15 00:17</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>在实际开发中，我们经常需要将代码自动部署到运行中的容器中，尤其是在使用 Jenkins 做持续集成的场景里。本篇文章介绍如何通过 Jenkins 脚本，将 Webman 项目部署到一个基于 Alpine 的 Docker 容器中。</p>
+<h2 id="-背景">🚀 背景
+</h2><p>我们有一个使用 Webman 框架开发的 PHP 项目，部署在名为 <code>webman-admin-php82</code> 的容器中。代码托管在 Gitea 中，Jenkins 通过 SSH 拉取代码并部署。</p>
+<h2 id="-拉取代码">🧩 拉取代码
+</h2><h3 id="方式一使用-gitea-用户名--密码--token推荐">方式一：使用 Gitea 用户名 + 密码 / Token（推荐）
+</h3><p>最简单稳定的方式，适用于 HTTP/HTTPS 仓库地址。</p>
+<h4 id="步骤-1生成-gitea-访问-token">步骤 1：生成 Gitea 访问 Token
+</h4><ol>
+<li>登录 Gitea</li>
+<li>点击右上角头像 → <strong>Settings</strong>（设置）</li>
+<li>左侧菜单选择：<strong>Applications</strong></li>
+<li>点击 <strong>Generate Token</strong></li>
+<li>输入名称，如：<code>jenkins-ci</code></li>
+<li>生成后，复制 Token，保存好（只显示一次）</li>
+</ol>
+<h4 id="步骤-2在-jenkins-中添加-gitea-凭据">步骤 2：在 Jenkins 中添加 Gitea 凭据
+</h4><ol>
+<li>打开 Jenkins → <strong>Manage Jenkins</strong> → <strong>Credentials</strong></li>
+<li>找到 <strong>(global)</strong> → 点击 <strong>Add Credentials</strong></li>
+<li>类型选择：<strong>Username with password</strong></li>
+<li>配置如下：
+<ul>
+<li><strong>Username</strong>：你在 Gitea 的用户名</li>
+<li><strong>Password</strong>：刚才生成的 Token</li>
+<li><strong>ID/Description</strong>：比如 <code>gitea-token</code></li>
+</ul>
+</li>
+<li>保存</li>
+</ol>
+<h4 id="步骤-3在-jenkins-job-中使用-gitea-凭据">步骤 3：在 Jenkins Job 中使用 Gitea 凭据
+</h4><p>如果是 Freestyle Job：</p>
+<ol>
+<li>源码管理 → Git Repository</li>
+<li>Repository URL: <code>http://your-gitea-host:3000/youruser/yourrepo.git</code></li>
+<li>Credentials: 选择刚刚添加的 <code>gitea-token</code></li>
+</ol>
+<h3 id="方式二使用-ssh-密钥对适用于-git-over-ssh">方式二：使用 SSH 密钥对（适用于 Git over SSH）
+</h3><p>适合高安全性或你偏好 SSH 的场景。</p>
+<h4 id="步骤-1在-jenkins-生成-ssh-公私钥对">步骤 1：在 Jenkins 生成 SSH 公私钥对
+</h4><p>在 Jenkins 容器或宿主机执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t rsa -b <span class="m">4096</span> -C <span class="s2">&#34;jenkins@gitea&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>保存为 <code>/var/jenkins_home/.ssh/id_rsa</code>（或你自定义路径）</p>
+<h4 id="步骤-2将公钥添加到-gitea-用户的-ssh-key">步骤 2：将公钥添加到 Gitea 用户的 SSH Key
+</h4><ol>
+<li>登录 Gitea</li>
+<li>点击头像 → <strong>Settings</strong> → <strong>SSH Keys</strong></li>
+<li>添加新 Key，粘贴 Jenkins 的 <code>id_rsa.pub</code> 内容</li>
+</ol>
+<h4 id="步骤-3在-jenkins-添加-ssh-凭据">步骤 3：在 Jenkins 添加 SSH 凭据
+</h4><ol>
+<li>Jenkins → <strong>Manage Jenkins</strong> → <strong>Credentials</strong> → <strong>(global)</strong> → <strong>Add Credentials</strong></li>
+<li>类型选择：<strong>SSH Username with Private Key</strong></li>
+<li>配置：
+<ul>
+<li><strong>Username</strong>: <code>git</code>（Gitea 默认的 SSH 用户名）</li>
+<li><strong>Private Key</strong>: 粘贴 <code>id_rsa</code> 内容（私钥）</li>
+<li><strong>ID</strong>: <code>gitea-ssh</code></li>
+</ul>
+</li>
+</ol>
+<h4 id="步骤-4配置-jenkins-job-使用-ssh-拉仓库">步骤 4：配置 Jenkins Job 使用 SSH 拉仓库
+</h4><ul>
+<li><strong>Git URL 示例</strong>：<code>git@your-gitea-host:youruser/yourrepo.git</code></li>
+<li><strong>凭据</strong>：选择 <code>gitea-ssh</code></li>
+</ul>
+<h2 id="-构建脚本">🧩 构建脚本
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nb">set</span> -e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 定义变量</span>
+</span></span><span class="line"><span class="cl"><span class="nv">BUILD_DIR</span><span class="o">=</span><span class="nv">$WORKSPACE</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DEPLOY_DIR</span><span class="o">=</span>/var/www/wms
+</span></span><span class="line"><span class="cl"><span class="nv">CONTAINER_NAME</span><span class="o">=</span>webman-admin-php82
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;📦 同步代码到容器...&#34;</span>
+</span></span><span class="line"><span class="cl">docker cp <span class="s2">&#34;</span><span class="nv">$BUILD_DIR</span><span class="s2">/.&#34;</span> <span class="s2">&#34;</span><span class="nv">$CONTAINER_NAME</span><span class="s2">:</span><span class="nv">$DEPLOY_DIR</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;🚀 在容器内执行部署...&#34;</span>
+</span></span><span class="line"><span class="cl">docker <span class="nb">exec</span> -i <span class="nv">$CONTAINER_NAME</span> sh -c <span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    cd </span><span class="nv">$DEPLOY_DIR</span><span class="s2"> &amp;&amp; \
+</span></span></span><span class="line"><span class="cl"><span class="s2">    composer install --no-dev -o &amp;&amp; \
+</span></span></span><span class="line"><span class="cl"><span class="s2">    php start.php stop &amp;&amp; \
+</span></span></span><span class="line"><span class="cl"><span class="s2">    php start.php start -d
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;✅ 部署完成！&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="-脚本说明">📝 脚本说明
+</h2><h3 id="变量定义">变量定义
+</h3><ul>
+<li><code>BUILD_DIR=$WORKSPACE</code>：Jenkins 工作空间目录</li>
+<li><code>DEPLOY_DIR=/var/www/wms</code>：容器内的部署目录</li>
+<li><code>CONTAINER_NAME=webman-admin-php82</code>：目标容器名称</li>
+</ul>
+<h3 id="部署流程">部署流程
+</h3><ol>
+<li><strong>同步代码</strong>：使用 <code>docker cp</code> 将构建目录的所有文件复制到容器内</li>
+<li><strong>安装依赖</strong>：在容器内执行 <code>composer install --no-dev -o</code> 安装生产环境依赖</li>
+<li><strong>重启服务</strong>：停止并重新启动 Webman 服务</li>
+</ol>
+<h3 id="关键参数说明">关键参数说明
+</h3><ul>
+<li><code>--no-dev</code>：不安装开发依赖</li>
+<li><code>-o</code>：优化自动加载器</li>
+<li><code>-d</code>：以守护进程模式启动</li>
+</ul>
+<h2 id="-注意事项">🔧 注意事项
+</h2><ol>
+<li><strong>容器状态</strong>：确保目标容器 <code>webman-admin-php82</code> 正在运行</li>
+<li><strong>权限问题</strong>：Jenkins 需要有执行 Docker 命令的权限</li>
+<li><strong>目录权限</strong>：确保容器内的部署目录有正确的读写权限</li>
+<li><strong>服务依赖</strong>：如果项目依赖数据库等服务，确保这些服务已启动</li>
+</ol>
+<h2 id="-故障排除">🚨 故障排除
+</h2><h3 id="常见问题">常见问题
+</h3><ol>
+<li>
+<p><strong>容器不存在</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Error: No such container: webman-admin-php82
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决：检查容器名称是否正确，容器是否正在运行</p>
+</li>
+<li>
+<p><strong>权限被拒绝</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">permission denied <span class="k">while</span> trying to connect to the Docker daemon socket
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决：将 Jenkins 用户添加到 docker 组</p>
+</li>
+<li>
+<p><strong>Composer 安装失败</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">composer install failed
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决：检查网络连接，或配置 Composer 镜像源</p>
+</li>
+</ol>
+<h3 id="调试技巧">调试技巧
+</h3><ul>
+<li>在脚本中添加更多 <code>echo</code> 语句来跟踪执行进度</li>
+<li>使用 <code>docker logs $CONTAINER_NAME</code> 查看容器日志</li>
+<li>临时移除 <code>set -e</code> 来继续执行后续命令进行调试</li>
+</ul>
+<h2 id="-相关资源">📚 相关资源
+</h2><ul>
+<li><a class="link" href="https://www.workerman.net/doc/webman"  target="_blank" rel="noopener"
+    >Webman 官方文档</a></li>
+<li><a class="link" href="https://www.jenkins.io/doc/"  target="_blank" rel="noopener"
+    >Jenkins 官方文档</a></li>
+<li><a class="link" href="https://docs.docker.com/"  target="_blank" rel="noopener"
+    >Docker 官方文档</a></li>
+<li><a class="link" href="https://docs.gitea.io/"  target="_blank" rel="noopener"
+    >Gitea 官方文档</a></li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/jenkins/">Jenkins</a>
+        
+            <a href="/tags/docker/">Docker</a>
+        
+            <a href="/tags/webman/">Webman</a>
+        
+            <a href="/tags/ci/cd/">CI/CD</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/webman%E6%A1%86%E6%9E%B6%E8%AF%B7%E6%B1%82%E9%AA%8C%E8%AF%81%E5%99%A8%E6%89%A9%E5%B1%95%E5%8C%85/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Webman框架请求验证器扩展包</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="hollisho/hollisho-blog-talks"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2024 - 
+        
+        2025 Hollis Ho
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

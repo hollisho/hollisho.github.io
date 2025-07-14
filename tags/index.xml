@@ -7,7 +7,39 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Hollis Ho</copyright>
-        <lastBuildDate>Sat, 03 May 2025 01:03:07 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 15 Jul 2025 00:17:11 +0800</lastBuildDate><atom:link href="https://hollisho.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CI/CD</title>
+        <link>https://hollisho.github.io/tags/ci/cd/</link>
+        <pubDate>Tue, 15 Jul 2025 00:17:11 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/ci/cd/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Docker</title>
+        <link>https://hollisho.github.io/tags/docker/</link>
+        <pubDate>Tue, 15 Jul 2025 00:17:11 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/docker/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Jenkins</title>
+        <link>https://hollisho.github.io/tags/jenkins/</link>
+        <pubDate>Tue, 15 Jul 2025 00:17:11 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/jenkins/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Webman</title>
+        <link>https://hollisho.github.io/tags/webman/</link>
+        <pubDate>Tue, 15 Jul 2025 00:17:11 +0800</pubDate>
+        
+        <guid>https://hollisho.github.io/tags/webman/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>AI</title>
         <link>https://hollisho.github.io/tags/ai/</link>
         <pubDate>Sat, 03 May 2025 01:03:07 +0800</pubDate>
@@ -109,14 +141,6 @@
         <pubDate>Mon, 11 Nov 2024 14:41:07 +0800</pubDate>
         
         <guid>https://hollisho.github.io/tags/rest-api/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Webman</title>
-        <link>https://hollisho.github.io/tags/webman/</link>
-        <pubDate>Mon, 21 Oct 2024 14:13:57 +0800</pubDate>
-        
-        <guid>https://hollisho.github.io/tags/webman/</guid>
         <description></description>
         </item>
         <item>
